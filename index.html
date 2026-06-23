@@ -1102,15 +1102,20 @@ async function doForgot(){
 function initWhatsApp(){ const w=document.getElementById('wa'); if(!w) return; w.setAttribute('href','https://wa.me/'+WHATSAPP_NUMBER); setTimeout(()=>{ w.classList.add('show'); }, WHATSAPP_DELAY_MS); }
 
 /* ---------- boot ---------- */
-(async function boot(){
+(function boot(){
   initClient();
-  if(SB_READY){
-    try{ sb.auth.onAuthStateChange(async (_e, session)=>{ await loadProfile(session?session.user:null); renderAuthSlot(); }); }catch(e){}
-    await loadSession();
-  }
   initWhatsApp();
   if(!location.hash) location.hash='/';
-  route();
+  route();                       // draw the page immediately, no waiting on the network
+  if(SB_READY){
+    try{
+      sb.auth.onAuthStateChange((_e, session)=>{
+        loadProfile(session ? session.user : null).then(function(){ renderAuthSlot(); });
+      });
+    }catch(e){}
+    // best-effort: pick up an existing login in the background, then refresh the view
+    loadSession().then(function(){ renderAuthSlot(); route(); }).catch(function(){ renderAuthSlot(); });
+  }
 })();
 
 </script>
