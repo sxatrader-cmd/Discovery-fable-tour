@@ -448,9 +448,18 @@
   function grantAccess() {
     if (timer) { clearInterval(timer); timer = null; }
     showSession(PREMIUM, true);
+
+    var authUrl = '$authaction?tok=$tok&redir=https://fabletour.com';
+    /* On the router, NoDogSplash replaces $authaction and $tok with real values.
+       On GitHub Pages they stay as literal '$' strings — detect and bypass.    */
+    var onRouter = (authUrl.charAt(0) !== '$');
+
     setTimeout(function() {
-      try { window.location.href = '$authaction?tok=$tok&redir=https://fabletour.com'; }
-      catch(e) { window.open('https://fabletour.com', '_blank'); }
+      if (onRouter) {
+        window.location.href = authUrl;   /* router: auth + redirect to fabletour */
+      } else {
+        window.location.href = 'https://fabletour.com'; /* GitHub Pages: go direct */
+      }
     }, 600);
   }
 
