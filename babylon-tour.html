@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BABYLON — Fable Tour</title>
+
+<!-- ════════════════════════════════════════════════════════════════
+     ⚙️  عدّل رقم واتساب وإيميل المشغّل في قسم CONFIG أسفل الصفحة فقط
+     ════════════════════════════════════════════════════════════════ -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;1,6..96,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Aref+Ruqaa:wght@400;700&family=Tajawal:wght@200;300;400;500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --noir:#080a10;          /* lapis at midnight */
+  --noir-2:#0c0f17;
+  --noir-3:#11151f;
+  --ivory:#efe9dc;
+  --ivory-soft:#cfc7b6;
+  --muted:rgba(239,233,220,.55);
+  --champ:#c9a96a;         /* champagne gold */
+  --champ-lt:#e3cf9b;
+  --champ-dp:#9a7d44;
+  --hair:rgba(201,169,106,.26);
+  --hair-soft:rgba(239,233,220,.10);
+
+  --f-disp:"Bodoni Moda", serif;
+  --f-body:"Cormorant Garamond", serif;
+  --f-ru-disp:"Playfair Display", serif;
+  --f-ru-body:"EB Garamond", serif;
+  --f-ar-disp:"Aref Ruqaa", serif;
+  --f-ar-body:"Tajawal", sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--noir);
+  color:var(--ivory);
+  font-family:var(--f-body);
+  font-size:1.12rem;
+  line-height:1.85;
+  letter-spacing:.01em;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+/* per-language faces */
+html[lang="ar"] body{font-family:var(--f-ar-body);font-weight:300;font-size:1.08rem;line-height:2}
+html[lang="ru"] body{font-family:var(--f-ru-body);font-size:1.1rem}
+
+h1,h2,h3{font-family:var(--f-disp);font-weight:500;line-height:1.18}
+html[lang="ar"] h1,html[lang="ar"] h2,html[lang="ar"] h3{font-family:var(--f-ar-disp);font-weight:700}
+html[lang="ru"] h1,html[lang="ru"] h2,html[lang="ru"] h3{font-family:var(--f-ru-disp)}
+
+a{color:inherit;text-decoration:none}
+::selection{background:rgba(201,169,106,.3);color:#fff}
+
+/* labels / eyebrows */
+.label{
+  font-family:var(--f-body);font-weight:500;
+  text-transform:uppercase;letter-spacing:.42em;
+  font-size:.7rem;color:var(--champ);
+}
+html[lang="ar"] .label{font-family:var(--f-ar-body);letter-spacing:.22em;font-weight:500}
+html[lang="ru"] .label{font-family:var(--f-ru-body)}
+
+/* fixed gold frame — the invitation card edge (signature) */
+.frame{position:fixed;inset:14px;border:1px solid var(--hair);
+  pointer-events:none;z-index:40}
+.frame::before,.frame::after{content:"";position:absolute;background:var(--champ);opacity:.5}
+.frame .c{position:absolute;width:14px;height:14px;border:1px solid var(--champ);opacity:.7}
+.frame .c.tl{inset-block-start:-1px;inset-inline-start:-1px;border-inline-end:0;border-block-end:0}
+.frame .c.tr{inset-block-start:-1px;inset-inline-end:-1px;border-inline-start:0;border-block-end:0}
+.frame .c.bl{inset-block-end:-1px;inset-inline-start:-1px;border-inline-end:0;border-block-start:0}
+.frame .c.br{inset-block-end:-1px;inset-inline-end:-1px;border-inline-start:0;border-block-start:0}
+@media(max-width:600px){.frame{inset:8px}}
+
+/* ───────────── top bar ───────────── */
+.topbar{position:fixed;inset-block-start:0;inset-inline:0;z-index:50;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.1rem clamp(1.4rem,5vw,3.4rem);
+  background:linear-gradient(180deg,rgba(8,10,16,.92),rgba(8,10,16,0));
+  transition:background .4s}
+.topbar.solid{background:rgba(8,10,16,.9);backdrop-filter:blur(10px);
+  border-block-end:1px solid var(--hair-soft)}
+.maison{font-family:var(--f-disp);letter-spacing:.5em;font-size:.82rem;
+  color:var(--ivory);padding-inline-start:.5em}
+html[lang="ar"] .maison{font-family:var(--f-ar-body);letter-spacing:.2em}
+.langs{display:flex;gap:.2rem;align-items:center}
+.langs button{cursor:pointer;border:0;background:transparent;color:var(--muted);
+  font-family:var(--f-body);font-size:.78rem;letter-spacing:.12em;
+  padding:.35rem .55rem;transition:.3s;position:relative}
+html[lang="ar"] .langs button{font-family:var(--f-ar-body)}
+.langs button.active{color:var(--champ-lt)}
+.langs button.active::after{content:"";position:absolute;inset-block-end:.1rem;inset-inline:.55rem;
+  height:1px;background:var(--champ)}
+.langs .sep{width:1px;height:12px;background:var(--hair)}
+
+/* ───────────── ornaments ───────────── */
+.orn{display:flex;align-items:center;justify-content:center;gap:1.1rem;margin:0 auto}
+.orn .ln{height:1px;width:min(120px,22vw);background:linear-gradient(90deg,transparent,var(--champ),transparent)}
+.orn .dia{width:7px;height:7px;background:var(--champ);transform:rotate(45deg);flex:0 0 auto}
+
+/* ───────────── hero ───────────── */
+.hero{min-height:100svh;display:grid;place-items:center;text-align:center;
+  padding:7rem clamp(1.4rem,6vw,4rem) 4rem;position:relative;
+  background:radial-gradient(130% 100% at 50% 0%,#0e1424 0%,var(--noir) 62%)}
+.hero .inner{max-width:760px}
+.hero .place{font-family:var(--f-body);letter-spacing:.5em;font-size:.72rem;
+  color:var(--champ);text-transform:uppercase;margin-block-end:1.8rem}
+html[lang="ar"] .hero .place{font-family:var(--f-ar-body);letter-spacing:.25em}
+.hero h1{font-size:clamp(3.2rem,11vw,7rem);font-weight:400;color:#fff;
+  letter-spacing:.02em;margin-block:1.4rem;font-style:italic}
+html[lang="ar"] .hero h1{font-style:normal;font-size:clamp(3rem,13vw,6.6rem)}
+.hero .sub{font-size:clamp(1.05rem,2.4vw,1.35rem);color:var(--ivory-soft);
+  max-width:54ch;margin-inline:auto;font-style:italic}
+html[lang="ar"] .hero .sub{font-style:normal}
+.hero .cta{margin-block-start:2.6rem;display:flex;gap:1.1rem;justify-content:center;flex-wrap:wrap}
+
+.btn{cursor:pointer;font-family:var(--f-body);font-weight:500;font-size:.8rem;
+  text-transform:uppercase;letter-spacing:.28em;padding:1.05rem 2.3rem;
+  border:1px solid var(--champ);background:transparent;color:var(--champ-lt);
+  transition:.45s cubic-bezier(.2,.7,.2,1);position:relative;overflow:hidden}
+html[lang="ar"] .btn{font-family:var(--f-ar-body);letter-spacing:.12em;font-size:.92rem}
+.btn::before{content:"";position:absolute;inset:0;background:var(--champ);
+  transform:scaleX(0);transform-origin:inline-start;transition:transform .45s cubic-bezier(.2,.7,.2,1);z-index:-1}
+.btn:hover{color:var(--noir)}
+.btn:hover::before{transform:scaleX(1)}
+.btn.solid{background:linear-gradient(120deg,var(--champ-lt),var(--champ-dp));color:var(--noir);border-color:transparent}
+.btn.solid::before{background:linear-gradient(120deg,#f0e2bd,var(--champ))}
+
+.scrolldot{position:absolute;inset-block-end:2.4rem;inset-inline-start:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:.6rem;color:var(--muted)}
+.scrolldot .line{width:1px;height:46px;background:linear-gradient(var(--champ),transparent);
+  animation:flow 2.4s ease-in-out infinite}
+@keyframes flow{0%,100%{opacity:.3;transform:scaleY(.6)}50%{opacity:1;transform:scaleY(1)}}
+
+/* ───────────── general section ───────────── */
+.section{padding:clamp(4rem,11vh,8rem) clamp(1.4rem,6vw,2rem);position:relative}
+.container{max-width:1080px;margin-inline:auto}
+.head{text-align:center;margin-block-end:3.6rem}
+.head .label{display:inline-block;margin-block-end:1.2rem}
+.head h2{font-size:clamp(2.1rem,6vw,3.6rem);font-weight:400;color:#fff;font-style:italic}
+html[lang="ar"] .head h2{font-style:normal}
+.head .desc{max-width:62ch;margin:1.4rem auto 0;color:var(--ivory-soft);font-style:italic}
+html[lang="ar"] .head .desc{font-style:normal}
+.head .orn{margin-block-start:1.8rem}
+
+/* intro prose */
+.prose{max-width:60ch;margin-inline:auto;text-align:center;color:var(--ivory-soft);
+  font-size:1.22rem;line-height:2}
+html[lang="ar"] .prose{font-size:1.15rem}
+
+/* ───────────── journey (editorial list) ───────────── */
+.stops{margin-block-start:1rem;border-block-start:1px solid var(--hair-soft)}
+.stop{display:grid;gap:.4rem 2.4rem;grid-template-columns:auto 1fr;
+  padding:2.6rem .4rem;border-block-end:1px solid var(--hair-soft);
+  align-items:start;position:relative;transition:.5s}
+@media(min-width:760px){.stop{grid-template-columns:120px 1fr}}
+.stop .rom{font-family:var(--f-disp);font-size:clamp(2.4rem,6vw,3.6rem);
+  color:var(--champ);opacity:.55;line-height:1;font-weight:400;transition:.5s}
+html[lang="ar"] .stop .rom{font-family:var(--f-ru-disp)}
+.stop h3{font-size:clamp(1.5rem,4vw,2.1rem);font-weight:400;color:#fff;margin-block-end:.5rem;font-style:italic}
+html[lang="ar"] .stop h3{font-style:normal}
+.stop .meta{font-family:var(--f-body);text-transform:uppercase;letter-spacing:.24em;
+  font-size:.68rem;color:var(--champ);margin-block-end:.9rem}
+html[lang="ar"] .stop .meta{font-family:var(--f-ar-body);letter-spacing:.1em}
+.stop p{color:var(--ivory-soft);max-width:60ch}
+.stop:hover{background:linear-gradient(90deg,rgba(201,169,106,.05),transparent)}
+.stop:hover .rom{opacity:1;transform:translateY(-3px)}
+
+/* ───────────── details (spec sheet) ───────────── */
+.specs{display:grid;gap:0;border:1px solid var(--hair);border-radius:2px}
+@media(min-width:720px){.specs{grid-template-columns:1fr 1fr}}
+.spec{padding:1.8rem 2rem;border-block-end:1px solid var(--hair-soft);
+  display:flex;align-items:baseline;justify-content:space-between;gap:1.5rem}
+@media(min-width:720px){.spec:nth-child(odd){border-inline-end:1px solid var(--hair-soft)}}
+.spec .k{font-family:var(--f-body);text-transform:uppercase;letter-spacing:.2em;
+  font-size:.72rem;color:var(--muted)}
+html[lang="ar"] .spec .k{font-family:var(--f-ar-body);letter-spacing:.06em;font-size:.85rem}
+.spec .v{font-family:var(--f-disp);font-size:1.25rem;color:var(--ivory)}
+html[lang="ar"] .spec .v{font-family:var(--f-ar-disp);font-size:1.4rem}
+
+/* price statement */
+.price{text-align:center;margin-block-start:3.5rem}
+.price .amt{font-family:var(--f-disp);font-size:clamp(3rem,9vw,5rem);font-weight:400;
+  background:linear-gradient(120deg,#f3e6c2,var(--champ),#cbab6c);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  letter-spacing:.01em}
+html[lang="ar"] .price .amt{font-family:var(--f-ar-disp)}
+.price .pn{color:var(--ivory-soft);max-width:54ch;margin:1rem auto 0;font-style:italic}
+html[lang="ar"] .price .pn{font-style:normal}
+.tickets{max-width:60ch;margin:2.2rem auto 0;padding-block-start:1.6rem;
+  border-block-start:1px solid var(--hair-soft);text-align:center;
+  color:var(--muted);font-size:.98rem}
+.tickets .label{display:block;margin-block-end:.6rem}
+
+/* ───────────── booking ───────────── */
+.booking{background:linear-gradient(180deg,var(--noir),var(--noir-2))}
+.book-grid{display:grid;gap:2.6rem;margin-block-start:1rem}
+@media(min-width:940px){.book-grid{grid-template-columns:1.05fr 1fr;align-items:start;gap:3.4rem}}
+.card{border:1px solid var(--hair);border-radius:2px;padding:2rem clamp(1.2rem,3vw,2rem);
+  background:linear-gradient(180deg,rgba(255,255,255,.012),transparent)}
+.card + .card{margin-block-start:2rem}
+.card .num{font-family:var(--f-disp);color:var(--champ);font-size:1rem;letter-spacing:.1em}
+.card .ctitle{font-family:var(--f-disp);font-size:1.35rem;color:#fff;font-style:italic;margin-block:.2rem .3rem}
+html[lang="ar"] .card .ctitle{font-family:var(--f-ar-disp);font-style:normal}
+html[lang="ru"] .card .ctitle{font-family:var(--f-ru-disp)}
+.card .chint{color:var(--muted);font-size:.92rem;margin-block-end:1.4rem}
+
+/* calendar */
+.cal-top{display:flex;align-items:center;justify-content:space-between;margin-block-end:1.1rem}
+.cal-top button{cursor:pointer;background:transparent;border:1px solid var(--hair);
+  color:var(--champ-lt);width:40px;height:40px;font-size:1rem;transition:.3s}
+.cal-top button:hover{background:var(--champ);color:var(--noir);border-color:var(--champ)}
+.cal-name{font-family:var(--f-disp);font-size:1.15rem;color:var(--ivory);letter-spacing:.08em}
+html[lang="ar"] .cal-name{font-family:var(--f-ar-disp)}
+html[lang="ru"] .cal-name{font-family:var(--f-ru-disp)}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal .dow{text-align:center;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);padding:.4rem 0;font-family:var(--f-body)}
+html[lang="ar"] .cal .dow{font-family:var(--f-ar-body);letter-spacing:0}
+.cell{aspect-ratio:1;display:grid;place-items:center;font-family:var(--f-disp);
+  font-size:.95rem;border:1px solid transparent;cursor:pointer;transition:.25s;position:relative;color:var(--ivory-soft)}
+html[lang="ar"] .cell{font-family:var(--f-ar-body)}
+.cell.empty{cursor:default}
+.cell.past{opacity:.2;cursor:not-allowed}
+.cell.avail:hover{border-color:var(--hair);color:var(--champ-lt)}
+.cell.sel{background:linear-gradient(120deg,var(--champ-lt),var(--champ-dp));color:var(--noir)}
+.cell.booked{color:var(--champ);cursor:not-allowed;opacity:.7}
+.cell.booked::after{content:"";position:absolute;width:5px;height:5px;background:var(--champ);
+  transform:rotate(45deg);inset-block-end:5px}
+.legend{display:flex;gap:1.4rem;flex-wrap:wrap;margin-block-start:1.1rem;
+  font-size:.74rem;color:var(--muted);letter-spacing:.05em}
+.legend span{display:inline-flex;align-items:center;gap:.5rem}
+.mk{width:9px;height:9px;display:inline-block;transform:rotate(45deg)}
+.mk.a{border:1px solid var(--hair)} .mk.s{background:var(--champ)} .mk.b{background:transparent;border:1px solid var(--champ)}
+
+/* seats (abstract cabin) */
+.cabin{border:1px solid var(--hair-soft);padding:1.4rem;display:grid;gap:.9rem;
+  grid-template-columns:1fr 1fr;max-width:340px;margin-inline:auto}
+.seat{border:1px solid var(--hair);padding:1.1rem .8rem;text-align:center;cursor:pointer;
+  transition:.3s;position:relative;background:transparent}
+.seat .rn{font-family:var(--f-disp);font-size:1.3rem;color:var(--champ);display:block;line-height:1}
+.seat .nm{font-family:var(--f-body);text-transform:uppercase;letter-spacing:.18em;
+  font-size:.6rem;color:var(--muted);margin-block-start:.4rem;display:block}
+html[lang="ar"] .seat .nm{font-family:var(--f-ar-body);letter-spacing:.04em;font-size:.72rem}
+.seat:hover:not(.fixed){border-color:var(--champ)}
+.seat.sel{background:linear-gradient(120deg,rgba(227,207,155,.16),rgba(154,125,68,.08));border-color:var(--champ)}
+.seat.sel .rn{color:var(--champ-lt)}
+.seat.sel::after{content:"✦";position:absolute;inset-block-start:6px;inset-inline-end:8px;color:var(--champ);font-size:.7rem}
+.seat.fixed{cursor:not-allowed;border-style:dashed;opacity:.7}
+.seat.fixed .rn{font-size:1rem}
+.seatcount{text-align:center;margin-block-start:1.2rem;font-family:var(--f-body);
+  letter-spacing:.06em;color:var(--ivory-soft)}
+html[lang="ar"] .seatcount{font-family:var(--f-ar-body)}
+.seatcount b{font-family:var(--f-disp);color:var(--champ-lt);font-size:1.25rem;padding:0 .2em}
+
+/* form */
+.field{margin-block-end:1.7rem;position:relative}
+.field label{display:block;font-family:var(--f-body);text-transform:uppercase;
+  letter-spacing:.2em;font-size:.66rem;color:var(--champ);margin-block-end:.6rem}
+html[lang="ar"] .field label{font-family:var(--f-ar-body);letter-spacing:.06em;font-size:.8rem}
+.field input{width:100%;background:transparent;border:0;border-block-end:1px solid var(--hair);
+  color:var(--ivory);font-family:inherit;font-size:1.1rem;padding:.5rem 0;transition:.3s}
+.field input:focus{outline:none;border-color:var(--champ)}
+.field input::placeholder{color:rgba(239,233,220,.28)}
+
+.summary{margin-block:1.8rem;padding:1.4rem 1.5rem;border:1px solid var(--hair)}
+.summary .row{display:flex;justify-content:space-between;gap:1rem;padding:.35rem 0;
+  font-size:.95rem;color:var(--ivory-soft)}
+.summary .row .k{font-family:var(--f-body);text-transform:uppercase;letter-spacing:.16em;
+  font-size:.7rem;color:var(--muted)}
+html[lang="ar"] .summary .row .k{font-family:var(--f-ar-body);letter-spacing:.04em;font-size:.85rem}
+.summary .tot{border-block-start:1px solid var(--hair-soft);margin-block-start:.5rem;padding-block-start:.8rem}
+.summary .tot .v{font-family:var(--f-disp);font-size:1.4rem;color:var(--champ-lt)}
+html[lang="ar"] .summary .tot .v{font-family:var(--f-ar-disp)}
+.btn-full{width:100%}
+.msg{margin-block-start:1.2rem;padding:1rem 1.2rem;border:1px solid;font-size:.92rem;display:none}
+.msg.show{display:block}
+.msg.err{border-color:var(--champ-dp);color:var(--champ-lt);background:rgba(154,125,68,.08)}
+.msg.ok{border-color:var(--champ);color:var(--ivory)}
+.msg.ok strong{font-family:var(--f-disp);font-size:1.15rem;color:var(--champ-lt);display:block;margin-block-end:.4rem}
+html[lang="ar"] .msg.ok strong{font-family:var(--f-ar-disp)}
+.msg .wa{display:inline-flex;align-items:center;gap:.5rem;margin-block-start:1rem;
+  border:1px solid var(--champ);color:var(--champ-lt);padding:.7rem 1.3rem;
+  text-transform:uppercase;letter-spacing:.18em;font-size:.72rem;font-family:var(--f-body);transition:.35s}
+html[lang="ar"] .msg .wa{font-family:var(--f-ar-body);letter-spacing:.06em;font-size:.85rem}
+.msg .wa:hover{background:var(--champ);color:var(--noir)}
+
+/* footer */
+footer{text-align:center;padding:4rem clamp(1.4rem,5vw,2rem) 3.4rem;
+  border-block-start:1px solid var(--hair-soft)}
+footer .maison{display:block;margin-block-end:1.2rem}
+footer .orn{margin-block:1.6rem}
+footer p{color:var(--muted);font-size:.85rem;letter-spacing:.08em;font-style:italic}
+html[lang="ar"] footer p{font-style:normal}
+
+/* journey: lead + expandable academic copy */
+.stop-main .lead{color:var(--ivory-soft);max-width:62ch}
+.stop-main .more{max-height:0;overflow:hidden;opacity:0;
+  transition:max-height .7s cubic-bezier(.2,.7,.2,1),opacity .6s ease}
+.stop-main .more.open{opacity:1}
+.stop-main .more p{color:var(--ivory-soft);max-width:64ch;margin-block-start:1.1rem;
+  font-size:1.04rem;line-height:1.95}
+html[lang="ar"] .stop-main .more p{font-size:1.02rem;line-height:2.05}
+.stop-main .more p:first-child{margin-block-start:1.4rem}
+.readmore{margin-block-start:1.2rem;cursor:pointer;background:transparent;border:0;
+  font-family:var(--f-body);text-transform:uppercase;letter-spacing:.24em;font-size:.68rem;
+  color:var(--champ);padding:.3rem 0;position:relative;transition:.3s}
+html[lang="ar"] .readmore{font-family:var(--f-ar-body);letter-spacing:.08em;font-size:.85rem}
+.readmore::after{content:"";display:inline-block;width:6px;height:6px;
+  border-inline-end:1px solid var(--champ);border-block-end:1px solid var(--champ);
+  transform:rotate(45deg);margin-inline-start:.7em;vertical-align:middle;transition:transform .3s}
+.readmore.open::after{transform:rotate(-135deg)}
+.readmore:hover{color:var(--champ-lt)}
+
+/* floating WhatsApp — gentle champagne pulse from first paint */
+.wa-float{position:fixed;inset-block-end:24px;inset-inline-end:24px;z-index:55;
+  display:flex;align-items:center;gap:0;text-decoration:none}
+@media(max-width:600px){.wa-float{inset-block-end:18px;inset-inline-end:18px}}
+.wa-float .btn-wa{width:60px;height:60px;border-radius:50%;flex:0 0 auto;
+  display:grid;place-items:center;position:relative;
+  background:radial-gradient(120% 120% at 30% 25%,#141925,var(--noir-2));
+  border:1px solid var(--champ);box-shadow:0 10px 30px rgba(0,0,0,.5);
+  animation:waGlow 3s ease-in-out infinite}
+.wa-float .btn-wa svg{width:28px;height:28px;color:var(--champ-lt);position:relative;z-index:2}
+.wa-float .btn-wa::before{content:"";position:absolute;inset:-1px;border-radius:50%;
+  border:1px solid var(--champ);animation:waRing 3s ease-out infinite;pointer-events:none}
+.wa-float .dot{position:absolute;inset-block-start:6px;inset-inline-end:7px;width:10px;height:10px;
+  border-radius:50%;background:#25d366;border:2px solid var(--noir-2);z-index:3;
+  animation:waBlink 3s ease-in-out infinite}
+.wa-float .tip{max-width:0;overflow:hidden;white-space:nowrap;opacity:0;
+  color:var(--ivory);font-family:var(--f-body);font-size:.82rem;letter-spacing:.04em;
+  background:rgba(8,10,16,.92);border:1px solid var(--hair);
+  transition:max-width .5s ease,opacity .4s ease,padding .4s ease;
+  padding:0;margin-inline-end:.6rem;border-radius:2px;align-self:center}
+html[lang="ar"] .wa-float .tip{font-family:var(--f-ar-body)}
+.wa-float:hover .tip{max-width:240px;opacity:1;padding:.7rem 1.1rem}
+.wa-float:hover .btn-wa{animation-play-state:paused;border-color:var(--champ-lt)}
+@keyframes waGlow{
+  0%,100%{box-shadow:0 10px 30px rgba(0,0,0,.5),0 0 0 0 rgba(201,169,106,.45)}
+  60%{box-shadow:0 10px 30px rgba(0,0,0,.5),0 0 0 14px rgba(201,169,106,0)}}
+@keyframes waRing{0%{transform:scale(1);opacity:.55}80%,100%{transform:scale(1.6);opacity:0}}
+@keyframes waBlink{0%,100%{opacity:1}50%{opacity:.45}}
+@media (prefers-reduced-motion: reduce){
+  .wa-float .btn-wa,.wa-float .btn-wa::before,.wa-float .dot{animation:none}}
+
+/* reveal on scroll */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity 1s ease,transform 1s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+
+@media (prefers-reduced-motion: reduce){
+  *{transition:none !important;animation:none !important;scroll-behavior:auto !important}
+  .reveal{opacity:1;transform:none}
+}
+:focus-visible{outline:1px solid var(--champ);outline-offset:3px}
+</style>
+</head>
+<body>
+
+<div class="frame"><span class="c tl"></span><span class="c tr"></span><span class="c bl"></span><span class="c br"></span></div>
+
+<!-- ░░ TOP BAR ░░ -->
+<div class="topbar" id="topbar">
+  <span class="maison">FABLE&nbsp;TOUR</span>
+  <div class="langs">
+    <button data-lang="ar" class="active">عربي</button><span class="sep"></span>
+    <button data-lang="en">EN</button><span class="sep"></span>
+    <button data-lang="ru">RU</button>
+  </div>
+</div>
+
+<!-- ░░ HERO ░░ -->
+<header class="hero">
+  <div class="inner">
+    <div class="place" data-i="hero.place">بغداد — بابل</div>
+    <div class="orn"><span class="ln"></span><span class="dia"></span><span class="ln"></span></div>
+    <h1 data-i="hero.title">بابل</h1>
+    <p class="sub" data-i="hero.sub"></p>
+    <div class="cta">
+      <button class="btn solid" data-scroll="#booking" data-i="hero.cta1">احجز رحلتك</button>
+      <button class="btn" data-scroll="#journey" data-i="hero.cta2">المسار</button>
+    </div>
+  </div>
+  <div class="scrolldot"><span class="line"></span></div>
+</header>
+
+<!-- ░░ INTRO ░░ -->
+<section class="section">
+  <div class="container reveal">
+    <div class="head">
+      <span class="label" data-i="intro.kicker">الحكاية</span>
+      <h2 data-i="intro.title">يومٌ من المجد والسكينة</h2>
+    </div>
+    <p class="prose" data-i="intro.lead"></p>
+    <div class="orn" style="margin-top:2.6rem"><span class="ln"></span><span class="dia"></span><span class="ln"></span></div>
+  </div>
+</section>
+
+<!-- ░░ JOURNEY ░░ -->
+<section class="section" id="journey">
+  <div class="container">
+    <div class="head reveal">
+      <span class="label" data-i="journey.kicker">المسار</span>
+      <h2 data-i="journey.title">ثلاث محطات</h2>
+      <p class="desc" data-i="journey.lead"></p>
+    </div>
+    <div class="stops">
+      <article class="stop reveal">
+        <div class="rom">I</div>
+        <div class="stop-main">
+          <div class="meta" data-i="stop1.meta">بوابة عشتار · أسد بابل</div>
+          <h3 data-i="stop1.title">آثار بابل</h3>
+          <p class="lead" data-i="stop1.lead"></p>
+          <div class="more" data-i-html="stop1.full"></div>
+          <button class="readmore" data-toggle data-i="ui.more">اقرأ المزيد</button>
+        </div>
+      </article>
+      <article class="stop reveal">
+        <div class="rom">II</div>
+        <div class="stop-main">
+          <div class="meta" data-i="stop2.meta">زقورة برس نمرود</div>
+          <h3 data-i="stop2.title">بورسيبا ومقام النبي إبراهيم</h3>
+          <p class="lead" data-i="stop2.lead"></p>
+          <div class="more" data-i-html="stop2.full"></div>
+          <button class="readmore" data-toggle data-i="ui.more">اقرأ المزيد</button>
+        </div>
+      </article>
+      <article class="stop reveal">
+        <div class="rom">III</div>
+        <div class="stop-main">
+          <div class="meta" data-i="stop3.meta">محطة روحية</div>
+          <h3 data-i="stop3.title">مرقد النبي أيوب</h3>
+          <p class="lead" data-i="stop3.lead"></p>
+          <div class="more" data-i-html="stop3.full"></div>
+          <button class="readmore" data-toggle data-i="ui.more">اقرأ المزيد</button>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ░░ DETAILS ░░ -->
+<section class="section">
+  <div class="container reveal">
+    <div class="head">
+      <span class="label" data-i="facts.kicker">التفاصيل</span>
+      <h2 data-i="facts.title">تجربة محسوبة بدقة</h2>
+    </div>
+    <div class="specs">
+      <div class="spec"><span class="k" data-i="facts.k1">مدة الرحلة</span><span class="v" data-i="facts.v1">٦ ساعات</span></div>
+      <div class="spec"><span class="k" data-i="facts.k2">الانطلاق والعودة</span><span class="v" data-i="facts.v2">نفس النقطة في بغداد</span></div>
+      <div class="spec"><span class="k" data-i="facts.k3">الحد الأقصى</span><span class="v" data-i="facts.v3">٣ أشخاص</span></div>
+      <div class="spec"><span class="k" data-i="facts.k4">السيارة</span><span class="v" data-i="facts.v4">خاصة لك وحدك</span></div>
+    </div>
+
+    <div class="price">
+      <span class="label" data-i="price.kicker">السعر</span>
+      <div class="amt" data-i="price.amount" style="margin-top:.8rem">١٥٠٬٠٠٠ دينار</div>
+      <p class="pn" data-i="price.sub"></p>
+    </div>
+    <div class="tickets">
+      <span class="label" data-i="price.tk">ملاحظة</span>
+      <span data-i="price.warn"></span>
+    </div>
+  </div>
+</section>
+
+<!-- ░░ BOOKING ░░ -->
+<section class="section booking" id="booking">
+  <div class="container">
+    <div class="head reveal">
+      <span class="label" data-i="book.kicker">الحجز</span>
+      <h2 data-i="book.title">احجز رحلتك الخاصة</h2>
+      <p class="desc" data-i="book.lead"></p>
+    </div>
+
+    <div class="book-grid">
+      <!-- left -->
+      <div class="reveal">
+        <div class="card">
+          <span class="num">01</span>
+          <div class="ctitle" data-i="book.s1">اختر اليوم</div>
+          <p class="chint" data-i="book.s1hint"></p>
+          <div class="cal-top">
+            <button id="prevM" aria-label="prev">‹</button>
+            <div class="cal-name" id="calName"></div>
+            <button id="nextM" aria-label="next">›</button>
+          </div>
+          <div class="cal" id="cal"></div>
+          <div class="legend">
+            <span><i class="mk a"></i><span data-i="book.lgA">متاح</span></span>
+            <span><i class="mk s"></i><span data-i="book.lgS">مُختار</span></span>
+            <span><i class="mk b"></i><span data-i="book.lgB">محجوز</span></span>
+          </div>
+        </div>
+
+        <div class="card">
+          <span class="num">02</span>
+          <div class="ctitle" data-i="book.s2">اختر مقعدك</div>
+          <p class="chint" data-i="book.s2hint"></p>
+          <div class="cabin">
+            <div class="seat fixed" id="seatD"><span class="rn">✦</span><span class="nm" data-i="seat.driver">السائق</span></div>
+            <div class="seat" data-seat="I"><span class="rn">I</span><span class="nm" data-i="seat.guest">مقعد</span></div>
+            <div class="seat" data-seat="II"><span class="rn">II</span><span class="nm" data-i="seat.guest">مقعد</span></div>
+            <div class="seat" data-seat="III"><span class="rn">III</span><span class="nm" data-i="seat.guest">مقعد</span></div>
+          </div>
+          <div class="seatcount"><span data-i="book.seatsChosen">المقاعد المختارة</span> <b id="seatNum">0</b> / 3</div>
+        </div>
+      </div>
+
+      <!-- right -->
+      <div class="card reveal">
+        <span class="num">03</span>
+        <div class="ctitle" data-i="book.s3">بياناتك</div>
+        <p class="chint" data-i="book.s3hint"></p>
+        <div class="field"><label data-i="form.name">الاسم الكامل</label><input id="fName" type="text" data-ph="form.namePh"></div>
+        <div class="field"><label data-i="form.email">البريد الإلكتروني</label><input id="fEmail" type="email" data-ph="form.emailPh"></div>
+        <div class="field"><label data-i="form.phone">رقم الهاتف</label><input id="fPhone" type="tel" data-ph="form.phonePh"></div>
+        <div class="field"><label data-i="form.wa">رقم واتساب</label><input id="fWa" type="tel" data-ph="form.waPh"></div>
+
+        <div class="summary">
+          <div class="row"><span class="k" data-i="sum.date">اليوم</span><span id="sDate">—</span></div>
+          <div class="row"><span class="k" data-i="sum.seats">المقاعد</span><span id="sSeats">—</span></div>
+          <div class="row tot"><span class="k" data-i="sum.total">الإجمالي</span><span class="v" id="sTotal" data-i="sum.totalVal">١٥٠٬٠٠٠ دينار</span></div>
+        </div>
+
+        <button class="btn solid btn-full" id="confirmBtn" data-i="book.confirm">تأكيد الحجز</button>
+        <div class="msg err" id="msgErr"></div>
+        <div class="msg ok" id="msgOk"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ░░ FOOTER ░░ -->
+<footer>
+  <span class="maison">FABLE&nbsp;TOUR</span>
+  <div class="orn"><span class="ln"></span><span class="dia"></span><span class="ln"></span></div>
+  <p data-i="footer.text">© Fable Tour — رحلات تراثية فاخرة في العراق</p>
+</footer>
+
+<!-- ░░ FLOATING WHATSAPP ░░ -->
+<a class="wa-float" id="waFloat" href="#" target="_blank" rel="noopener" aria-label="WhatsApp">
+  <span class="tip" id="waTip" data-i="wa.float">تواصل عبر واتساب</span>
+  <span class="btn-wa">
+    <span class="dot"></span>
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.9c0 1.9.5 3.68 1.45 5.27L2 22l4.96-1.55a9.86 9.86 0 004.62 1.18h.01c5.46 0 9.9-4.45 9.9-9.9C21.49 6.45 17.5 2 12.04 2zm0 18.02h-.01a8.2 8.2 0 01-4.18-1.14l-.3-.18-3.1.81.83-3.02-.2-.31a8.16 8.16 0 01-1.26-4.37c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 012.41 5.82c0 4.54-3.69 8.23-8.22 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.8-.79.97-.14.16-.29.18-.54.06-.25-.13-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.16.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.42l-.48-.01c-.16 0-.43.06-.66.31-.23.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.13.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28z"/></svg>
+  </span>
+</a>
+
+<script>
+/* ════════════════════════════════════════════════════════════════
+   ⚙️ CONFIG — عدّل هذين السطرين فقط
+   ════════════════════════════════════════════════════════════════ */
+const OPERATOR = {
+  whatsapp: "9647711745353",       // ← رقمك بصيغة دولية بدون +
+  email:    "info@fabletour.com"   // ← بريدك
+};
+
+/* ───────────── i18n ───────────── */
+const T = {
+  ar:{ dir:"rtl",
+    "hero.place":"بغداد — بابل",
+    "hero.title":"بابل",
+    "hero.sub":"رحلة خاصة في يوم واحد، من قلب بغداد إلى أرض الملوك والأنبياء.",
+    "hero.cta1":"احجز رحلتك","hero.cta2":"المسار",
+    "intro.kicker":"الحكاية","intro.title":"يومٌ من المجد والسكينة",
+    "intro.lead":"كانت بابل يوماً أعظم مدن الأرض؛ بوابةٌ من اللازورد والذهب، وجنائنُ معلّقة عُدّت من عجائب الدنيا. نُهديك يوماً منظّماً بعناية ينطلق من أي نقطة تختارها في بغداد، بسيارة خاصة تجمع بين هيبة التاريخ وصفاء المقام، وتعيدك مساءً إلى حيث بدأت.",
+    "journey.kicker":"المسار","journey.title":"ثلاث محطات",
+    "journey.lead":"وجهةٌ لكل فصل من فصول الحكاية — من المجد الإمبراطوري إلى الصفاء الروحي.",
+    "stop1.meta":"بوابة عشتار · أسد بابل","stop1.title":"آثار بابل",
+    "stop1.lead":"عاصمة نبوخذنصّر ومركز العالم القديم؛ حيث تتجوّل بين أطلال القصور المرمّمة وتقف أمام أسد بابل الشهير.",
+    "stop1.full":`<p>على ضفاف نهر الفرات، وعلى بُعد نحو خمسةٍ وثمانين كيلومتراً جنوب بغداد، تنهض بابل بوصفها أعظم عواصم العالم القديم وأعمقها أثراً في الذاكرة الإنسانية. بلغت المدينة ذروة مجدها في عهد الملك نبوخذنصّر الثاني خلال القرن السادس قبل الميلاد، حين غدت قلب الإمبراطورية البابلية الحديثة، ومركزاً للعلم والفلك والقانون والعمارة. هنا صُقلت أقدم الشرائع المكتوبة، ورُصدت حركات النجوم والكواكب، ووُضعت أسسٌ في الرياضيات والتقويم ما تزال آثارها حاضرة في حضارتنا حتى اليوم.</p>
+<p>تتقدّم زيارتك بوابة عشتار، تحفة العمارة المكسوّة بالقرميد المزجّج بلون اللازورد، تتوّجها نقوشٌ بارزة لتنين الإله مردوخ وثيران الإله أدد، في تناغمٍ من اللون والرمز لم يعرف العالم القديم له نظيراً. ومن البوابة يمتدّ طريق الموكب الذي سار عليه الملوك والكهنة في مواسم الاحتفال، فتسير على الدرب ذاته الذي صنع التاريخ. وفي قلب الموقع ينتصب أسد بابل المنحوت من حجر البازلت، رمزاً خالداً للقوة والهيبة، ظلّ شاهداً على المدينة عبر آلاف السنين.</p>
+<p>ولا تكتمل حكاية بابل دون الجنائن المعلّقة، إحدى عجائب الدنيا السبع، التي تنسبها الروايات إلى نبوخذنصّر أهداها لزوجته أميتيس لتُذكّرها بجبال موطنها الأخضر؛ حدائق مدرّجة قيل إنها كانت تُروى بنظامٍ هندسي بديع سبق زمانه بقرون. وإلى جانبها كانت زقورة إيتيمينانكي تناطح السماء، فألهمت حكايات الأبراج العظيمة في التراث الإنساني، وجعلت من بابل أيقونةً للطموح المعماري الذي لا يعرف حدوداً.</p>
+<p>ولبابل تاريخٌ أعرق من نبوخذنصّر بقرون؛ فقد ازدهرت في العصر البابلي القديم على يد الملك حمورابي الذي خلّد اسمه بأقدم مدوّناتٍ مكتملة للقانون، تلك الشريعة التي نُقشت على مسلّةٍ من حجر الديوريت وأرست مبدأ العدالة المنظّمة قبل أن تعرفه الأمم. وعلى مرّ القرون توافد على بابل الفاتحون والحكماء؛ فدخلها كورش الفارسي، ومات فيها الإسكندر المقدوني وهو يحلم بأن يجعلها عاصمة عالمه. ووصف المؤرّخون القدماء أسوارها الشاهقة وأبراجها التي لا تُحصى، حتى غدت في الوجدان الإنساني مثالاً للمدينة الكونية. ثم طوى الرمل معالمها قروناً طويلة قبل أن تكشفها معاول التنقيب الحديثة وتعيد إلى الضوء شيئاً من بهائها. وفي رحلتنا نمنحك وقتاً كافياً للتأمّل والتصوير في أبهى الزوايا، مع روايةٍ هادئة بثلاث لغات تجعل من كل حجرٍ باباً إلى حكاية.</p>
+<p>اليوم، وقد أُدرجت بابل على لائحة التراث العالمي لليونسكو، تمنحك زيارتها أكثر من جولةٍ بين الأطلال؛ إنها لحظة وقوفٍ في المكان الذي وُلدت فيه فكرة المدينة والإمبراطورية والحضارة. ومع مرافقتنا الخاصة وروايتنا المتأنّية، تتحوّل الحجارة الصامتة إلى سردٍ حيّ، وتستعيد بابل أمام عينيك صورتها يوم كانت سيّدة العالم.</p>`,
+    "stop2.meta":"زقورة برس نمرود","stop2.title":"بورسيبا ومقام النبي إبراهيم",
+    "stop2.lead":"زقورةٌ شامخة يربطها كثيرون ببرج بابل، وإلى جوارها مقامٌ يُنسب إلى النبي إبراهيم عليه السلام.",
+    "stop2.full":`<p>على مسافةٍ قصيرة جنوب غرب بابل تقوم مدينة بورسيبا القديمة، التي عُرفت في العصور البابلية مركزاً للعبادة والمعرفة، وكُرّست للإله نَبو، إله الحكمة والكتابة وحامي الكتبة والعلماء. كان معبدها العظيم «إيزيدا» قِبلةً للحجّاج والدارسين، وغدت المدينة توأماً روحياً لبابل، تتبادل معها المواكب والطقوس في أيام الأعياد الكبرى، حتى صار اسمها مرادفاً للعلم المقدّس في بلاد الرافدين.</p>
+<p>تهيمن على الموقع زقورة برس نمرود، الصرح الطيني الشاهق الذي ما يزال يبهر الزائر بضخامته رغم ما طوته القرون. تكسو قمّتها كتلٌ من الطابوق المتزجّج الذي انصهر بفعل حرارةٍ هائلة، فاكتسبت لمعاناً زجاجياً غريباً نسجت حوله الأساطير. ولطالما رُبطت هذه الزقورة في التراث الشعبي وبعض الروايات القديمة ببرج بابل المذكور في الكتب المقدّسة، ما يضفي على المكان هالةً من الرهبة والغموض يصعب أن يجدها المسافر في موضعٍ آخر.</p>
+<p>وإلى جوار الأثر يقوم مقامٌ يُنسب في التراث المحلي إلى النبي إبراهيم عليه السلام، خليل الله وأبي الأنبياء، الذي تتردّد قصته في الذاكرة الجماعية لهذه الأرض رمزاً للتوحيد والصبر ومواجهة الضلال. يقصده الزائرون للتأمّل والدعاء، فيمتزج عبق التاريخ القديم بسكينة المقام في تجربةٍ روحية وثقافية نادرة الاجتماع.</p>
+<p>كُرّس الإله نَبو، ابن مردوخ، حارساً للحكمة والكتابة، فكانت بورسيبا موطن الكتبة ومخازن الألواح المسماريّة التي حُفظت فيها أسرار العلوم والتنجيم والأدب. وفي أعياد رأس السنة البابلية كان تمثال نَبو يُحمل في موكبٍ مهيب من بورسيبا إلى بابل ليلتقي بأبيه مردوخ في طقسٍ يجدّد شرعية الملك ويُبارك خصب الأرض، فتتحوّل الطريق بين المدينتين إلى مسرحٍ للإيمان والسلطان معاً. أمّا الزقورة فقد قُدّر ارتفاعها الأصلي بعشرات الأمتار، وتباينت الآراء في سرّ تزجّج طابوقها بين حريقٍ هائل وصاعقةٍ سماوية، وهو ما غذّى ارتباطها في المخيّلة الشعبية باسم نمرود وببرج بابل. وعند الغروب تكتسب أطلالها لوناً ذهبياً يخطف الأبصار. وإلى هذا البعد التاريخي ينضمّ بعدٌ إيماني؛ فأرض بابل في الموروث الديني مسرحٌ لقصة إبراهيم عليه السلام في مواجهته للأصنام ودعوته إلى التوحيد، ما يجعل الوقوف عند مقامه هنا لحظةً تتلاقى فيها ذاكرة الحضارة بذاكرة النبوّة.</p>
+<p>هكذا تجمع هذه المحطة بين بُعدين عظيمين: عظمة العمارة البابلية التي تحدّت الزمن، وقدسية المكان الذي تتنفّس فيه حكايات الأنبياء. ومع شرحنا المتأنّي، تتكشّف أمامك طبقات المعنى المتراكمة في هذا الموضع، فتغادره وقد حملت معك أثراً لا يُمحى.</p>`,
+    "stop3.meta":"محطة روحية","stop3.title":"مرقد النبي أيوب",
+    "stop3.lead":"خاتمةٌ روحية هادئة عند مرقدٍ يُنسب إلى النبي أيوب عليه السلام، رمز الصبر واليقين.",
+    "stop3.full":`<p>تختتم رحلتك عند مرقدٍ يُنسب في التراث المحلي إلى النبي أيوب عليه السلام، أحد أنبياء الله الذين خلّدت قصصهم الكتب السماوية. وأيوب في الذاكرة الإنسانية رمزٌ خالد للصبر الجميل والثبات على الإيمان؛ فقد ابتُلي في جسده وماله وأهله ابتلاءً عظيماً، فلم يزده البلاء إلا يقيناً وتسليماً، حتى ردّ الله عليه عافيته وأضعاف ما فقد، فصارت سيرته مضرباً للمثل في احتمال الشدائد ورجاء الفرج.</p>
+<p>المقام، الذي يحفّه الهدوء والوقار، يمنح الزائر مساحةً للتأمّل بعد يومٍ حافل بعظمة الحضارات وصخب التاريخ. هنا تتباطأ الخُطى، ويخفت الضجيج، ويستحضر القلب معاني الصبر والامتنان والرضا. وقد تواترت زيارة مثل هذه المقامات عبر الأجيال بوصفها محطّاتٍ للسكينة الداخلية، يقصدها الناس على اختلاف مشاربهم التماساً للطمأنينة وراحة الروح.</p>
+<p>اخترنا أن تكون هذه المحطة خاتمة الرحلة عن قصد؛ فبعد أن تجولت في أطلال الملوك ووقفت تحت ظلال الأبراج العظيمة، يحسن أن تُختم التجربة بلحظةٍ من التأمّل الهادئ تُعيد التوازن بين هيبة الماضي وسلام الحاضر. إنها لمسةٌ إنسانية تذكّرنا أن وراء كل حضارةٍ عظيمة قلوباً عاشت وآمنت وصبرت.</p>
+<p>وقصة أيوب عليه السلام كما تتناقلها الكتب السماوية نموذجٌ في الابتلاء والعطاء؛ فقد كان ذا مالٍ وأهلٍ وصحّة، فسُلب ذلك كلّه في امتحانٍ عظيم، فما لانت له عزيمة ولا اعترض على قضاء ربّه، بل لازم الذكر والدعاء حتى جاءه الفرج؛ فأُمر أن يركض برجله فتفجّرت عين ماءٍ باردٍ شفته من دائه، وردّ الله عليه أهله وماله مضاعفاً، ليبقى مثلاً خالداً في أن الشدّة مهما اشتدّت فإلى زوال. ولهذا اتّخذ الناس من سيرته منارةً للرجاء، وقصدوا المقامات المنسوبة إليه يستلهمون منها الثبات والطمأنينة، وتعاقبت أجيالٌ على هذه الزيارة بوصفها وقفةً للروح لا للجسد.</p>
+<p>وزيارة هذا المقام ليست طقساً عابراً، بل وقفةٌ يتعلّم فيها القلب أن العظمة الحقيقية ليست في الحجر وحده، بل في الإنسان الذي يصمد ويؤمن. ونحرص في رحلتنا على أن نصون قدسية المكان وآدابه، فنمنحك مساحةً من الصمت والتأمّل بعيداً عن العجلة، ونروي لك المعنى بلغةٍ راقية تليق بمقام النبوّة، لتغادر هذه المحطة وقد لمست في داخلك سكينةً تكمّل ما بدأته عظمة بابل.</p>
+<p>ومع مرافقتنا، لن تكون مجرّد زائرٍ عابر، بل ضيفاً يُروى له المعنى بلغةٍ راقية تحترم قدسية المكان وثراءه التاريخي، لتغادر الرحلة وقد امتلأت روحك بما لا تمنحه الصور ولا تختصره الكلمات.</p>`,
+    "ui.more":"اقرأ المزيد","ui.less":"عرض أقل",
+    "wa.greet":"مرحباً، أودّ الاستفسار عن رحلة بابل الخاصة.","wa.float":"تواصل معنا عبر واتساب",
+    "facts.kicker":"التفاصيل","facts.title":"تجربة محسوبة بدقة",
+    "facts.k1":"مدة الرحلة","facts.v1":"٦ ساعات",
+    "facts.k2":"الانطلاق والعودة","facts.v2":"نفس النقطة في بغداد",
+    "facts.k3":"الحد الأقصى","facts.v3":"٣ أشخاص",
+    "facts.k4":"السيارة","facts.v4":"خاصة لك وحدك",
+    "price.kicker":"السعر","price.amount":"١٥٠٬٠٠٠ دينار",
+    "price.sub":"سعرٌ ثابت للرحلة كاملة — سواء كنت شخصاً واحداً أو شخصين أو ثلاثة. السيارة خاصة لك وحدك.",
+    "price.tk":"ملاحظة",
+    "price.warn":"تذاكر الدخول إلى آثار بابل غير مشمولة في السعر، إذ يختلف رسم الدخول بين الزائر العراقي والأجنبي ويُدفع في الموقع مباشرة.",
+    "book.kicker":"الحجز","book.title":"احجز رحلتك الخاصة",
+    "book.lead":"السيارة خاصة بك وحدك، لذا يُحجز اليوم بالكامل لأول من يحجزه. اختر يوماً متاحاً وأكمل بياناتك.",
+    "book.s1":"اختر اليوم","book.s1hint":"الأيام المؤشّرة محجوزة بالكامل ولا يمكن اختيارها.",
+    "book.s2":"اختر مقعدك","book.s2hint":"مقعد السائق محجوز لي. اختر حتى ٣ مقاعد للضيوف.",
+    "book.s3":"بياناتك","book.s3hint":"سنتواصل معك لتأكيد نقطة الانطلاق داخل بغداد.",
+    "book.seatsChosen":"المقاعد المختارة","book.confirm":"تأكيد الحجز",
+    "book.lgA":"متاح","book.lgS":"مُختار","book.lgB":"محجوز",
+    "seat.driver":"السائق","seat.guest":"مقعد",
+    "form.name":"الاسم الكامل","form.namePh":"اكتب اسمك",
+    "form.email":"البريد الإلكتروني","form.emailPh":"name@email.com",
+    "form.phone":"رقم الهاتف","form.phonePh":"07XX XXX XXXX",
+    "form.wa":"رقم واتساب","form.waPh":"07XX XXX XXXX",
+    "sum.date":"اليوم","sum.seats":"المقاعد","sum.total":"الإجمالي","sum.totalVal":"١٥٠٬٠٠٠ دينار",
+    "footer.text":"© Fable Tour — رحلات تراثية فاخرة في العراق",
+    months:["كانون الثاني","شباط","آذار","نيسان","أيار","حزيران","تموز","آب","أيلول","تشرين الأول","تشرين الثاني","كانون الأول"],
+    dows:["أحد","اثنين","ثلاثاء","أربعاء","خميس","جمعة","سبت"],
+    err_date:"الرجاء اختيار يوم متاح أولاً.",
+    err_seat:"الرجاء اختيار مقعد واحد على الأقل.",
+    err_name:"الرجاء كتابة الاسم.",
+    err_email:"الرجاء كتابة بريد إلكتروني صحيح.",
+    err_phone:"الرجاء كتابة رقم الهاتف.",
+    err_booked:"عذراً، هذا اليوم أصبح محجوزاً للتوّ. اختر يوماً آخر.",
+    ok_title:"تمّ استلام حجزك",
+    ok_body:"حُجز يومك بنجاح، وأصبح غير متاح لغيرك. أرسل التفاصيل عبر واتساب لتثبيت الحجز.",
+    wa_btn:"إرسال عبر واتساب",
+    wa_msg:(d)=>`حجز رحلة بابل\nالاسم: ${d.name}\nاليوم: ${d.date}\nالمقاعد: ${d.seats}\nالهاتف: ${d.phone}\nواتساب: ${d.wa}\nالإيميل: ${d.email}\nالإجمالي: 150,000 دينار`
+  },
+  en:{ dir:"ltr",
+    "hero.place":"Baghdad — Babylon",
+    "hero.title":"Babylon",
+    "hero.sub":"A private one-day journey, from the heart of Baghdad to the land of kings and prophets.",
+    "hero.cta1":"Reserve","hero.cta2":"The route",
+    "intro.kicker":"The story","intro.title":"A day of grandeur and grace",
+    "intro.lead":"Babylon was once the greatest city on earth — a gate of lapis and gold, hanging gardens counted among the wonders of the world. We offer a carefully composed day that begins from any point you choose in Baghdad, in a private car that joins the majesty of history with the serenity of the sacred, and returns you by evening to where you began.",
+    "journey.kicker":"The route","journey.title":"Three stops",
+    "journey.lead":"One destination for each chapter of the tale — from imperial glory to spiritual calm.",
+    "stop1.meta":"Ishtar Gate · Lion of Babylon","stop1.title":"The Ruins of Babylon",
+    "stop1.lead":"The capital of Nebuchadnezzar and the centre of the ancient world, where you walk restored palace ruins and stand before the famous Lion of Babylon.",
+    "stop1.full":`<p>On the banks of the Euphrates, some eighty-five kilometres south of Baghdad, Babylon rises as the greatest capital of the ancient world and one of the deepest imprints on human memory. The city reached the summit of its glory under King Nebuchadnezzar II in the sixth century BCE, when it became the heart of the Neo-Babylonian Empire and a centre of science, astronomy, law and architecture. Here the earliest written codes were refined, the movements of stars and planets were charted, and foundations were laid in mathematics and the calendar whose traces still shape our civilisation today.</p>
+<p>Your visit is led by the Ishtar Gate, a masterpiece sheathed in glazed brick the colour of lapis lazuli, crowned with reliefs of the dragon of the god Marduk and the bulls of the god Adad — a harmony of colour and symbol the ancient world never equalled. From the gate extends the Processional Way, trodden by kings and priests in seasons of festival, so that you walk the very path on which history was made. At the heart of the site stands the Lion of Babylon, carved from basalt, an enduring emblem of power and majesty that has watched over the city for thousands of years.</p>
+<p>No telling of Babylon is complete without the Hanging Gardens, one of the Seven Wonders of the world, which tradition attributes to Nebuchadnezzar as a gift to his wife Amytis, to remind her of the green mountains of her homeland — terraced gardens said to have been watered by an ingenious engineering system centuries ahead of its time. Beside them, the ziggurat of Etemenanki once rose toward the heavens, inspiring the great tower legends of human heritage and making Babylon an icon of architectural ambition without limit.</p>
+<p>Babylon's story reaches back centuries before Nebuchadnezzar, to the age of King Hammurabi, who immortalised his name with the earliest complete code of law — justice carved in diorite stone before the nations knew it. Conquerors and sages passed through her gates: Cyrus the Persian entered, and Alexander the Great died here while dreaming of making the city his capital. Ancient historians described her soaring walls and countless towers, until in human memory Babylon became the very model of a universal city. In our journey an unhurried, three-language narration and generous time at her finest vantage points turn every stone into a doorway to a story.</p>
+<p>Today, inscribed on the UNESCO World Heritage List, Babylon offers far more than a walk among ruins; it is a moment of standing in the place where the very idea of the city, the empire and civilisation was born. With our private accompaniment and unhurried narration, silent stones become living narrative, and Babylon is restored before your eyes as it was when it ruled the world.</p>`,
+    "stop2.meta":"Birs Nimrud ziggurat","stop2.title":"Borsippa & Shrine of Prophet Abraham",
+    "stop2.lead":"A towering ziggurat long tied to the Tower of Babel, beside a shrine attributed to the Prophet Abraham.",
+    "stop2.full":`<p>A short distance south-west of Babylon stands the ancient city of Borsippa, known throughout the Babylonian ages as a centre of worship and learning, consecrated to the god Nabu — deity of wisdom and writing and patron of scribes and scholars. Its great temple, Ezida, was a destination for pilgrims and students alike, and the city became Babylon's spiritual twin, exchanging processions and rites in the days of the great festivals, until its name became synonymous with sacred knowledge in Mesopotamia.</p>
+<p>The site is dominated by the ziggurat of Birs Nimrud, a soaring mound of mudbrick that still astonishes the visitor with its scale despite the centuries it has endured. Its summit is capped with masses of vitrified brick, fused by tremendous heat into a strange glassy sheen around which legends have been woven. This ziggurat has long been linked, in popular tradition and some ancient accounts, to the Tower of Babel of scripture, lending the place an aura of awe and mystery the traveller will rarely find elsewhere.</p>
+<p>Beside the ruin stands a shrine attributed in local tradition to the Prophet Abraham — the friend of God and father of prophets — whose story echoes through the collective memory of this land as a symbol of monotheism, patience and the confrontation of error. Visitors come here for reflection and prayer, so that the fragrance of ancient history mingles with the serenity of the shrine in an experience rare in its union of the cultural and the spiritual.</p>
+<p>The god Nabu, son of Marduk, was guardian of wisdom and writing, and Borsippa was home to scribes and to archives of cuneiform tablets preserving the secrets of science, astrology and literature. At the Babylonian New Year, the statue of Nabu was carried in solemn procession from Borsippa to meet his father Marduk in Babylon — a rite that renewed the king's legitimacy and blessed the fertility of the land, so that the road between the two cities became a stage for faith and sovereignty alike. The ziggurat once rose tens of metres into the sky, and its vitrified summit — fused by raging fire or a bolt of lightning — bound its name in the popular imagination to Nimrod and the great tower, while at sunset its ruins take on a golden hue that holds the eye.</p>
+<p>Thus this stop joins two great dimensions: the grandeur of a Babylonian architecture that defied time, and the sanctity of a place that breathes the stories of the prophets. With our measured commentary, the accumulated layers of meaning in this site are unveiled before you, and you leave it carrying an impression that will not fade.</p>`,
+    "stop3.meta":"A spiritual stop","stop3.title":"Shrine of Prophet Job",
+    "stop3.lead":"A quiet spiritual close at a shrine attributed to the Prophet Job — a symbol of patience and faith.",
+    "stop3.full":`<p>Your journey closes at a shrine attributed in local tradition to the Prophet Job (Ayyub), one of the prophets of God whose stories the scriptures have immortalised. In human memory, Job is an enduring symbol of beautiful patience and steadfast faith: tried grievously in his body, his wealth and his family, affliction only deepened his certainty and submission, until God restored his health and many times what he had lost, so that his life became a byword for enduring hardship in the hope of relief.</p>
+<p>The shrine, wrapped in quiet and dignity, offers the visitor a space for reflection after a day filled with the grandeur of civilisations and the clamour of history. Here the pace slows, the noise fades, and the heart recalls the meanings of patience, gratitude and contentment. The visiting of such shrines has continued across generations as a station of inner serenity, sought by people of every background in search of tranquillity and rest for the soul.</p>
+<p>We chose this stop as the journey's conclusion deliberately: after wandering the ruins of kings and standing beneath the shadows of great towers, it is fitting to end the experience with a moment of calm reflection that restores the balance between the majesty of the past and the peace of the present. It is a human touch, reminding us that behind every great civilisation are hearts that lived, believed and endured.</p>
+<p>The story of Job, as the scriptures relate it, is a model of trial and restoration: a man rich in family, wealth and health, stripped of all in a great test, who never wavered nor protested against his Lord, but held fast to remembrance and prayer until relief came — a spring of cool water gushing forth to heal him, his family and fortune returned to him many times over. So his life endured as a timeless emblem that no hardship, however severe, is without end. People have taken his example as a beacon of hope, seeking the shrines attributed to him to draw from them steadfastness and serenity, generation after generation, as a pause for the soul rather than the body.</p>
+<p>With our accompaniment, you are not a passing visitor but a guest to whom meaning is told in a refined voice that honours the sanctity of the place and the richness of its history — so that you leave the journey with your spirit filled by what no image can give and no words can abbreviate.</p>`,
+    "ui.more":"Read more","ui.less":"Show less",
+    "wa.greet":"Hello, I'd like to ask about the private Babylon journey.","wa.float":"Chat with us on WhatsApp",
+    "facts.kicker":"The details","facts.title":"A precisely composed experience",
+    "facts.k1":"Duration","facts.v1":"6 hours",
+    "facts.k2":"Pickup & drop-off","facts.v2":"Same point in Baghdad",
+    "facts.k3":"Maximum","facts.v3":"3 guests",
+    "facts.k4":"The car","facts.v4":"Private to you",
+    "price.kicker":"The price","price.amount":"150,000 IQD",
+    "price.sub":"A flat price for the entire journey — whether one, two or three guests. The car is yours alone.",
+    "price.tk":"Please note",
+    "price.warn":"Entry tickets to the Babylon site are not included, as the fee differs between Iraqi and foreign visitors and is paid on site.",
+    "book.kicker":"Reservation","book.title":"Reserve your private journey",
+    "book.lead":"The car is yours alone, so the whole day is held for whoever books it first. Choose an available day and complete your details.",
+    "book.s1":"Choose the day","book.s1hint":"Marked days are fully booked and cannot be selected.",
+    "book.s2":"Choose your seat","book.s2hint":"The driver's seat is mine. Select up to 3 guest seats.",
+    "book.s3":"Your details","book.s3hint":"We'll contact you to confirm your pickup point in Baghdad.",
+    "book.seatsChosen":"Seats chosen","book.confirm":"Confirm reservation",
+    "book.lgA":"Available","book.lgS":"Selected","book.lgB":"Booked",
+    "seat.driver":"Driver","seat.guest":"Seat",
+    "form.name":"Full name","form.namePh":"Your name",
+    "form.email":"Email","form.emailPh":"name@email.com",
+    "form.phone":"Phone","form.phonePh":"+964 7XX XXX XXXX",
+    "form.wa":"WhatsApp","form.waPh":"+964 7XX XXX XXXX",
+    "sum.date":"Day","sum.seats":"Seats","sum.total":"Total","sum.totalVal":"150,000 IQD",
+    "footer.text":"© Fable Tour — Luxury heritage journeys in Iraq",
+    months:["January","February","March","April","May","June","July","August","September","October","November","December"],
+    dows:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
+    err_date:"Please choose an available day first.",
+    err_seat:"Please select at least one seat.",
+    err_name:"Please enter your name.",
+    err_email:"Please enter a valid email.",
+    err_phone:"Please enter your phone number.",
+    err_booked:"Sorry, this day has just been booked. Please choose another.",
+    ok_title:"Reservation received",
+    ok_body:"Your day is booked and is now unavailable to others. Send the details on WhatsApp to confirm.",
+    wa_btn:"Send on WhatsApp",
+    wa_msg:(d)=>`Babylon Tour reservation\nName: ${d.name}\nDay: ${d.date}\nSeats: ${d.seats}\nPhone: ${d.phone}\nWhatsApp: ${d.wa}\nEmail: ${d.email}\nTotal: 150,000 IQD`
+  },
+  ru:{ dir:"ltr",
+    "hero.place":"Багдад — Вавилон",
+    "hero.title":"Вавилон",
+    "hero.sub":"Частное однодневное путешествие из сердца Багдада в землю царей и пророков.",
+    "hero.cta1":"Забронировать","hero.cta2":"Маршрут",
+    "intro.kicker":"История","intro.title":"День величия и покоя",
+    "intro.lead":"Когда-то Вавилон был величайшим городом на земле — врата из лазурита и золота, висячие сады среди чудес света. Мы предлагаем тщательно составленный день, который начинается из любой точки Багдада по вашему выбору, в частном автомобиле, соединяющем величие истории и безмятежность святынь, и к вечеру возвращает вас туда, откуда вы начали.",
+    "journey.kicker":"Маршрут","journey.title":"Три остановки",
+    "journey.lead":"Своя цель для каждой главы повествования — от имперского величия до духовного покоя.",
+    "stop1.meta":"Врата Иштар · Лев Вавилона","stop1.title":"Руины Вавилона",
+    "stop1.lead":"Столица Навуходоносора и центр древнего мира, где вы пройдёте среди отреставрированных руин дворцов и встанете перед знаменитым Львом Вавилона.",
+    "stop1.full":`<p>На берегах Евфрата, примерно в восьмидесяти пяти километрах к югу от Багдада, возвышается Вавилон — величайшая столица древнего мира и один из глубочайших отпечатков в человеческой памяти. Город достиг вершины своей славы при царе Навуходоносоре II в шестом веке до нашей эры, став сердцем Нововавилонского царства и центром науки, астрономии, права и архитектуры. Здесь оттачивались древнейшие письменные законы, прослеживались движения звёзд и планет, закладывались основы математики и календаря, следы которых и поныне формируют нашу цивилизацию.</p>
+<p>Ваш визит открывают врата Иштар — шедевр, облицованный глазурованным кирпичом цвета лазурита, увенчанный рельефами дракона бога Мардука и быков бога Адада, в гармонии цвета и символа, которой не знал древний мир. От врат тянется Дорога процессий, по которой в дни празднеств шествовали цари и жрецы, так что вы идёте по тому самому пути, где творилась история. В сердце комплекса стоит Лев Вавилона, высеченный из базальта, — вечный символ силы и величия, тысячи лет хранящий город.</p>
+<p>Повествование о Вавилоне немыслимо без висячих садов — одного из семи чудес света, которые предание приписывает Навуходоносору как дар его супруге Амитис, дабы напоминать ей о зелёных горах родины; террасные сады, которые, как говорят, орошались остроумной инженерной системой, на века опередившей своё время. Рядом с ними к небесам некогда вздымался зиккурат Этеменанки, вдохновивший великие легенды о башнях в наследии человечества и сделавший Вавилон символом безграничного архитектурного дерзновения.</p>
+<p>История Вавилона уходит на века глубже Навуходоносора — к старовавилонской эпохе царя Хаммурапи, обессмертившего своё имя древнейшим полным сводом законов: правосудием, высеченным в камне прежде, чем его узнали народы. Через его врата проходили завоеватели и мудрецы: вошёл персидский Кир, а Александр Македонский умер здесь, мечтая сделать город своей столицей. Древние историки описывали его исполинские стены и бесчисленные башни, так что в человеческом сознании Вавилон стал образцом вселенского города. Затем пески на долгие века скрыли его черты, прежде чем кирки современных раскопок вернули на свет частицу его блеска. В нашей поездке мы дарим вам время для созерцания и съёмки в самых выразительных ракурсах, с неспешным рассказом на трёх языках, превращающим каждый камень в дверь к повести.</p>
+<p>Сегодня, внесённый в список Всемирного наследия ЮНЕСКО, Вавилон дарит куда больше, чем прогулку среди руин; это миг пребывания там, где родилась сама идея города, империи и цивилизации. С нашим частным сопровождением и неспешным рассказом безмолвные камни оживают повествованием, и Вавилон вновь предстаёт перед вашими глазами таким, каким он был, когда правил миром.</p>`,
+    "stop2.meta":"Зиккурат Бирс-Нимруд","stop2.title":"Борсиппа и гробница пророка Авраама",
+    "stop2.lead":"Возвышающийся зиккурат, издавна связываемый с Вавилонской башней, рядом с гробницей, приписываемой пророку Аврааму.",
+    "stop2.full":`<p>На небольшом расстоянии к юго-западу от Вавилона стоит древний город Борсиппа, известный на протяжении вавилонских эпох как центр культа и учёности, посвящённый богу Набу — божеству мудрости и письма, покровителю писцов и учёных. Его великий храм Эзида был целью паломников и учеников, а сам город стал духовным близнецом Вавилона, обмениваясь с ним процессиями и обрядами в дни больших празднеств, пока его имя не стало синонимом священного знания в Месопотамии.</p>
+<p>Над местностью господствует зиккурат Бирс-Нимруд — вздымающийся холм из сырцового кирпича, который и сегодня поражает посетителя своими размерами, несмотря на пережитые столетия. Его вершину венчают массы остеклованного кирпича, сплавленного чудовищным жаром в странный стеклянистый блеск, вокруг которого сплетались легенды. Этот зиккурат издавна связывают — в народном предании и некоторых древних свидетельствах — с библейской Вавилонской башней, что придаёт месту ауру благоговения и тайны, какую путешественник редко найдёт где-либо ещё.</p>
+<p>Рядом с руиной стоит гробница, приписываемая местным преданием пророку Аврааму — другу Божьему и отцу пророков, чья история звучит в коллективной памяти этой земли как символ единобожия, терпения и противостояния заблуждению. Сюда приходят для размышления и молитвы, так что аромат древней истории сливается с безмятежностью гробницы в опыте, редком в своём соединении культурного и духовного.</p>
+<p>Бог Набу, сын Мардука, был хранителем мудрости и письма, и Борсиппа стала домом писцов и хранилищ клинописных табличек, в которых берегли тайны наук, астрологии и словесности. В вавилонский Новый год статую Набу несли торжественной процессией из Борсиппы в Вавилон на встречу с отцом Мардуком — обрядом, обновлявшим законность царя и благословлявшим плодородие земли, так что дорога между городами становилась сценой веры и власти одновременно. Высота зиккурата первоначально достигала десятков метров, а тайна остеклованного кирпича его вершины — следствие ли это чудовищного пожара или небесной молнии — питала связь места в народном воображении с именем Нимрода и Вавилонской башней, тогда как на закате его руины обретают золотистый отблеск, пленяющий взор.</p>
+<p>Так эта остановка объединяет два великих измерения: величие вавилонской архитектуры, бросившей вызов времени, и святость места, дышащего историями пророков. С нашим размеренным комментарием перед вами раскрываются накопленные слои смысла этого места, и вы покидаете его, унося неизгладимое впечатление.</p>`,
+    "stop3.meta":"Духовная остановка","stop3.title":"Гробница пророка Иова",
+    "stop3.lead":"Тихое духовное завершение у гробницы, приписываемой пророку Иову, — символу терпения и веры.",
+    "stop3.full":`<p>Ваше путешествие завершается у гробницы, приписываемой местным преданием пророку Иову (Айюбу), одному из пророков Божьих, чьи истории увековечены Писаниями. В человеческой памяти Иов — вечный символ прекрасного терпения и стойкой веры: тяжко испытанный в теле, имуществе и семье, он лишь укрепился в уверенности и смирении, пока Бог не вернул ему здоровье и многократно то, что он утратил, так что его жизнь стала образцом стойкости перед лицом бедствий в надежде на избавление.</p>
+<p>Гробница, окутанная тишиной и достоинством, дарит посетителю пространство для размышления после дня, наполненного величием цивилизаций и шумом истории. Здесь замедляется шаг, стихает гул, и сердце вспоминает смыслы терпения, благодарности и довольства. Посещение таких святынь продолжается из поколения в поколение как станция внутреннего покоя, к которой стремятся люди всякого происхождения в поисках безмятежности и отдохновения для души.</p>
+<p>Мы намеренно выбрали эту остановку завершением путешествия: пройдя среди руин царей и постояв под тенью великих башен, уместно завершить опыт мгновением тихого размышления, восстанавливающим равновесие между величием прошлого и миром настоящего. Это человеческое прикосновение, напоминающее, что за каждой великой цивилизацией стоят сердца, которые жили, верили и терпели.</p>
+<p>История Иова, как передают её Писания, — образец испытания и воздаяния: человек, богатый семьёй, имуществом и здоровьем, лишённый всего в великом испытании, который не дрогнул и не возроптал на своего Господа, но держался поминания и молитвы, пока не пришло избавление — забил источник прохладной воды, исцеливший его, и семья и достояние вернулись к нему многократно. Так его жизнь осталась вечным знаком того, что никакая беда, сколь бы тяжкой ни была, не бесконечна. Люди сделали его пример маяком надежды и устремляются к приписываемым ему святыням, черпая в них стойкость и покой, поколение за поколением, как остановку для души, а не для тела.</p>
+<p>С нашим сопровождением вы не случайный посетитель, а гость, которому смысл рассказывают изысканным голосом, чтящим святость места и богатство его истории, — так что вы покидаете путешествие с душой, наполненной тем, чего не даст ни один образ и не вместят никакие слова.</p>`,
+    "ui.more":"Подробнее","ui.less":"Свернуть",
+    "wa.greet":"Здравствуйте, хочу узнать о частной поездке в Вавилон.","wa.float":"Напишите нам в WhatsApp",
+    "facts.kicker":"Детали","facts.title":"Точно выверенный опыт",
+    "facts.k1":"Длительность","facts.v1":"6 часов",
+    "facts.k2":"Подача и возврат","facts.v2":"Та же точка в Багдаде",
+    "facts.k3":"Максимум","facts.v3":"3 гостя",
+    "facts.k4":"Автомобиль","facts.v4":"Только для вас",
+    "price.kicker":"Цена","price.amount":"150 000 динаров",
+    "price.sub":"Фиксированная цена за всю поездку — один, двое или трое гостей. Автомобиль только ваш.",
+    "price.tk":"Обратите внимание",
+    "price.warn":"Входные билеты на территорию Вавилона не включены, так как плата для иракцев и иностранцев различается и оплачивается на месте.",
+    "book.kicker":"Бронирование","book.title":"Забронируйте частную поездку",
+    "book.lead":"Автомобиль только ваш, поэтому весь день закрепляется за тем, кто забронирует первым. Выберите свободный день и заполните данные.",
+    "book.s1":"Выберите день","book.s1hint":"Отмеченные дни полностью забронированы.",
+    "book.s2":"Выберите место","book.s2hint":"Место водителя занято мной. Выберите до 3 мест для гостей.",
+    "book.s3":"Ваши данные","book.s3hint":"Мы свяжемся с вами, чтобы уточнить точку подачи в Багдаде.",
+    "book.seatsChosen":"Выбрано мест","book.confirm":"Подтвердить бронь",
+    "book.lgA":"Свободно","book.lgS":"Выбрано","book.lgB":"Занято",
+    "seat.driver":"Водитель","seat.guest":"Место",
+    "form.name":"Полное имя","form.namePh":"Ваше имя",
+    "form.email":"Эл. почта","form.emailPh":"name@email.com",
+    "form.phone":"Телефон","form.phonePh":"+964 7XX XXX XXXX",
+    "form.wa":"WhatsApp","form.waPh":"+964 7XX XXX XXXX",
+    "sum.date":"День","sum.seats":"Места","sum.total":"Итого","sum.totalVal":"150 000 динаров",
+    "footer.text":"© Fable Tour — Роскошные культурные путешествия по Ираку",
+    months:["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"],
+    dows:["Вс","Пн","Вт","Ср","Чт","Пт","Сб"],
+    err_date:"Сначала выберите свободный день.",
+    err_seat:"Выберите хотя бы одно место.",
+    err_name:"Введите имя.",
+    err_email:"Введите корректный email.",
+    err_phone:"Введите номер телефона.",
+    err_booked:"Извините, этот день только что забронировали. Выберите другой.",
+    ok_title:"Бронь принята",
+    ok_body:"Ваш день забронирован и теперь недоступен другим. Отправьте детали в WhatsApp для подтверждения.",
+    wa_btn:"Отправить в WhatsApp",
+    wa_msg:(d)=>`Бронь тура в Вавилон\nИмя: ${d.name}\nДень: ${d.date}\nМеста: ${d.seats}\nТелефон: ${d.phone}\nWhatsApp: ${d.wa}\nEmail: ${d.email}\nИтого: 150 000 динаров`
+  }
+};
+
+/* ───────────── state ───────────── */
+const STORE="fableBabylonBookings";
+let lang="ar", selectedSeats=new Set(), selectedDate=null, vY, vM;
+
+const loadB=()=>{try{return JSON.parse(localStorage.getItem(STORE))||{}}catch(e){return{}}};
+const saveB=(k,d)=>{const a=loadB();a[k]=d;localStorage.setItem(STORE,JSON.stringify(a))};
+const isB=k=>!!loadB()[k];
+
+/* ───────────── language ───────────── */
+function applyLang(l){
+  lang=l;const d=T[l];
+  document.documentElement.lang=l;document.documentElement.dir=d.dir;
+  document.querySelectorAll("[data-i]").forEach(e=>{const k=e.getAttribute("data-i");if(d[k]!==undefined)e.textContent=d[k];});
+  document.querySelectorAll("[data-i-html]").forEach(e=>{const k=e.getAttribute("data-i-html");if(d[k]!==undefined)e.innerHTML=d[k];});
+  document.querySelectorAll("[data-ph]").forEach(e=>{const k=e.getAttribute("data-ph");if(d[k])e.placeholder=d[k];});
+  // read-more buttons keep their open/closed label
+  document.querySelectorAll(".readmore").forEach(b=>b.textContent=b.classList.contains("open")?d["ui.less"]:d["ui.more"]);
+  // recompute height of any expanded panels for the new language
+  document.querySelectorAll(".more.open").forEach(m=>m.style.maxHeight=m.scrollHeight+"px");
+  // floating WhatsApp link + tooltip
+  const wf=document.getElementById("waFloat");
+  if(wf) wf.href=`https://wa.me/${OPERATOR.whatsapp}?text=${encodeURIComponent(d["wa.greet"])}`;
+  document.querySelectorAll(".langs button").forEach(b=>b.classList.toggle("active",b.dataset.lang===l));
+  renderCal();updateSum();
+}
+
+/* ───────────── read more ───────────── */
+document.querySelectorAll(".readmore[data-toggle]").forEach(btn=>{
+  const panel=btn.parentElement.querySelector(".more");
+  btn.addEventListener("click",()=>{
+    const open=panel.classList.toggle("open");
+    btn.classList.toggle("open",open);
+    btn.textContent=T[lang][open?"ui.less":"ui.more"];
+    panel.style.maxHeight=open?panel.scrollHeight+"px":"0px";
+  });
+});
+
+/* ───────────── calendar ───────────── */
+const pad=n=>String(n).padStart(2,"0");
+const keyOf=(y,m,dd)=>`${y}-${pad(m+1)}-${pad(dd)}`;
+function renderCal(){
+  const d=T[lang],cal=document.getElementById("cal"),name=document.getElementById("calName");
+  cal.innerHTML="";name.textContent=`${d.months[vM]} ${vY}`;
+  d.dows.forEach(x=>{const h=document.createElement("div");h.className="dow";h.textContent=x;cal.appendChild(h);});
+  const first=new Date(vY,vM,1).getDay(),days=new Date(vY,vM+1,0).getDate();
+  const today=new Date();today.setHours(0,0,0,0);
+  for(let i=0;i<first;i++){const e=document.createElement("div");e.className="cell empty";cal.appendChild(e);}
+  for(let dd=1;dd<=days;dd++){
+    const c=document.createElement("div");c.className="cell";c.textContent=dd;
+    const td=new Date(vY,vM,dd);td.setHours(0,0,0,0);const k=keyOf(vY,vM,dd);
+    if(td<today)c.classList.add("past");
+    else if(isB(k))c.classList.add("booked");
+    else{c.classList.add("avail");if(selectedDate===k)c.classList.add("sel");
+      c.addEventListener("click",()=>{selectedDate=k;renderCal();updateSum();document.getElementById("msgErr").classList.remove("show");});}
+    cal.appendChild(c);
+  }
+}
+const shift=delta=>{vM+=delta;if(vM<0){vM=11;vY--}if(vM>11){vM=0;vY++}renderCal();};
+
+/* ───────────── seats ───────────── */
+document.querySelectorAll(".seat[data-seat]").forEach(s=>{
+  s.addEventListener("click",()=>{
+    const id=s.dataset.seat;
+    if(selectedSeats.has(id)){selectedSeats.delete(id);s.classList.remove("sel");}
+    else{if(selectedSeats.size>=3)return;selectedSeats.add(id);s.classList.add("sel");}
+    document.getElementById("seatNum").textContent=selectedSeats.size;updateSum();
+  });
+});
+
+/* ───────────── summary ───────────── */
+function fmtDate(k){if(!k)return"—";const[y,m,dd]=k.split("-").map(Number);return`${dd} ${T[lang].months[m-1]} ${y}`;}
+function updateSum(){
+  document.getElementById("sDate").textContent=fmtDate(selectedDate);
+  document.getElementById("sSeats").textContent=selectedSeats.size?[...selectedSeats].join(" · "):"—";
+  document.getElementById("sTotal").textContent=T[lang]["sum.totalVal"];
+}
+
+/* ───────────── confirm ───────────── */
+document.getElementById("confirmBtn").addEventListener("click",()=>{
+  const d=T[lang],err=document.getElementById("msgErr"),ok=document.getElementById("msgOk");
+  ok.classList.remove("show");err.classList.remove("show");
+  const name=fName.value.trim(),email=fEmail.value.trim(),phone=fPhone.value.trim(),wa=fWa.value.trim();
+  const emailOk=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  let e=null;
+  if(!selectedDate)e=d.err_date;
+  else if(isB(selectedDate))e=d.err_booked;
+  else if(selectedSeats.size===0)e=d.err_seat;
+  else if(!name)e=d.err_name;
+  else if(!emailOk)e=d.err_email;
+  else if(!phone)e=d.err_phone;
+  if(e){err.textContent=e;err.classList.add("show");err.scrollIntoView({behavior:"smooth",block:"center"});return;}
+  const data={name,email,phone,wa:wa||phone,seats:[...selectedSeats].join(", "),date:fmtDate(selectedDate),lang,ts:Date.now()};
+  saveB(selectedDate,data);
+  const waUrl=`https://wa.me/${OPERATOR.whatsapp}?text=${encodeURIComponent(d.wa_msg(data))}`;
+  ok.innerHTML=`<strong>${d.ok_title}</strong>${d.ok_body}<br><a class="wa" href="${waUrl}" target="_blank" rel="noopener">${d.wa_btn} →</a>`;
+  ok.classList.add("show");ok.scrollIntoView({behavior:"smooth",block:"center"});
+  document.querySelectorAll(".seat.sel").forEach(s=>s.classList.remove("sel"));
+  selectedSeats.clear();document.getElementById("seatNum").textContent=0;selectedDate=null;
+  renderCal();updateSum();
+});
+
+/* ───────────── nav + reveal ───────────── */
+document.querySelectorAll(".langs button").forEach(b=>b.addEventListener("click",()=>applyLang(b.dataset.lang)));
+document.querySelectorAll("[data-scroll]").forEach(b=>b.addEventListener("click",()=>document.querySelector(b.dataset.scroll).scrollIntoView({behavior:"smooth"})));
+document.getElementById("prevM").addEventListener("click",()=>shift(-1));
+document.getElementById("nextM").addEventListener("click",()=>shift(1));
+window.addEventListener("scroll",()=>document.getElementById("topbar").classList.toggle("solid",scrollY>40));
+
+const io=new IntersectionObserver((es)=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add("in");io.unobserve(en.target);}}),{threshold:.12});
+document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+
+/* ───────────── init ───────────── */
+(function(){const n=new Date();vY=n.getFullYear();vM=n.getMonth();applyLang("ar");})();
+</script>
+</body>
+</html>
