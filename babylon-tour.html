@@ -566,7 +566,8 @@ const OPERATOR = {
    إن تركتهما فارغين سيعمل الموقع محلياً (localStorage) بدون خادم. */
 const SUPABASE = {
   url:     "https://zrbbnveaqockoptftqst.supabase.co",
-  anonKey: "الصق_مفتاح_publishable_هنا"   // ← الصق المفتاح الكامل sb_publishable_...
+    anonKey: "sb_publishable_YscqakXUfq9ngPjaAhe2KA__sFDoMcl"
+
 };
 const REMOTE = !!(SUPABASE.url && SUPABASE.anonKey && SUPABASE.anonKey.indexOf("الصق")!==0);
 const sb = (REMOTE && window.supabase) ? window.supabase.createClient(SUPABASE.url, SUPABASE.anonKey) : null;
