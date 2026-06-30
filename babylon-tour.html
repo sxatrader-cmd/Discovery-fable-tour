@@ -552,6 +552,7 @@ html[lang="ar"] .wa-float .tip{font-family:var(--f-ar-body)}
   </span>
 </a>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* ════════════════════════════════════════════════════════════════
    ⚙️ CONFIG — عدّل هذين السطرين فقط
@@ -560,6 +561,15 @@ const OPERATOR = {
   whatsapp: "9647711745353",       // ← رقمك بصيغة دولية بدون +
   email:    "info@fabletour.com"   // ← بريدك
 };
+
+/* Supabase — الصق رابط مشروعك ومفتاح anon (public) هنا ليصلك الحجز على الإيميل.
+   إن تركتهما فارغين سيعمل الموقع محلياً (localStorage) بدون خادم. */
+const SUPABASE = {
+  url:     "",   // ← مثل: https://xxxxxxxxxxxx.supabase.co
+  anonKey: ""    // ← anon public key
+};
+const REMOTE = !!(SUPABASE.url && SUPABASE.anonKey);
+const sb = (REMOTE && window.supabase) ? window.supabase.createClient(SUPABASE.url, SUPABASE.anonKey) : null;
 
 /* ───────────── i18n ───────────── */
 const T = {
@@ -627,6 +637,8 @@ const T = {
     err_email:"الرجاء كتابة بريد إلكتروني صحيح.",
     err_phone:"الرجاء كتابة رقم الهاتف.",
     err_booked:"عذراً، هذا اليوم أصبح محجوزاً للتوّ. اختر يوماً آخر.",
+    ui_sending:"جارٍ الحجز…",
+    err_generic:"تعذّر إتمام الحجز. تأكّد من الاتصال وحاول مجدداً.",
     ok_title:"تمّ استلام حجزك",
     ok_body:"حُجز يومك بنجاح، وأصبح غير متاح لغيرك. أرسل التفاصيل عبر واتساب لتثبيت الحجز.",
     wa_btn:"إرسال عبر واتساب",
@@ -695,6 +707,8 @@ const T = {
     err_email:"Please enter a valid email.",
     err_phone:"Please enter your phone number.",
     err_booked:"Sorry, this day has just been booked. Please choose another.",
+    ui_sending:"Booking…",
+    err_generic:"Could not complete the booking. Check your connection and try again.",
     ok_title:"Reservation received",
     ok_body:"Your day is booked and is now unavailable to others. Send the details on WhatsApp to confirm.",
     wa_btn:"Send on WhatsApp",
@@ -763,6 +777,8 @@ const T = {
     err_email:"Введите корректный email.",
     err_phone:"Введите номер телефона.",
     err_booked:"Извините, этот день только что забронировали. Выберите другой.",
+    ui_sending:"Бронирование…",
+    err_generic:"Не удалось завершить бронирование. Проверьте связь и повторите.",
     ok_title:"Бронь принята",
     ok_body:"Ваш день забронирован и теперь недоступен другим. Отправьте детали в WhatsApp для подтверждения.",
     wa_btn:"Отправить в WhatsApp",
@@ -773,10 +789,20 @@ const T = {
 /* ───────────── state ───────────── */
 const STORE="fableBabylonBookings";
 let lang="ar", selectedSeats=new Set(), selectedDate=null, vY, vM;
+let bookedRemote=new Set();
 
 const loadB=()=>{try{return JSON.parse(localStorage.getItem(STORE))||{}}catch(e){return{}}};
 const saveB=(k,d)=>{const a=loadB();a[k]=d;localStorage.setItem(STORE,JSON.stringify(a))};
-const isB=k=>!!loadB()[k];
+const isB=k=> bookedRemote.has(k) || !!loadB()[k];
+
+async function fetchBooked(){
+  if(!REMOTE) return;
+  try{
+    const {data,error}=await sb.rpc("booked_dates");
+    if(!error && Array.isArray(data)) bookedRemote=new Set(data.map(x=>x.d));
+    renderCal();
+  }catch(e){/* تجاهل أخطاء الشبكة بهدوء */}
+}
 
 /* ───────────── language ───────────── */
 function applyLang(l){
@@ -848,8 +874,9 @@ function updateSum(){
 }
 
 /* ───────────── confirm ───────────── */
-document.getElementById("confirmBtn").addEventListener("click",()=>{
+document.getElementById("confirmBtn").addEventListener("click",async()=>{
   const d=T[lang],err=document.getElementById("msgErr"),ok=document.getElementById("msgOk");
+  const btn=document.getElementById("confirmBtn");
   ok.classList.remove("show");err.classList.remove("show");
   const name=fName.value.trim(),email=fEmail.value.trim(),phone=fPhone.value.trim(),wa=fWa.value.trim();
   const emailOk=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -861,8 +888,41 @@ document.getElementById("confirmBtn").addEventListener("click",()=>{
   else if(!emailOk)e=d.err_email;
   else if(!phone)e=d.err_phone;
   if(e){err.textContent=e;err.classList.add("show");err.scrollIntoView({behavior:"smooth",block:"center"});return;}
-  const data={name,email,phone,wa:wa||phone,seats:[...selectedSeats].join(", "),date:fmtDate(selectedDate),lang,ts:Date.now()};
-  saveB(selectedDate,data);
+
+  const seatStr=[...selectedSeats].join(", ");
+  const orig=btn.textContent;btn.disabled=true;btn.textContent=d.ui_sending;
+
+  if(REMOTE){
+    try{
+      const {error}=await sb.from("bookings").insert({
+        booking_date:selectedDate, full_name:name, email, phone,
+        whatsapp:wa||phone, seats:seatStr, language:lang
+      });
+      if(error){
+        btn.disabled=false;btn.textContent=orig;
+        if(error.code==="23505"){ // اليوم محجوز للتوّ
+          bookedRemote.add(selectedDate);renderCal();
+          err.textContent=d.err_booked;err.classList.add("show");
+          err.scrollIntoView({behavior:"smooth",block:"center"});
+        }else{
+          err.textContent=d.err_generic;err.classList.add("show");
+          err.scrollIntoView({behavior:"smooth",block:"center"});
+        }
+        return;
+      }
+      bookedRemote.add(selectedDate);
+    }catch(ex){
+      btn.disabled=false;btn.textContent=orig;
+      err.textContent=d.err_generic;err.classList.add("show");
+      err.scrollIntoView({behavior:"smooth",block:"center"});return;
+    }
+  }else{
+    saveB(selectedDate,{name,email,phone,wa:wa||phone,seats:seatStr,date:fmtDate(selectedDate),lang,ts:Date.now()});
+  }
+
+  // نجاح
+  btn.disabled=false;btn.textContent=orig;
+  const data={name,email,phone,wa:wa||phone,seats:seatStr,date:fmtDate(selectedDate),lang};
   const waUrl=`https://wa.me/${OPERATOR.whatsapp}?text=${encodeURIComponent(d.wa_msg(data))}`;
   ok.innerHTML=`<strong>${d.ok_title}</strong>${d.ok_body}<br><a class="wa" href="${waUrl}" target="_blank" rel="noopener">${d.wa_btn} →</a>`;
   ok.classList.add("show");ok.scrollIntoView({behavior:"smooth",block:"center"});
@@ -882,7 +942,7 @@ const io=new IntersectionObserver((es)=>es.forEach(en=>{if(en.isIntersecting){en
 document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
 
 /* ───────────── init ───────────── */
-(function(){const n=new Date();vY=n.getFullYear();vM=n.getMonth();applyLang("ar");})();
+(function(){const n=new Date();vY=n.getFullYear();vM=n.getMonth();applyLang("ar");fetchBooked();})();
 </script>
 </body>
 </html>
