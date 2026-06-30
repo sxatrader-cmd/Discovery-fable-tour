@@ -565,11 +565,14 @@ const OPERATOR = {
 /* Supabase — الصق رابط مشروعك ومفتاح anon (public) هنا ليصلك الحجز على الإيميل.
    إن تركتهما فارغين سيعمل الموقع محلياً (localStorage) بدون خادم. */
 const SUPABASE = {
-  url:     "",   // ← مثل: https://xxxxxxxxxxxx.supabase.co
-  anonKey: ""    // ← anon public key
+  url:     "https://zrbbnveaqockoptftqst.supabase.co",
+  anonKey: "الصق_مفتاح_publishable_هنا"   // ← الصق المفتاح الكامل sb_publishable_...
 };
-const REMOTE = !!(SUPABASE.url && SUPABASE.anonKey);
+const REMOTE = !!(SUPABASE.url && SUPABASE.anonKey && SUPABASE.anonKey.indexOf("الصق")!==0);
 const sb = (REMOTE && window.supabase) ? window.supabase.createClient(SUPABASE.url, SUPABASE.anonKey) : null;
+
+/* Web3Forms — لإرسال إشعار الحجز إلى بريدك (يصلك على الإيميل المرتبط بالمفتاح) */
+const WEB3FORMS_KEY = "9e405ed2-6f37-467e-aea0-4b7678c7e635";   // ← Access Key من web3forms.com
 
 /* ───────────── i18n ───────────── */
 const T = {
@@ -804,6 +807,32 @@ async function fetchBooked(){
   }catch(e){/* تجاهل أخطاء الشبكة بهدوء */}
 }
 
+/* ───────────── email notify (Web3Forms) ───────────── */
+function notifyByEmail(info){
+  if(!WEB3FORMS_KEY || WEB3FORMS_KEY.indexOf("الصق")===0) return;
+  const message=
+    "اليوم / Date: "+info.date+"\n"+
+    "الاسم / Name: "+info.name+"\n"+
+    "المقاعد / Seats: "+info.seats+"\n"+
+    "الهاتف / Phone: "+info.phone+"\n"+
+    "واتساب / WhatsApp: "+info.wa+"\n"+
+    "الإيميل / Email: "+info.email+"\n"+
+    "اللغة / Language: "+info.lang+"\n"+
+    "الإجمالي / Total: 150,000 IQD";
+  fetch("https://api.web3forms.com/submit",{
+    method:"POST",
+    headers:{"Content-Type":"application/json","Accept":"application/json"},
+    body:JSON.stringify({
+      access_key:WEB3FORMS_KEY,
+      subject:"حجز جديد — رحلة بابل ("+info.date+")",
+      from_name:"Fable Tour Website",
+      name:info.name,
+      email:info.email,
+      message:message
+    })
+  }).catch(function(){});
+}
+
 /* ───────────── language ───────────── */
 function applyLang(l){
   lang=l;const d=T[l];
@@ -923,6 +952,7 @@ document.getElementById("confirmBtn").addEventListener("click",async()=>{
   // نجاح
   btn.disabled=false;btn.textContent=orig;
   const data={name,email,phone,wa:wa||phone,seats:seatStr,date:fmtDate(selectedDate),lang};
+  notifyByEmail(data);
   const waUrl=`https://wa.me/${OPERATOR.whatsapp}?text=${encodeURIComponent(d.wa_msg(data))}`;
   ok.innerHTML=`<strong>${d.ok_title}</strong>${d.ok_body}<br><a class="wa" href="${waUrl}" target="_blank" rel="noopener">${d.wa_btn} →</a>`;
   ok.classList.add("show");ok.scrollIntoView({behavior:"smooth",block:"center"});
