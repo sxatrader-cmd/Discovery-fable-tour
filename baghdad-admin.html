@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Baghdad Old Town Tour | Fable Tour</title>
+<meta name="robots" content="noindex,nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--white:#fff;--cream:#fff6ee;--orange:#e85d04;--orange-deep:#c74e02;--ink:#111;--line:#f0e2d4}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Source Sans 3',sans-serif;color:var(--ink);background:var(--cream);line-height:1.6;font-size:16px}
+h1,h2{font-family:'Marcellus',serif;font-weight:400}
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+header{background:#fff;border-bottom:1px solid var(--line)}
+.nav{display:flex;justify-content:space-between;align-items:center;height:60px}
+.logo{font-family:'Marcellus',serif;font-size:20px}
+.logo span{color:var(--orange)}
+#logout-btn{background:none;border:1.5px solid var(--orange);color:var(--orange-deep);border-radius:999px;padding:7px 18px;font-weight:700;cursor:pointer;display:none;font-family:inherit}
+section{padding:36px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;margin-bottom:26px}
+.card h2{font-size:24px;margin-bottom:16px}
+label{display:block;font-weight:700;font-size:14px;margin:14px 0 5px}
+input{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;font-size:16px;font-family:inherit}
+input:focus{outline:none;border-color:var(--orange)}
+.btn{background:var(--orange);color:#fff;border:none;border-radius:999px;padding:13px 28px;font-size:16px;font-weight:700;cursor:pointer;margin-top:18px;font-family:inherit}
+.btn:hover{background:var(--orange-deep)}
+.btn:disabled{background:#e0c9b5;cursor:not-allowed}
+.msg{margin-top:14px;padding:12px 14px;border-radius:10px;font-size:14px;display:none}
+.msg.ok{display:block;background:#eefaf0;color:#1c6b32;border:1px solid #bfe6c8}
+.msg.err{display:block;background:#fdeeee;color:#a12b2b;border:1px solid #f0c6c6}
+.counter{font-size:14px;color:#666;margin-top:8px}
+.counter b{color:var(--orange-deep)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-top:18px}
+.ph{position:relative;border-radius:10px;overflow:hidden;background:var(--cream)}
+.ph img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
+.ph button{position:absolute;top:6px;right:6px;background:rgba(17,17,17,.75);color:#fff;border:none;border-radius:8px;width:30px;height:30px;cursor:pointer;font-size:15px}
+.ph button:hover{background:#a12b2b}
+table{width:100%;border-collapse:collapse;margin-top:14px;font-size:15px}
+th{text-align:left;padding:10px;background:var(--cream);border-bottom:2px solid var(--orange);white-space:nowrap}
+td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
+td .del{background:none;border:1px solid #d7a5a5;color:#a12b2b;border-radius:8px;padding:5px 12px;cursor:pointer;font-family:inherit;font-size:13px}
+td .del:hover{background:#fdeeee}
+#app{display:none}
+progress{width:100%;height:10px;margin-top:12px;accent-color:var(--orange);display:none}
+@media(max-width:640px){table{display:block;overflow-x:auto}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="logo">Fable <span>Tour</span> · Admin</div>
+    <button id="logout-btn">Log out</button>
+  </div>
+</header>
+
+<!-- ============ LOGIN ============ -->
+<section id="login-box">
+  <div class="wrap" style="max-width:440px">
+    <div class="card">
+      <h2>Admin login</h2>
+      <label for="l-email">Email</label>
+      <input type="email" id="l-email" autocomplete="username">
+      <label for="l-pass">Password</label>
+      <input type="password" id="l-pass" autocomplete="current-password">
+      <button class="btn" id="login-btn">Log in</button>
+      <div class="msg" id="login-msg"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ APP ============ -->
+<section id="app">
+  <div class="wrap">
+
+    <!-- Photos -->
+    <div class="card">
+      <h2>Gallery photos</h2>
+      <p class="counter">Photos in gallery: <b id="ph-count">0</b> / 200 maximum</p>
+      <label for="ph-files">Add photos (you can select many at once)</label>
+      <input type="file" id="ph-files" accept="image/*" multiple>
+      <button class="btn" id="upload-btn">Upload photos</button>
+      <progress id="up-prog" max="100" value="0"></progress>
+      <div class="msg" id="ph-msg"></div>
+      <div class="grid" id="ph-grid"></div>
+    </div>
+
+    <!-- Bookings -->
+    <div class="card">
+      <h2>Bookings</h2>
+      <p style="font-size:14px;color:#666">Each date can only be booked once. Delete a booking to make its date available again.</p>
+      <div class="msg" id="bk-msg"></div>
+      <table>
+        <thead><tr><th>Date</th><th>Name</th><th>Email</th><th>WhatsApp</th><th>Received</th><th></th></tr></thead>
+        <tbody id="bk-body"></tbody>
+      </table>
+    </div>
+
+  </div>
+</section>
+
+<script>
+/* =========================================================
+   CONFIGURATION — بدّل هذني القيمتين فقط (نفس قيم index.html)
+   ========================================================= */
+const SUPABASE_URL  = "https://zrbbnveaqockoptftqst.supabase.co";
+const SUPABASE_ANON = "sb_publishable_YscqakXUfq9ngPjaAhe2KA__sFDoMcl";
+const GALLERY_BUCKET = "oldtown-gallery";
+const MAX_PHOTOS = 200;
+/* ========================================================= */
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+const $ = id => document.getElementById(id);
+
+function show(el, ok, text){ el.className = 'msg ' + (ok ? 'ok' : 'err'); el.textContent = text; }
+
+/* ---------- Auth ---------- */
+async function checkSession(){
+  const { data } = await sb.auth.getSession();
+  if(data.session){ enterApp(); }
+}
+$('login-btn').addEventListener('click', async () => {
+  const { error } = await sb.auth.signInWithPassword({
+    email: $('l-email').value.trim(),
+    password: $('l-pass').value
+  });
+  if(error){ show($('login-msg'), false, "Login failed: " + error.message); return; }
+  enterApp();
+});
+$('logout-btn').addEventListener('click', async () => {
+  await sb.auth.signOut();
+  location.reload();
+});
+function enterApp(){
+  $('login-box').style.display = 'none';
+  $('app').style.display = 'block';
+  $('logout-btn').style.display = 'inline-block';
+  loadPhotos();
+  loadBookings();
+}
+
+/* ---------- Photos ---------- */
+let photoCount = 0;
+async function loadPhotos(){
+  const grid = $('ph-grid'); grid.innerHTML = '';
+  const { data, error } = await sb.storage.from(GALLERY_BUCKET).list('', { limit: 300, sortBy:{column:'created_at',order:'desc'} });
+  if(error){ show($('ph-msg'), false, "Could not load photos: " + error.message); return; }
+  const files = (data || []).filter(f => f.name && !f.name.startsWith('.'));
+  photoCount = files.length;
+  $('ph-count').textContent = photoCount;
+  files.forEach(f => {
+    const { data: pub } = sb.storage.from(GALLERY_BUCKET).getPublicUrl(f.name);
+    const div = document.createElement('div');
+    div.className = 'ph';
+    div.innerHTML = '<img loading="lazy" alt="">';
+    div.querySelector('img').src = pub.publicUrl;
+    const del = document.createElement('button');
+    del.textContent = '✕';
+    del.title = 'Delete photo';
+    del.onclick = async () => {
+      if(!confirm('Delete this photo?')) return;
+      const { error } = await sb.storage.from(GALLERY_BUCKET).remove([f.name]);
+      if(error){ show($('ph-msg'), false, "Delete failed: " + error.message); return; }
+      loadPhotos();
+    };
+    div.appendChild(del);
+    grid.appendChild(div);
+  });
+}
+
+$('upload-btn').addEventListener('click', async () => {
+  const files = Array.from($('ph-files').files);
+  const msg = $('ph-msg'); msg.className = 'msg';
+  if(files.length === 0){ show(msg, false, "Choose photos first."); return; }
+  if(photoCount + files.length > MAX_PHOTOS){
+    show(msg, false, `Limit is ${MAX_PHOTOS} photos. You have ${photoCount}, so you can add ${MAX_PHOTOS - photoCount} more.`);
+    return;
+  }
+  const btn = $('upload-btn'), prog = $('up-prog');
+  btn.disabled = true; prog.style.display = 'block'; prog.value = 0;
+  let done = 0, failed = 0;
+  for(const file of files){
+    const clean = file.name.toLowerCase().replace(/[^a-z0-9.]+/g,'-');
+    const path = Date.now() + '-' + Math.random().toString(36).slice(2,7) + '-' + clean;
+    const { error } = await sb.storage.from(GALLERY_BUCKET).upload(path, file, { cacheControl: '3600' });
+    if(error) failed++;
+    done++;
+    prog.value = Math.round(done / files.length * 100);
+  }
+  btn.disabled = false; prog.style.display = 'none';
+  $('ph-files').value = '';
+  show(msg, failed === 0, failed === 0 ? `Uploaded ${done} photo(s).` : `Uploaded ${done - failed}, failed ${failed}. Try the failed ones again.`);
+  loadPhotos();
+});
+
+/* ---------- Bookings ---------- */
+async function loadBookings(){
+  const body = $('bk-body'); body.innerHTML = '';
+  const { data, error } = await sb.from('oldtown_bookings').select('*').order('tour_date', { ascending: true });
+  if(error){ show($('bk-msg'), false, "Could not load bookings: " + error.message); return; }
+  if(!data || data.length === 0){
+    body.innerHTML = '<tr><td colspan="6" style="color:#888;font-style:italic">No bookings yet.</td></tr>';
+    return;
+  }
+  data.forEach(b => {
+    const tr = document.createElement('tr');
+    const cells = [b.tour_date, b.name || '', b.email || '', b.whatsapp || '', new Date(b.created_at).toLocaleString()];
+    cells.forEach(c => { const td = document.createElement('td'); td.textContent = c; tr.appendChild(td); });
+    const td = document.createElement('td');
+    const del = document.createElement('button');
+    del.className = 'del'; del.textContent = 'Delete';
+    del.onclick = async () => {
+      if(!confirm(`Delete booking for ${b.tour_date}? The date becomes available again.`)) return;
+      const { error } = await sb.from('oldtown_bookings').delete().eq('id', b.id);
+      if(error){ show($('bk-msg'), false, "Delete failed: " + error.message); return; }
+      show($('bk-msg'), true, "Booking deleted — date is open again.");
+      loadBookings();
+    };
+    td.appendChild(del); tr.appendChild(td);
+    body.appendChild(tr);
+  });
+}
+
+checkSession();
+</script>
+</body>
+</html>
