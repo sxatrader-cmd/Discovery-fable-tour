@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fable Tour Taxi | تكسي بين المحافظات</title>
+<meta name="description" content="Private intercity taxi in Iraq — Baghdad, Hillah, Karbala, Najaf. Book online or via WhatsApp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+  :root{
+    --orange:#E8720C;
+    --red:#B3261E;
+    --red-dark:#8E1B15;
+    --cream:#FFF8F2;
+    --black:#1A1A1A;
+    --grey:#6f6f6f;
+    --line:#f0dfd0;
+    --white:#ffffff;
+    --radius:14px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:'Cairo',sans-serif;
+    background:var(--white);
+    color:var(--black);
+    line-height:1.7;
+  }
+  body.ltr{direction:ltr}
+
+  /* ===== Header ===== */
+  header{
+    background:var(--white);
+    padding:12px 18px;
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    position:sticky;top:0;z-index:500;
+    border-bottom:3px solid var(--red);
+    box-shadow:0 2px 12px rgba(0,0,0,.06);
+  }
+  .brand{display:flex;align-items:center;gap:10px}
+  .brand-mark{
+    width:44px;height:44px;border-radius:10px;
+    background:linear-gradient(135deg,var(--orange),var(--red));
+    color:#fff;display:flex;align-items:center;justify-content:center;
+    font-size:1.35rem;
+  }
+  .brand-name{font-family:'Playfair Display',serif;font-weight:900;font-size:1.2rem;color:var(--red-dark);line-height:1.1}
+  .brand-name small{display:block;font-family:'Cairo',sans-serif;font-size:.68rem;font-weight:700;color:var(--orange);letter-spacing:2px}
+
+  .lang-switch{display:flex;gap:6px}
+  .lang-switch button{
+    border:1.5px solid var(--line);background:#fff;
+    border-radius:8px;padding:5px 11px;
+    font-family:'Cairo',sans-serif;font-weight:700;font-size:.82rem;
+    cursor:pointer;color:var(--grey);transition:.15s;
+  }
+  .lang-switch button.active{
+    background:var(--red);border-color:var(--red);color:#fff;
+  }
+
+  /* ===== Hero ===== */
+  .hero{
+    background:
+      radial-gradient(ellipse at 20% 120%, rgba(179,38,30,.35), transparent 55%),
+      linear-gradient(135deg,var(--orange) 0%,var(--red) 100%);
+    color:#fff;text-align:center;
+    padding:52px 20px 58px;
+    position:relative;
+  }
+  .hero::after{
+    content:"";position:absolute;bottom:0;left:0;right:0;height:12px;
+    background:repeating-linear-gradient(90deg,var(--red-dark) 0 26px,var(--orange) 26px 52px);
+  }
+  .hero h1{
+    font-size:clamp(1.7rem,5.5vw,2.7rem);font-weight:900;margin-bottom:8px;
+  }
+  .hero p{font-size:1.05rem;opacity:.95;max-width:560px;margin:0 auto}
+  .hero .cities{
+    display:inline-flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:18px;
+  }
+  .hero .city-chip{
+    background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.4);
+    border-radius:20px;padding:4px 16px;font-weight:700;font-size:.9rem;
+    backdrop-filter:blur(4px);
+  }
+
+  /* ===== Booking ===== */
+  .container{max-width:760px;margin:0 auto;padding:0 18px}
+  .booking{padding:40px 0 60px}
+  .booking h2{
+    font-size:1.5rem;font-weight:900;text-align:center;color:var(--red-dark);
+  }
+  .booking .sub{text-align:center;color:var(--grey);margin-bottom:24px;font-size:.95rem}
+  form{
+    background:var(--cream);border:1.5px solid var(--line);
+    border-radius:var(--radius);padding:26px 24px;
+    box-shadow:0 8px 26px rgba(179,38,30,.08);
+  }
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:560px){.grid2{grid-template-columns:1fr}}
+  .field{margin-bottom:16px}
+  label{display:block;font-weight:700;font-size:.92rem;margin-bottom:6px;color:var(--black)}
+  label span{color:var(--red)}
+  input,select{
+    width:100%;padding:12px 14px;
+    border:1.5px solid var(--line);border-radius:10px;
+    font-family:'Cairo',sans-serif;font-size:1rem;color:var(--black);
+    background:#fff;
+  }
+  input:focus,select:focus{outline:none;border-color:var(--orange);box-shadow:0 0 0 3px rgba(232,114,12,.18)}
+  input[type=tel]{direction:ltr}
+  body:not(.ltr) input[type=tel]{text-align:right}
+
+  /* نوع الرحلة */
+  .trip-type{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .trip-type input{position:absolute;opacity:0}
+  .trip-type label{
+    border:1.5px solid var(--line);border-radius:10px;background:#fff;
+    padding:13px 10px;text-align:center;cursor:pointer;
+    font-weight:700;margin:0;transition:.15s;
+  }
+  .trip-type input:checked+label{
+    border-color:var(--red);background:var(--red);color:#fff;
+  }
+  .trip-type input:focus-visible+label{box-shadow:0 0 0 3px rgba(179,38,30,.35)}
+
+  /* الخريطة */
+  #map{height:270px;border-radius:10px;border:1.5px solid var(--line);margin-top:6px;z-index:1}
+  .map-hint{font-size:.82rem;color:var(--grey);margin-top:6px}
+  .map-hint.ok{color:#1a8f3c;font-weight:700}
+  .locate-btn{
+    margin-top:8px;background:#fff;color:var(--red-dark);
+    border:1.5px solid var(--red);border-radius:10px;
+    padding:8px 16px;font-family:'Cairo',sans-serif;font-weight:700;
+    font-size:.88rem;cursor:pointer;
+  }
+  .locate-btn:hover{background:var(--red);color:#fff}
+
+  /* السعر */
+  .fare-box{
+    display:none;
+    background:linear-gradient(135deg,var(--red-dark),var(--red));
+    color:#fff;border-radius:var(--radius);
+    padding:18px 22px;margin:6px 0 18px;text-align:center;
+  }
+  .fare-box.show{display:block;animation:pop .3s ease}
+  @keyframes pop{from{transform:scale(.96);opacity:0}to{transform:scale(1);opacity:1}}
+  @media (prefers-reduced-motion:reduce){.fare-box.show{animation:none}}
+  .fare-label{font-size:.85rem;color:#FFD9A8;font-weight:700}
+  .fare-amount{font-size:2rem;font-weight:900}
+  .fare-extra{font-size:.8rem;color:#f3cfc0;margin-top:4px}
+
+  .submit-btn{
+    width:100%;border:none;border-radius:12px;padding:16px;
+    background:linear-gradient(135deg,var(--orange),var(--red));
+    color:#fff;font-family:'Cairo',sans-serif;
+    font-size:1.15rem;font-weight:900;cursor:pointer;transition:.15s;
+  }
+  .submit-btn:hover{filter:brightness(1.08)}
+  .submit-btn:disabled{background:#ccc;cursor:not-allowed}
+  .form-msg{text-align:center;font-weight:700;margin-top:12px;display:none}
+  .form-msg.ok{display:block;color:#1a8f3c}
+  .form-msg.err{display:block;color:var(--red)}
+
+  /* واتساب عائم */
+  .wa-float{
+    position:fixed;bottom:22px;z-index:900;
+    background:#25D366;color:#fff;
+    width:60px;height:60px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 6px 18px rgba(37,211,102,.45);
+    animation:waPulse 1.6s ease-in-out infinite;
+    text-decoration:none;
+  }
+  body:not(.ltr) .wa-float{left:22px}
+  body.ltr .wa-float{right:22px}
+  .wa-float svg{width:32px;height:32px;fill:#fff}
+  @keyframes waPulse{
+    0%,100%{transform:scale(1);box-shadow:0 6px 18px rgba(37,211,102,.45)}
+    50%{transform:scale(1.1);box-shadow:0 6px 28px rgba(37,211,102,.75)}
+  }
+  @media (prefers-reduced-motion:reduce){.wa-float{animation:none}}
+
+  footer{
+    background:var(--red-dark);color:#fff;text-align:center;
+    padding:20px;font-size:.9rem;
+  }
+  footer b{color:#FFD9A8}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="brand-mark">🚕</div>
+    <div class="brand-name">Fable Tour <small data-i18n="brandSub">تكسي المحافظات</small></div>
+  </div>
+  <div class="lang-switch">
+    <button type="button" data-lang="ar" class="active">عربي</button>
+    <button type="button" data-lang="en">EN</button>
+    <button type="button" data-lang="ru">RU</button>
+  </div>
+</header>
+
+<section class="hero">
+  <h1 data-i18n="heroTitle">تكسي خاص بين المحافظات</h1>
+  <p data-i18n="heroSub">سيارة خاصة مع سائق — احجز بثوانٍ وسنتواصل معك فوراً</p>
+  <div class="cities">
+    <span class="city-chip" data-i18n="cBaghdad">بغداد</span>
+    <span class="city-chip" data-i18n="cHillah">الحلة</span>
+    <span class="city-chip" data-i18n="cKarbala">كربلاء</span>
+    <span class="city-chip" data-i18n="cNajaf">النجف</span>
+  </div>
+</section>
+
+<section class="booking container">
+  <h2 data-i18n="formTitle">احجز رحلتك</h2>
+  <p class="sub" data-i18n="formSub">أكمل الحقول ويظهر لك سعر الرحلة فوراً</p>
+
+  <form id="bookingForm">
+    <div class="grid2">
+      <div class="field">
+        <label for="from"><span data-i18n="from">من</span> <span>*</span></label>
+        <select id="from" required></select>
+      </div>
+      <div class="field">
+        <label for="to"><span data-i18n="to">إلى</span> <span>*</span></label>
+        <select id="to" required></select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label><span data-i18n="tripType">نوع الرحلة</span> <span>*</span></label>
+      <div class="trip-type">
+        <input type="radio" name="tripType" id="oneway" value="oneway" checked>
+        <label for="oneway" data-i18n="oneway">ذهاب فقط</label>
+        <input type="radio" name="tripType" id="return" value="return">
+        <label for="return" data-i18n="return">ذهاب وعودة</label>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="field">
+        <label for="date"><span data-i18n="date">التاريخ</span> <span>*</span></label>
+        <input type="date" id="date" required>
+      </div>
+      <div class="field">
+        <label for="time"><span data-i18n="time">الوقت</span> <span>*</span></label>
+        <input type="time" id="time" required>
+      </div>
+    </div>
+
+    <div class="field">
+      <label><span data-i18n="mapLabel">حدد موقعك على الخريطة</span> <span>*</span></label>
+      <div id="map"></div>
+      <p class="map-hint" id="mapHint" data-i18n="mapHint">👆 اضغط على الخريطة لتحديد نقطة الاستلام</p>
+      <button type="button" class="locate-btn" id="locateBtn" data-i18n="locateBtn">📍 استخدم موقعي الحالي</button>
+    </div>
+
+    <div class="grid2">
+      <div class="field">
+        <label for="pax"><span data-i18n="pax">عدد الركاب (بحد أقصى 3)</span> <span>*</span></label>
+        <select id="pax" required>
+          <option value="">—</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="name"><span data-i18n="name">الاسم الكامل</span> <span>*</span></label>
+        <input type="text" id="name" required>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="phone"><span data-i18n="phone">رقم الهاتف / واتساب</span> <span>*</span></label>
+      <input type="tel" id="phone" placeholder="07XXXXXXXXX" required>
+    </div>
+
+    <div class="fare-box" id="fareBox">
+      <div class="fare-label" id="fareLabel"></div>
+      <div class="fare-amount"><span id="fareAmount">—</span> <span data-i18n="iqd">دينار عراقي</span></div>
+      <div class="fare-extra" id="fareExtra"></div>
+    </div>
+
+    <button type="submit" class="submit-btn" id="submitBtn" data-i18n="book">احجز الآن 🚕</button>
+    <p class="form-msg" id="formMsg"></p>
+  </form>
+</section>
+
+<a class="wa-float" href="https://wa.me/9647711745353" target="_blank" rel="noopener" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<footer><b>Fable Tour Taxi</b> — Baghdad, Iraq | WhatsApp: <span dir="ltr">+964 771 174 5353</span></footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// =====================================================
+// ⚠️ مفتاح Web3Forms — نفس مفتاح موقع Baghdad Old Town
+// افتح ملف صفحة Old Town وابحث عن access_key وانسخه هنا
+// =====================================================
+const WEB3FORMS_KEY = "9e405ed2-6f37-467e-aea0-4b7678c7e635";
+
+// ============ الترجمات ============
+const T = {
+  ar: {
+    dir:"rtl", brandSub:"تكسي المحافظات",
+    heroTitle:"تكسي خاص بين المحافظات",
+    heroSub:"سيارة خاصة مع سائق — احجز بثوانٍ وسنتواصل معك فوراً",
+    cBaghdad:"بغداد", cHillah:"الحلة", cKarbala:"كربلاء", cNajaf:"النجف",
+    formTitle:"احجز رحلتك", formSub:"أكمل الحقول ويظهر لك سعر الرحلة فوراً",
+    from:"من", to:"إلى", choose:"— اختر —",
+    tripType:"نوع الرحلة", oneway:"ذهاب فقط", return:"ذهاب وعودة",
+    date:"التاريخ", time:"الوقت",
+    address:"عنوان الاستلام", addressPh:"مثال: بغداد - المنصور - شارع 14 رمضان",
+    mapLabel:"حدد موقعك على الخريطة",
+    mapHint:"👆 اضغط على الخريطة لتحديد نقطة الاستلام",
+    mapOk:"✅ تم تحديد الموقع",
+    locateBtn:"📍 استخدم موقعي الحالي",
+    pax:"عدد الركاب (بحد أقصى 3)", name:"الاسم الكامل", phone:"رقم الهاتف / واتساب",
+    iqd:"دينار عراقي",
+    fareOneway:"سعر الرحلة (ذهاب فقط)", fareReturn:"سعر الرحلة (ذهاب وعودة)",
+    fareWait:"انتظار ساعتين مجاناً + 5,000 د.ع لكل ساعة إضافية",
+    book:"احجز الآن 🚕", sending:"جارِ الإرسال...",
+    ok:"✅ تم استلام حجزك! سنتواصل معك خلال دقائق للتأكيد",
+    errSame:"⚠️ اختر مدينتين مختلفتين",
+    errRoute:"⚠️ هذا الخط غير متوفر — الخطوط المتاحة من/إلى بغداد",
+    errMap:"⚠️ يرجى تحديد موقعك على الخريطة",
+    errFill:"⚠️ يرجى إكمال جميع الحقول",
+    errSend:"❌ حدث خطأ — تواصل معنا مباشرة عبر زر الواتساب",
+    errGeo:"تعذر تحديد موقعك — اضغط على الخريطة يدوياً",
+    errNoGeo:"متصفحك لا يدعم تحديد الموقع",
+    mapNA:"ℹ️ الخريطة غير متاحة حالياً — اكتب عنوانك بالتفصيل وسنتواصل معك",
+  },
+  en: {
+    dir:"ltr", brandSub:"INTERCITY TAXI",
+    heroTitle:"Private Intercity Taxi in Iraq",
+    heroSub:"Private car with driver — book in seconds, we confirm right away",
+    cBaghdad:"Baghdad", cHillah:"Hillah", cKarbala:"Karbala", cNajaf:"Najaf",
+    formTitle:"Book Your Ride", formSub:"Fill in the fields and your fare appears instantly",
+    from:"From", to:"To", choose:"— Select —",
+    tripType:"Trip type", oneway:"One way", return:"Round trip",
+    date:"Date", time:"Time",
+    address:"Pickup address", addressPh:"e.g. Baghdad - Mansour - 14 Ramadan St.",
+    mapLabel:"Pin your location on the map",
+    mapHint:"👆 Tap the map to set your pickup point",
+    mapOk:"✅ Location set",
+    locateBtn:"📍 Use my current location",
+    pax:"Passengers (max 3)", name:"Full name", phone:"Phone / WhatsApp",
+    iqd:"IQD",
+    fareOneway:"Your fare (one way)", fareReturn:"Your fare (round trip)",
+    fareWait:"2 hours waiting free + 5,000 IQD per extra hour",
+    book:"Book Now 🚕", sending:"Sending...",
+    ok:"✅ Booking received! We will contact you within minutes to confirm",
+    errSame:"⚠️ Please choose two different cities",
+    errRoute:"⚠️ Route not available — all routes run to/from Baghdad",
+    errMap:"⚠️ Please pin your location on the map",
+    errFill:"⚠️ Please complete all fields",
+    errSend:"❌ Something went wrong — contact us directly via WhatsApp",
+    errGeo:"Couldn't get your location — tap the map manually",
+    errNoGeo:"Your browser doesn't support geolocation",
+    mapNA:"ℹ️ Map unavailable — write your full address and we'll contact you",
+  },
+  ru: {
+    dir:"ltr", brandSub:"МЕЖДУГОРОДНЕЕ ТАКСИ",
+    heroTitle:"Частное междугороднее такси в Ираке",
+    heroSub:"Личный автомобиль с водителем — бронируйте за секунды, мы сразу подтвердим",
+    cBaghdad:"Багдад", cHillah:"Хилла", cKarbala:"Кербела", cNajaf:"Наджаф",
+    formTitle:"Забронируйте поездку", formSub:"Заполните поля — цена появится мгновенно",
+    from:"Откуда", to:"Куда", choose:"— Выберите —",
+    tripType:"Тип поездки", oneway:"В одну сторону", return:"Туда и обратно",
+    date:"Дата", time:"Время",
+    address:"Адрес подачи", addressPh:"напр.: Багдад - Мансур - ул. 14 Рамадан",
+    mapLabel:"Отметьте место на карте",
+    mapHint:"👆 Нажмите на карту, чтобы указать точку подачи",
+    mapOk:"✅ Место выбрано",
+    locateBtn:"📍 Моё текущее местоположение",
+    pax:"Пассажиры (макс. 3)", name:"Полное имя", phone:"Телефон / WhatsApp",
+    iqd:"IQD",
+    fareOneway:"Стоимость (в одну сторону)", fareReturn:"Стоимость (туда и обратно)",
+    fareWait:"2 часа ожидания бесплатно + 5 000 IQD за каждый доп. час",
+    book:"Забронировать 🚕", sending:"Отправка...",
+    ok:"✅ Заявка получена! Мы свяжемся с вами в течение нескольких минут",
+    errSame:"⚠️ Выберите два разных города",
+    errRoute:"⚠️ Маршрут недоступен — все маршруты из/в Багдад",
+    errMap:"⚠️ Отметьте место на карте",
+    errFill:"⚠️ Заполните все поля",
+    errSend:"❌ Ошибка отправки — напишите нам в WhatsApp",
+    errGeo:"Не удалось определить местоположение — нажмите на карту вручную",
+    errNoGeo:"Ваш браузер не поддерживает геолокацию",
+    mapNA:"ℹ️ Карта недоступна — укажите подробный адрес, и мы свяжемся с вами",
+  }
+};
+
+// ============ المدن والأسعار ============
+const CITIES = ["Baghdad","Hillah","Karbala","Najaf"];
+const CITY_LABELS = {
+  Baghdad:{ar:"بغداد",en:"Baghdad",ru:"Багдад"},
+  Hillah:{ar:"الحلة",en:"Hillah",ru:"Хилла"},
+  Karbala:{ar:"كربلاء",en:"Karbala",ru:"Кербела"},
+  Najaf:{ar:"النجف",en:"Najaf",ru:"Наджаф"},
+};
+const FARES = {
+  "Baghdad|Hillah":  { oneway:45000,  ret:90000 },
+  "Baghdad|Karbala": { oneway:50000,  ret:100000 },
+  "Baghdad|Najaf":   { oneway:60000,  ret:120000 },
+};
+function fareFor(a,b){ return FARES[a+"|"+b] || FARES[b+"|"+a] || null; }
+
+// ============ اللغة ============
+let lang = "ar";
+function applyLang(l){
+  lang = l;
+  const t = T[l];
+  document.documentElement.lang = l;
+  document.documentElement.dir = t.dir;
+  document.body.classList.toggle("ltr", t.dir === "ltr");
+  document.querySelectorAll("[data-i18n]").forEach(el=>{
+    const k = el.getAttribute("data-i18n");
+    if (t[k]) el.textContent = t[k];
+  });
+  document.querySelectorAll("[data-i18n-ph]").forEach(el=>{
+    const k = el.getAttribute("data-i18n-ph");
+    if (t[k]) el.placeholder = t[k];
+  });
+  document.querySelectorAll(".lang-switch button").forEach(b=>{
+    b.classList.toggle("active", b.dataset.lang === l);
+  });
+  buildCityOptions();
+  if (typeof mapAvailable !== "undefined" && !mapAvailable){
+    document.getElementById('mapHint').textContent = t.mapNA;
+  }
+  updateFare();
+}
+document.querySelectorAll(".lang-switch button").forEach(b=>{
+  b.addEventListener("click", ()=> applyLang(b.dataset.lang));
+});
+
+function buildCityOptions(){
+  ["from","to"].forEach(id=>{
+    const sel = document.getElementById(id);
+    const current = sel.value;
+    sel.innerHTML = "";
+    const ph = document.createElement("option");
+    ph.value = ""; ph.textContent = T[lang].choose;
+    sel.appendChild(ph);
+    CITIES.forEach(c=>{
+      const o = document.createElement("option");
+      o.value = c; o.textContent = CITY_LABELS[c][lang];
+      sel.appendChild(o);
+    });
+    sel.value = current;
+  });
+}
+
+// ============ تعبئة المدن فوراً (قبل أي كود يعتمد على مكتبة خارجية) ============
+buildCityOptions();
+
+// ============ الخريطة (اختيارية — إذا فشل تحميلها يستمر الموقع بدونها) ============
+let map = null, marker = null, pickedLatLng = null, mapAvailable = false;
+try {
+  map = L.map('map').setView([33.05, 44.25], 7);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    maxZoom:19, attribution:'&copy; OpenStreetMap'
+  }).addTo(map);
+  mapAvailable = true;
+  map.on('click', e => setMarker(e.latlng));
+} catch (err) {
+  document.getElementById('map').style.display = 'none';
+  document.getElementById('locateBtn').style.display = 'none';
+  document.getElementById('mapHint').textContent = T[lang].mapNA;
+}
+
+function setMarker(latlng){
+  pickedLatLng = latlng;
+  if (marker) marker.setLatLng(latlng);
+  else marker = L.marker(latlng).addTo(map);
+  const hint = document.getElementById('mapHint');
+  hint.textContent = T[lang].mapOk + ": " + latlng.lat.toFixed(5) + ", " + latlng.lng.toFixed(5);
+  hint.classList.add('ok');
+  updateFare();
+}
+
+document.getElementById('locateBtn').addEventListener('click', ()=>{
+  if (!mapAvailable) return;
+  if (!navigator.geolocation){ alert(T[lang].errNoGeo); return; }
+  navigator.geolocation.getCurrentPosition(
+    pos=>{
+      const ll = L.latLng(pos.coords.latitude, pos.coords.longitude);
+      map.setView(ll, 15); setMarker(ll);
+    },
+    ()=> alert(T[lang].errGeo)
+  );
+});
+
+// ============ السعر ============
+const els = {
+  from: document.getElementById('from'),
+  to: document.getElementById('to'),
+  date: document.getElementById('date'),
+  time: document.getElementById('time'),
+  pax: document.getElementById('pax'),
+  name: document.getElementById('name'),
+  phone: document.getElementById('phone'),
+};
+const fareBox = document.getElementById('fareBox');
+const fareAmount = document.getElementById('fareAmount');
+const fareLabel = document.getElementById('fareLabel');
+const fareExtra = document.getElementById('fareExtra');
+const formMsg = document.getElementById('formMsg');
+
+els.date.min = new Date().toISOString().split('T')[0];
+
+function currentFare(){
+  const from = els.from.value, to = els.to.value;
+  if (!from || !to || from === to) return null;
+  const f = fareFor(from, to);
+  if (!f) return null;
+  const isReturn = document.getElementById('return').checked;
+  return { amount: isReturn ? f.ret : f.oneway, isReturn };
+}
+function allFilled(){
+  return els.from.value && els.to.value && els.from.value !== els.to.value &&
+         fareFor(els.from.value, els.to.value) &&
+         els.date.value && els.time.value &&
+         els.pax.value && els.name.value.trim() && els.phone.value.trim() &&
+         (pickedLatLng || !mapAvailable);
+}
+function updateFare(){
+  formMsg.className = 'form-msg';
+  const from = els.from.value, to = els.to.value;
+  if (from && to && from === to){
+    fareBox.classList.remove('show');
+    formMsg.textContent = T[lang].errSame; formMsg.classList.add('err'); return;
+  }
+  if (from && to && !fareFor(from, to)){
+    fareBox.classList.remove('show');
+    formMsg.textContent = T[lang].errRoute; formMsg.classList.add('err'); return;
+  }
+  if (allFilled()){
+    const f = currentFare();
+    fareAmount.textContent = f.amount.toLocaleString('en-US');
+    fareLabel.textContent = f.isReturn ? T[lang].fareReturn : T[lang].fareOneway;
+    fareExtra.textContent = f.isReturn ? T[lang].fareWait : "";
+    fareBox.classList.add('show');
+  } else {
+    fareBox.classList.remove('show');
+  }
+}
+Object.values(els).forEach(el=>{
+  el.addEventListener('input', updateFare);
+  el.addEventListener('change', updateFare);
+});
+document.querySelectorAll('input[name=tripType]').forEach(r=> r.addEventListener('change', updateFare));
+
+// ============ الإرسال ============
+document.getElementById('bookingForm').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  formMsg.className = 'form-msg';
+  if (mapAvailable && !pickedLatLng){ formMsg.textContent = T[lang].errMap; formMsg.classList.add('err'); return; }
+  if (!allFilled()){ formMsg.textContent = T[lang].errFill; formMsg.classList.add('err'); return; }
+
+  const f = currentFare();
+  const isReturn = document.getElementById('return').checked;
+  const mapsLink = pickedLatLng
+    ? `https://www.google.com/maps?q=${pickedLatLng.lat},${pickedLatLng.lng}`
+    : "لم يتم التحديد (الخريطة غير متاحة)";
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true; btn.textContent = T[lang].sending;
+
+  try {
+    const res = await fetch("https://api.web3forms.com/submit", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json", "Accept":"application/json" },
+      body: JSON.stringify({
+        access_key: WEB3FORMS_KEY,
+        subject: "🚕 حجز تكسي جديد: " + CITY_LABELS[els.from.value].ar + " → " + CITY_LABELS[els.to.value].ar,
+        from_name: "Fable Tour Taxi",
+        "من": CITY_LABELS[els.from.value].ar,
+        "إلى": CITY_LABELS[els.to.value].ar,
+        "نوع الرحلة": isReturn ? "ذهاب وعودة (مرجع)" : "ذهاب فقط",
+        "السعر": f.amount.toLocaleString('en-US') + " د.ع",
+        "التاريخ": els.date.value,
+        "الوقت": els.time.value,
+        "الموقع على الخريطة": mapsLink,
+        "عدد الركاب": els.pax.value,
+        "الاسم": els.name.value.trim(),
+        "الهاتف": els.phone.value.trim(),
+        "لغة الزائر": lang.toUpperCase(),
+      })
+    });
+    const data = await res.json();
+    if (data.success){
+      formMsg.textContent = T[lang].ok; formMsg.classList.add('ok');
+      e.target.reset();
+      fareBox.classList.remove('show');
+      if (marker){ map.removeLayer(marker); marker = null; }
+      pickedLatLng = null;
+      const hint = document.getElementById('mapHint');
+      hint.textContent = mapAvailable ? T[lang].mapHint : T[lang].mapNA;
+      hint.classList.remove('ok');
+      buildCityOptions();
+    } else throw new Error();
+  } catch {
+    formMsg.textContent = T[lang].errSend; formMsg.classList.add('err');
+  } finally {
+    btn.disabled = false; btn.textContent = T[lang].book;
+  }
+});
+
+// تهيئة
+buildCityOptions();
+</script>
+</body>
+</html>
