@@ -279,6 +279,12 @@
       </div>
     </div>
 
+    <div class="field" id="waitField" style="display:none">
+      <label for="wait"><span data-i18n="waitLabel">مدة الانتظار</span> <span>*</span></label>
+      <select id="wait"></select>
+      <p class="map-hint" data-i18n="waitNote">⏱️ انتظار ساعتين مجاناً — وكل ساعة إضافية 5,000 د.ع فقط</p>
+    </div>
+
     <div class="grid2">
       <div class="field">
         <label for="date"><span data-i18n="date">التاريخ</span> <span>*</span></label>
@@ -385,6 +391,11 @@ const T = {
     promoTitle:"اكتشف العراق مع Fable Tour",
     promoText:"جولات سياحية خاصة في بغداد وبابل وكربلاء والنجف مع دليل محترف — تاريخ يُروى، وتجربة لا تُنسى",
     promoBtn:"زر fabletour.com ←",
+    waitLabel:"مدة الانتظار",
+    waitNote:"⏱️ انتظار ساعتين مجاناً — وكل ساعة إضافية 5,000 د.ع فقط",
+    waitHours:"ساعات",
+    waitFree:"مجاناً",
+    waitIncluded:"السعر يشمل {h} ساعات انتظار",
   },
   en: {
     dir:"ltr", brandSub:"INTERCITY TAXI",
@@ -417,6 +428,11 @@ const T = {
     promoTitle:"Discover Iraq with Fable Tour",
     promoText:"Private heritage tours in Baghdad, Babylon, Karbala and Najaf with a professional guide — history told, and an experience you'll never forget",
     promoBtn:"Visit fabletour.com →",
+    waitLabel:"Waiting time",
+    waitNote:"⏱️ First 2 hours of waiting are free — each extra hour is only 5,000 IQD",
+    waitHours:"hours",
+    waitFree:"free",
+    waitIncluded:"Price includes {h} hours of waiting",
   },
   ru: {
     dir:"ltr", brandSub:"МЕЖДУГОРОДНЕЕ ТАКСИ",
@@ -449,6 +465,11 @@ const T = {
     promoTitle:"Откройте Ирак с Fable Tour",
     promoText:"Частные туры по Багдаду, Вавилону, Кербеле и Наджафу с профессиональным гидом — живая история и незабываемые впечатления",
     promoBtn:"Перейти на fabletour.com →",
+    waitLabel:"Время ожидания",
+    waitNote:"⏱️ Первые 2 часа ожидания бесплатно — каждый доп. час всего 5 000 IQD",
+    waitHours:"ч.",
+    waitFree:"бесплатно",
+    waitIncluded:"Цена включает {h} ч. ожидания",
   }
 };
 
@@ -466,7 +487,7 @@ const FARES = {
   "Baghdad|Najaf":   { oneway:60000,  ret:120000 },
   "Hillah|Karbala":  { oneway:25000,  ret:50000 },
   "Hillah|Najaf":    { oneway:25000,  ret:50000 },
-  "Najaf|Karbala":   { oneway:25000,  ret:50000 },
+  "Najaf|Karbala":   { oneway:50000,  ret:100000 },
 };
 function fareFor(a,b){ return FARES[a+"|"+b] || FARES[b+"|"+a] || null; }
 
@@ -514,6 +535,28 @@ function buildCityOptions(){
     });
     sel.value = current;
   });
+  buildWaitOptions();
+}
+
+function buildWaitOptions(){
+  const sel = document.getElementById('wait');
+  const current = sel.value || "2";
+  sel.innerHTML = "";
+  for (let h = 2; h <= 8; h++){
+    const o = document.createElement("option");
+    o.value = h;
+    const extra = (h - 2) * 5000;
+    o.textContent = h + " " + T[lang].waitHours + (extra === 0
+      ? " — " + T[lang].waitFree
+      : " (+" + extra.toLocaleString('en-US') + " " + T[lang].iqd + ")");
+    sel.appendChild(o);
+  }
+  sel.value = current;
+}
+
+function toggleWaitField(){
+  const isReturn = document.getElementById('return').checked;
+  document.getElementById('waitField').style.display = isReturn ? "" : "none";
 }
 
 // ============ تعبئة المدن فوراً (قبل أي كود يعتمد على مكتبة خارجية) ============
@@ -580,7 +623,9 @@ function currentFare(){
   const f = fareFor(from, to);
   if (!f) return null;
   const isReturn = document.getElementById('return').checked;
-  return { amount: isReturn ? f.ret : f.oneway, isReturn };
+  const waitH = isReturn ? parseInt(document.getElementById('wait').value || "2", 10) : 0;
+  const extraWait = isReturn ? Math.max(0, waitH - 2) * 5000 : 0;
+  return { amount: (isReturn ? f.ret : f.oneway) + extraWait, isReturn, waitH, extraWait };
 }
 function allFilled(){
   return els.from.value && els.to.value && els.from.value !== els.to.value &&
@@ -604,7 +649,11 @@ function updateFare(){
     const f = currentFare();
     fareAmount.textContent = f.amount.toLocaleString('en-US');
     fareLabel.textContent = f.isReturn ? T[lang].fareReturn : T[lang].fareOneway;
-    fareExtra.textContent = f.isReturn ? T[lang].fareWait : "";
+    fareExtra.textContent = f.isReturn
+      ? (T[lang].fareWait + (f.extraWait > 0
+          ? " — " + T[lang].waitIncluded.replace("{h}", f.waitH)
+          : ""))
+      : "";
     fareBox.classList.add('show');
   } else {
     fareBox.classList.remove('show');
@@ -614,7 +663,11 @@ Object.values(els).forEach(el=>{
   el.addEventListener('input', updateFare);
   el.addEventListener('change', updateFare);
 });
-document.querySelectorAll('input[name=tripType]').forEach(r=> r.addEventListener('change', updateFare));
+document.getElementById('wait').addEventListener('change', updateFare);
+document.querySelectorAll('input[name=tripType]').forEach(r=> r.addEventListener('change', ()=>{
+  toggleWaitField();
+  updateFare();
+}));
 
 // ============ الإرسال ============
 document.getElementById('bookingForm').addEventListener('submit', async (e)=>{
@@ -642,6 +695,7 @@ document.getElementById('bookingForm').addEventListener('submit', async (e)=>{
         "من": CITY_LABELS[els.from.value].ar,
         "إلى": CITY_LABELS[els.to.value].ar,
         "نوع الرحلة": isReturn ? "ذهاب وعودة (مرجع)" : "ذهاب فقط",
+        "مدة الانتظار": isReturn ? (f.waitH + " ساعة") : "—",
         "السعر": f.amount.toLocaleString('en-US') + " د.ع",
         "التاريخ": els.date.value,
         "الوقت": els.time.value,
@@ -663,6 +717,7 @@ document.getElementById('bookingForm').addEventListener('submit', async (e)=>{
       hint.textContent = mapAvailable ? T[lang].mapHint : T[lang].mapNA;
       hint.classList.remove('ok');
       buildCityOptions();
+      toggleWaitField();
     } else throw new Error();
   } catch {
     formMsg.textContent = T[lang].errSend; formMsg.classList.add('err');
