@@ -540,7 +540,7 @@ function updateFare(){
     fareBox.classList.remove('show');
     formMsg.textContent = T[lang].errRoute; formMsg.classList.add('err'); return;
   }
-  if (allFilled()){
+  if (from && to && fareFor(from, to)){
     const f = currentFare();
     fareAmount.textContent = f.amount.toLocaleString('en-US');
     fareLabel.textContent = f.isReturn ? T[lang].fareReturn : T[lang].fareOneway;
