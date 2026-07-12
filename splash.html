@@ -128,6 +128,21 @@
     font-family:inherit;
   }
   .cta:active{transform:translateY(1px);}
+  #waOverlay{
+    position:fixed;top:0;left:0;width:100%;height:100%;z-index:60;display:none;
+    background:var(--lapis-deep);text-align:center;padding:60px 24px;
+  }
+  #waOverlay .check{
+    width:74px;height:74px;line-height:74px;margin:0 auto 20px;border-radius:50%;
+    background:#25D366;color:#fff;font-size:40px;font-weight:bold;
+  }
+  #waOverlay h3{color:var(--gold);font-size:22px;margin-bottom:14px;}
+  #waOverlay .msg{color:var(--ivory);font-size:16px;line-height:1.9;max-width:420px;margin:0 auto;}
+  #waOverlay .bignum{
+    display:block;color:#25D366;font-size:26px;font-weight:bold;margin:18px 0;
+    font-family:Arial,Helvetica,sans-serif;direction:ltr;
+  }
+  #waOverlay .count{color:var(--ivory-dim);font-size:14px;margin-top:22px;}
   #siteFrame{
     position:fixed;top:0;left:0;width:100%;height:100%;
     border:0;background:var(--lapis-deep);z-index:50;display:none;
@@ -346,6 +361,14 @@
   <div class="footer">FABLE TOUR · BAGHDAD · DISCOVERY.FABLETOUR.COM</div>
 </div>
 
+<div id="waOverlay">
+  <div class="check">&#10003;</div>
+  <h3 id="ovTitle">خطوة واحدة تفصلك عنا</h3>
+  <div class="msg" id="ovMsg">سيتفعل الإنترنت المجاني الآن. بعدها افتح تطبيق واتساب وراسلنا على الرقم:</div>
+  <span class="bignum">+964 771 174 5353</span>
+  <div class="count" id="ovCount"></div>
+</div>
+
 <iframe id="siteFrame" title="Fable Tour"></iframe>
 
 <script>
@@ -355,11 +378,11 @@ var SITE_URL = 'https://discovery.fabletour.com/babylon-tour';
 var authDone = false;
 
 var TXT = {
-  ar: {wa:'واتساب', waWait:'جاري تفعيل الإنترنت وفتح واتساب...', site:'زيارة الموقع والحجز الآن ←',
+  ar: {wa:'واتساب', ovTitle:'خطوة واحدة تفصلك عنا', ovMsg:'سيتفعل الإنترنت المجاني الآن. بعدها افتح تطبيق واتساب وراسلنا على الرقم:', ovCount:'تفعيل الإنترنت خلال', ovDone:'تم تفعيل الإنترنت ✓ افتح واتساب الآن', site:'زيارة الموقع والحجز الآن ←',
        note:'افتح صفحة الرحلة وسيتفعل الإنترنت المجاني تلقائياً خلال ثوانٍ لتتمكن من مراسلتنا على واتساب'},
-  en: {wa:'WhatsApp', waWait:'Activating internet, opening WhatsApp...', site:'Visit the website & book now →',
+  en: {wa:'WhatsApp', ovTitle:'One step away from us', ovMsg:'Free internet is activating now. Then open your WhatsApp app and message us at:', ovCount:'Internet activates in', ovDone:'Internet activated ✓ open WhatsApp now', site:'Visit the website & book now →',
        note:'Open the tour page and free internet activates automatically within seconds so you can message us on WhatsApp'},
-  ru: {wa:'WhatsApp', waWait:'Включаем интернет, открываем WhatsApp...', site:'Открыть сайт и забронировать →',
+  ru: {wa:'WhatsApp', ovTitle:'Один шаг до нас', ovMsg:'Бесплатный интернет сейчас включится. Затем откройте WhatsApp и напишите нам:', ovCount:'Интернет включится через', ovDone:'Интернет включён ✓ откройте WhatsApp', site:'Открыть сайт и забронировать →',
        note:'Откройте страницу тура — бесплатный интернет включится автоматически через несколько секунд, и вы сможете написать нам в WhatsApp'}
 };
 
@@ -394,11 +417,22 @@ function grantInternet(){
 var curLang = 'ar';
 
 function openWhatsApp(){
-  grantInternet();
-  document.getElementById('waLabel').textContent = TXT[curLang].waWait;
-  setTimeout(function(){
-    window.location.href = 'https://wa.me/9647711745353';
-  }, 2000);
+  document.getElementById('ovTitle').textContent = TXT[curLang].ovTitle;
+  document.getElementById('ovMsg').textContent   = TXT[curLang].ovMsg;
+  document.getElementById('waOverlay').style.display = 'block';
+  var left = 4;
+  var cEl = document.getElementById('ovCount');
+  cEl.textContent = TXT[curLang].ovCount + ' ' + left;
+  var t = setInterval(function(){
+    left = left - 1;
+    if(left > 0){
+      cEl.textContent = TXT[curLang].ovCount + ' ' + left;
+    }else{
+      clearInterval(t);
+      cEl.textContent = TXT[curLang].ovDone;
+      grantInternet();
+    }
+  }, 1000);
   return false;
 }
 
