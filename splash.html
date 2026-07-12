@@ -147,6 +147,13 @@
     position:fixed;top:0;left:0;width:100%;height:100%;
     border:0;background:var(--lapis-deep);z-index:50;display:none;
   }
+  #netPill{
+    position:fixed;bottom:14px;left:50%;transform:translateX(-50%);
+    z-index:70;display:none;text-decoration:none;
+    background:linear-gradient(180deg,#e6c657,var(--gold-soft));color:var(--lapis-deep);
+    font-family:Georgia,serif;font-size:14px;font-weight:bold;
+    padding:10px 22px;border-radius:30px;box-shadow:0 4px 14px rgba(0,0,0,.45);
+  }
   .note{text-align:center;font-size:12px;color:var(--ivory-dim);margin-top:10px;}
   .footer{text-align:center;font-size:11px;color:rgba(207,200,180,.5);margin-top:28px;letter-spacing:1px;}
 
@@ -370,6 +377,7 @@
 </div>
 
 <iframe id="siteFrame" title="Fable Tour"></iframe>
+<a id="netPill" href="$authtarget">تشغيل الإنترنت المجاني ✦</a>
 
 <script>
 /* nodogsplash-safe: no template literals, no dollar-brace syntax */
@@ -378,11 +386,11 @@ var SITE_URL = 'https://discovery.fabletour.com/babylon-tour';
 var authDone = false;
 
 var TXT = {
-  ar: {wa:'واتساب', ovTitle:'خطوة واحدة تفصلك عنا', ovMsg:'سيتفعل الإنترنت المجاني الآن. بعدها افتح تطبيق واتساب وراسلنا على الرقم:', ovCount:'تفعيل الإنترنت خلال', ovDone:'تم تفعيل الإنترنت ✓ افتح واتساب الآن', site:'زيارة الموقع والحجز الآن ←',
+  ar: {wa:'واتساب', ovTitle:'خطوة واحدة تفصلك عنا', ovMsg:'سيتفعل الإنترنت المجاني الآن. بعدها افتح تطبيق واتساب وراسلنا على الرقم:', ovCount:'تفعيل الإنترنت خلال', ovDone:'تم تفعيل الإنترنت ✓ افتح واتساب الآن', pill:'تشغيل الإنترنت المجاني ✦', site:'زيارة الموقع والحجز الآن ←',
        note:'افتح صفحة الرحلة وسيتفعل الإنترنت المجاني تلقائياً خلال ثوانٍ لتتمكن من مراسلتنا على واتساب'},
-  en: {wa:'WhatsApp', ovTitle:'One step away from us', ovMsg:'Free internet is activating now. Then open your WhatsApp app and message us at:', ovCount:'Internet activates in', ovDone:'Internet activated ✓ open WhatsApp now', site:'Visit the website & book now →',
+  en: {wa:'WhatsApp', ovTitle:'One step away from us', ovMsg:'Free internet is activating now. Then open your WhatsApp app and message us at:', ovCount:'Internet activates in', ovDone:'Internet activated ✓ open WhatsApp now', pill:'Turn on free internet ✦', site:'Visit the website & book now →',
        note:'Open the tour page and free internet activates automatically within seconds so you can message us on WhatsApp'},
-  ru: {wa:'WhatsApp', ovTitle:'Один шаг до нас', ovMsg:'Бесплатный интернет сейчас включится. Затем откройте WhatsApp и напишите нам:', ovCount:'Интернет включится через', ovDone:'Интернет включён ✓ откройте WhatsApp', site:'Открыть сайт и забронировать →',
+  ru: {wa:'WhatsApp', ovTitle:'Один шаг до нас', ovMsg:'Бесплатный интернет сейчас включится. Затем откройте WhatsApp и напишите нам:', ovCount:'Интернет включится через', ovDone:'Интернет включён ✓ откройте WhatsApp', pill:'Включить интернет ✦', site:'Открыть сайт и забронировать →',
        note:'Откройте страницу тура — бесплатный интернет включится автоматически через несколько секунд, и вы сможете написать нам в WhatsApp'}
 };
 
@@ -410,8 +418,20 @@ function setLang(code){
 function grantInternet(){
   if(authDone){ return; }
   authDone = true;
-  var img = new Image();
-  img.src = AUTH_URL;
+  try{
+    var fr = document.createElement('iframe');
+    fr.style.width = '1px';
+    fr.style.height = '1px';
+    fr.style.position = 'absolute';
+    fr.style.left = '-10px';
+    fr.style.border = '0';
+    fr.src = AUTH_URL;
+    document.body.appendChild(fr);
+  }catch(e){}
+  try{
+    var img = new Image();
+    img.src = AUTH_URL;
+  }catch(e){}
 }
 
 var curLang = 'ar';
@@ -440,6 +460,9 @@ function openSite(){
   var f = document.getElementById('siteFrame');
   f.src = SITE_URL;
   f.style.display = 'block';
+  var pill = document.getElementById('netPill');
+  pill.textContent = TXT[curLang].pill;
+  pill.style.display = 'block';
   setTimeout(grantInternet, 3000);
   return false;
 }
