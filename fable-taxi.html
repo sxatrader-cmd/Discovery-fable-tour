@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fable Tour Taxi | تكسي بين المحافظات</title>
-<meta name="description" content="Private intercity taxi in Iraq — Baghdad, Hilla (Babylon), Karbala, Najaf. Book online or via WhatsApp.">
+<meta name="description" content="Private intercity taxi in Iraq — Baghdad Airport, Baghdad, Hilla (Babylon), Karbala, Najaf, Nasiriyah (Ur), the Mesopotamian Marshes, Basra. Book online or via WhatsApp.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
@@ -246,10 +246,14 @@
   <h1 data-i18n="heroTitle">تكسي خاص بين المحافظات</h1>
   <p data-i18n="heroSub">سيارة خاصة مع سائق — احجز بثوانٍ وسنتواصل معك فوراً</p>
   <div class="cities">
+    <span class="city-chip" data-i18n="cAirport">مطار بغداد الدولي</span>
     <span class="city-chip" data-i18n="cBaghdad">بغداد</span>
     <span class="city-chip" data-i18n="cHillah">الحلة</span>
     <span class="city-chip" data-i18n="cKarbala">كربلاء</span>
     <span class="city-chip" data-i18n="cNajaf">النجف</span>
+    <span class="city-chip" data-i18n="cNasiriyah">الناصرية</span>
+    <span class="city-chip" data-i18n="cMarshes">الأهوار</span>
+    <span class="city-chip" data-i18n="cBasra">البصرة</span>
   </div>
 </section>
 
@@ -364,7 +368,7 @@ const T = {
     dir:"rtl", brandSub:"تكسي المحافظات",
     heroTitle:"تكسي خاص بين المحافظات",
     heroSub:"سيارة خاصة مع سائق — احجز بثوانٍ وسنتواصل معك فوراً",
-    cBaghdad:"بغداد", cHillah:"الحلة", cKarbala:"كربلاء", cNajaf:"النجف",
+    cAirport:"مطار بغداد الدولي", cBaghdad:"بغداد", cHillah:"الحلة", cKarbala:"كربلاء", cNajaf:"النجف", cNasiriyah:"الناصرية", cMarshes:"الأهوار", cBasra:"البصرة",
     formTitle:"احجز رحلتك", formSub:"أكمل الحقول ويظهر لك سعر الرحلة فوراً",
     from:"من", to:"إلى", choose:"— اختر —",
     tripType:"نوع الرحلة", oneway:"ذهاب فقط", return:"ذهاب وعودة",
@@ -401,7 +405,7 @@ const T = {
     dir:"ltr", brandSub:"INTERCITY TAXI",
     heroTitle:"Private Intercity Taxi in Iraq",
     heroSub:"Private car with driver — book in seconds, we confirm right away",
-    cBaghdad:"Baghdad", cHillah:"Hilla (Babylon)", cKarbala:"Karbala", cNajaf:"Najaf",
+    cAirport:"Baghdad Airport (BGW)", cBaghdad:"Baghdad", cHillah:"Hilla (Babylon)", cKarbala:"Karbala", cNajaf:"Najaf", cNasiriyah:"Nasiriyah (Ur)", cMarshes:"The Marshes", cBasra:"Basra",
     formTitle:"Book Your Ride", formSub:"Fill in the fields and your fare appears instantly",
     from:"From", to:"To", choose:"— Select —",
     tripType:"Trip type", oneway:"One way", return:"Round trip",
@@ -438,7 +442,7 @@ const T = {
     dir:"ltr", brandSub:"МЕЖДУГОРОДНЕЕ ТАКСИ",
     heroTitle:"Частное междугороднее такси в Ираке",
     heroSub:"Личный автомобиль с водителем — бронируйте за секунды, мы сразу подтвердим",
-    cBaghdad:"Багдад", cHillah:"Хилла (Вавилон)", cKarbala:"Кербела", cNajaf:"Наджаф",
+    cAirport:"Аэропорт Багдада (BGW)", cBaghdad:"Багдад", cHillah:"Хилла (Вавилон)", cKarbala:"Кербела", cNajaf:"Наджаф", cNasiriyah:"Насирия (Ур)", cMarshes:"Болота", cBasra:"Басра",
     formTitle:"Забронируйте поездку", formSub:"Заполните поля — цена появится мгновенно",
     from:"Откуда", to:"Куда", choose:"— Выберите —",
     tripType:"Тип поездки", oneway:"В одну сторону", return:"Туда и обратно",
@@ -474,20 +478,34 @@ const T = {
 };
 
 // ============ المدن والأسعار ============
-const CITIES = ["Baghdad","Hillah","Karbala","Najaf"];
+const CITIES = ["Airport","Baghdad","Hillah","Karbala","Najaf","Nasiriyah","Marshes","Basra"];
 const CITY_LABELS = {
+  Airport:{ar:"مطار بغداد الدولي",en:"Baghdad Airport (BGW)",ru:"Аэропорт Багдада (BGW)"},
   Baghdad:{ar:"بغداد",en:"Baghdad",ru:"Багдад"},
   Hillah:{ar:"الحلة",en:"Hilla (Babylon)",ru:"Хилла (Вавилон)"},
   Karbala:{ar:"كربلاء",en:"Karbala",ru:"Кербела"},
   Najaf:{ar:"النجف",en:"Najaf",ru:"Наджаф"},
+  Nasiriyah:{ar:"الناصرية",en:"Nasiriyah (Ur)",ru:"Насирия (Ур)"},
+  Marshes:{ar:"الأهوار (الجبايش)",en:"Mesopotamian Marshes (Chibayish)",ru:"Месопотамские болота (Чибаиш)"},
+  Basra:{ar:"البصرة",en:"Basra",ru:"Басра"},
 };
 const FARES = {
+  "Airport|Baghdad": { oneway:25000,  ret:50000 },
+  "Airport|Hillah":  { oneway:45000,  ret:90000 },
+  "Airport|Karbala": { oneway:50000,  ret:100000 },
+  "Airport|Najaf":   { oneway:60000,  ret:120000 },
   "Baghdad|Hillah":  { oneway:45000,  ret:90000 },
   "Baghdad|Karbala": { oneway:50000,  ret:100000 },
   "Baghdad|Najaf":   { oneway:60000,  ret:120000 },
   "Hillah|Karbala":  { oneway:25000,  ret:50000 },
   "Hillah|Najaf":    { oneway:25000,  ret:50000 },
   "Najaf|Karbala":   { oneway:50000,  ret:100000 },
+  "Baghdad|Nasiriyah": { oneway:80000,  ret:160000 },
+  "Baghdad|Basra":     { oneway:150000, ret:300000 },
+  "Airport|Nasiriyah": { oneway:80000,  ret:160000 },
+  "Airport|Basra":     { oneway:150000, ret:300000 },
+  "Baghdad|Marshes":   { oneway:120000, ret:240000 },
+  "Airport|Marshes":   { oneway:120000, ret:240000 },
 };
 function fareFor(a,b){ return FARES[a+"|"+b] || FARES[b+"|"+a] || null; }
 
