@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="only light">
 <title>Baghdad Old Town Private Walking Tour — 6 Historic Stops | Fable Tour</title>
 <meta name="description" content="Private 4–5 hour walking tour through historic Baghdad: Mustansiriyah Madrasah, Safafeer Copper Market, Al-Baghdadi Museum, Al Rasheed Street, Mutanabbi Street & Qishla Clock Tower. Hotel pickup included. English · العربية · Русский.">
 <meta name="keywords" content="Baghdad tour, Baghdad walking tour, Iraq tourism, Mutanabbi Street, Mustansiriyah Madrasah, Al Rasheed Street, Qishla, Safafeer copper market, private tour Baghdad, Fable Tour, جولة بغداد, экскурсия Багдад">
@@ -19,6 +20,7 @@
 <meta property="og:title" content="Baghdad Old Town Private Walking Tour — A Journey Through the Heart of History">
 <meta property="og:description" content="6 iconic stops in 4–5 hours: Mustansiriyah Madrasah, Copper Market, Al-Baghdadi Museum, Al Rasheed Street, Mutanabbi Street & Qishla Clock Tower. Private guide, hotel pickup included. 150,000 IQD per group (up to 3).">
 <meta property="og:url" content="https://discovery.fabletour.com/baghdad-old-town.html">
+<meta property="og:image" content="https://discovery.fabletour.com/images/mutanabbi-statue.webp">
 <meta property="og:locale" content="en_US">
 <meta property="og:locale:alternate" content="ar_IQ">
 <meta property="og:locale:alternate" content="ru_RU">
@@ -26,6 +28,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Baghdad Old Town Private Walking Tour | Fable Tour">
 <meta name="twitter:description" content="Private 4–5 hour walk through historic Baghdad — 6 iconic stops, hotel pickup included. EN · AR · RU.">
+<meta name="twitter:image" content="https://discovery.fabletour.com/images/mutanabbi-statue.webp">
 <!-- Structured data -->
 <script type="application/ld+json">
 {
@@ -70,6 +73,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{
+  color-scheme:light;
   --white:#ffffff;--cream:#fff6ee;--orange:#e85d04;--orange-deep:#c74e02;
   --orange-soft:#ffd9b8;--ink:#111111;--ink-soft:#3a3a3a;--line:#f0e2d4;
   --f-display:'Marcellus','Playfair Display',serif;
@@ -366,7 +370,6 @@ footer a{color:var(--orange-soft)}
 const SUPABASE_URL  = "https://zrbbnveaqockoptftqst.supabase.co";
 const SUPABASE_ANON = "sb_publishable_YscqakXUfq9ngPjaAhe2KA__sFDoMcl";
 const WEB3FORMS_KEY = "e9d1132b-a901-4764-af66-b98807d3d918";
-const GALLERY_BUCKET = "oldtown-gallery";
 const WHATSAPP_NUMBER = "9647711745353"; // بدون + أو مسافات
 const WA_DELAY_MS = 9000; // يظهر بعد ٩ ثواني
 const WA_TEXT = {
@@ -374,6 +377,34 @@ const WA_TEXT = {
   ar:{label:"راسلنا واتساب", msg:"مرحباً! أرغب بالاستفسار عن جولة بغداد القديمة الخاصة."},
   ru:{label:"Напишите нам", msg:"Здравствуйте! Меня интересует частная экскурсия по старому Багдаду."}
 };
+
+/* =========================================================
+   GALLERY IMAGES — ملفات محلية بنفس ريبو GitHub Pages
+   الصور داخل مجلد images/ بجانب هذا الملف.
+   لحذف صورة: احذف سطرها من هنا واحذف الملف من المجلد.
+   ========================================================= */
+const GALLERY_IMAGES = [
+  {src:"images/mutanabbi-statue.webp",         alt:"Al-Mutanabbi statue above the Tigris, Baghdad"},
+  {src:"images/shabandar-cafe-tea.webp",       alt:"Tea at the historic Shabandar Café on Mutanabbi Street"},
+  {src:"images/tigris-boat-clock-tower.webp",  alt:"Boat ride on the Tigris with the Qishla clock tower"},
+  {src:"images/qishla-arcade.webp",            alt:"Qishla arcades with the clock tower, old Baghdad"},
+  {src:"images/qishla-clock-tower-view.webp",  alt:"View of the Qishla clock tower from the balcony"},
+  {src:"images/qishla-balcony.webp",           alt:"Guests on the Qishla balcony overlooking the gardens"},
+  {src:"images/abbasid-palace-arches.webp",    alt:"Abbasid-era brick arches in old Baghdad"},
+  {src:"images/abbasid-palace-courtyard.webp", alt:"Abbasid courtyard with ornamental brickwork, Baghdad"},
+  {src:"images/baghdadi-museum-scene.webp",    alt:"Traditional life dioramas at the Al-Baghdadi Museum"},
+  {src:"images/baghdadi-museum-costumes.webp", alt:"Guests in traditional Iraqi costumes at the museum"},
+  {src:"images/kadhimiya-shrine-1.webp",       alt:"Golden domes and minarets of the Kadhimiya shrine"},
+  {src:"images/kadhimiya-shrine-2.webp",       alt:"Kadhimiya shrine framed by a tiled archway"},
+  {src:"images/kadhimiya-shrine-3.webp",       alt:"Kadhimiya shrine courtyard carpets at sunset"},
+  {src:"images/kadhimiya-shrine-4.webp",       alt:"Evening light over the Kadhimiya shrine courtyard"},
+  {src:"images/kadhimiya-courtyard.webp",      alt:"Marble courtyard of the Kadhimiya shrine"},
+  {src:"images/dur-kurigalzu-ziggurat.webp",   alt:"Restored staircase of the Dur-Kurigalzu ziggurat"},
+  {src:"images/aqar-quf-ziggurat.webp",        alt:"The ziggurat of Aqar Quf near Baghdad"},
+  {src:"images/aqar-quf-gate.webp",            alt:"Brick gate passage at the Aqar Quf ziggurat"},
+  {src:"images/taq-kasra-arch-1.webp",         alt:"Taq Kasra, the great Sasanian arch at Ctesiphon"},
+  {src:"images/taq-kasra-arch-2.webp",         alt:"Visitors beneath the Taq Kasra arch, Ctesiphon"}
+];
 /* ========================================================= */
 
 /* =========================================================
@@ -699,7 +730,7 @@ document.querySelectorAll('.langs button').forEach(b=>{
 });
 
 /* =========================================================
-   SUPABASE — booked dates + gallery
+   SUPABASE — booked dates (bookings only; storage no longer used)
    ========================================================= */
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 let bookedDates = new Set();
@@ -742,21 +773,22 @@ dateInput.addEventListener('change', ()=>{
   }
 });
 
-async function loadGallery(){
+/* =========================================================
+   GALLERY — static images served from GitHub Pages (images/)
+   لا يستهلك أي باندويث من Supabase
+   ========================================================= */
+function loadGallery(){
   const grid = document.getElementById('gallery-grid');
   const empty = document.getElementById('gallery-empty');
-  try{
-    const { data, error } = await sb.storage.from(GALLERY_BUCKET).list('', { limit: 200, sortBy:{column:'created_at',order:'desc'} });
-    if(error) throw error;
-    const files = (data || []).filter(f => f.name && !f.name.startsWith('.'));
-    if(files.length === 0){ empty.style.display = 'block'; return; }
-    files.forEach(f=>{
-      const { data: pub } = sb.storage.from(GALLERY_BUCKET).getPublicUrl(f.name);
-      const img = document.createElement('img');
-      img.src = pub.publicUrl; img.alt = "Baghdad Old Town tour"; img.loading = "lazy";
-      grid.appendChild(img);
-    });
-  }catch(e){ console.error(e); empty.style.display = 'block'; }
+  if(!GALLERY_IMAGES.length){ empty.style.display = 'block'; return; }
+  GALLERY_IMAGES.forEach(g=>{
+    const img = document.createElement('img');
+    img.src = g.src;
+    img.alt = g.alt;
+    img.loading = "lazy";
+    img.decoding = "async";
+    grid.appendChild(img);
+  });
 }
 
 /* =========================================================
