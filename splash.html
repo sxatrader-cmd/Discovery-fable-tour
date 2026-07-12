@@ -128,6 +128,13 @@
     font-family:inherit;
   }
   .cta:active{transform:translateY(1px);}
+  .cta2{
+    display:block;text-align:center;text-decoration:none;
+    background:transparent;border:1.5px solid var(--gold);
+    color:var(--gold);font-size:16px;font-weight:bold;
+    padding:13px;border-radius:12px;margin-top:12px;font-family:inherit;
+  }
+  .cta2:active{transform:translateY(1px);}
   .note{text-align:center;font-size:12px;color:var(--ivory-dim);margin-top:10px;}
   .footer{text-align:center;font-size:11px;color:rgba(207,200,180,.5);margin-top:28px;letter-spacing:1px;}
 
@@ -149,7 +156,7 @@
   </div>
 
   <!-- ================= ARABIC ================= -->
-  <div class="lang show" id="lang-ar" dir="rtl">
+  <div class="lang show" id="lang-ar" dir="rtl" style="display:block">
     <div class="gate">
       <div class="brand">FABLE TOUR</div>
       <div class="title">رحلة بابل الأثرية</div>
@@ -208,14 +215,10 @@
 
     </div>
 
-    <a class="wa" href="https://wa.me/9647711745353"><svg width="24" height="24" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.6-6.1c-.3-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.3-.7.8-.8 1-.1.2-.3.2-.5.1-.3-.1-1.1-.4-2-1.2-.8-.7-1.3-1.5-1.4-1.8-.1-.3 0-.4.1-.5l.4-.5c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s1 2.5 1.1 2.7c.1.2 1.9 3 4.7 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.4-.3z"/></svg><span>واتساب</span><span class="num">+964 771 174 5353</span></a>
-
-    <a class="cta" href="$authtarget">زيارة الموقع والحجز الآن ←</a>
-    <div class="note">بالضغط على الزر يتم تفعيل اتصالك بالإنترنت وفتح صفحة الرحلة</div>
   </div>
 
   <!-- ================= ENGLISH ================= -->
-  <div class="lang" id="lang-en" dir="ltr">
+  <div class="lang" id="lang-en" dir="ltr" style="display:none">
     <div class="gate">
       <div class="brand">FABLE TOUR</div>
       <div class="title">Babylon Day Trip</div>
@@ -274,14 +277,10 @@
 
     </div>
 
-    <a class="wa" href="https://wa.me/9647711745353"><svg width="24" height="24" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.6-6.1c-.3-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.3-.7.8-.8 1-.1.2-.3.2-.5.1-.3-.1-1.1-.4-2-1.2-.8-.7-1.3-1.5-1.4-1.8-.1-.3 0-.4.1-.5l.4-.5c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s1 2.5 1.1 2.7c.1.2 1.9 3 4.7 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.4-.3z"/></svg><span>WhatsApp</span><span class="num">+964 771 174 5353</span></a>
-
-    <a class="cta" href="$authtarget">Visit the website &amp; book now →</a>
-    <div class="note">Tapping the button connects you to the internet and opens the tour page</div>
   </div>
 
   <!-- ================= RUSSIAN ================= -->
-  <div class="lang" id="lang-ru" dir="ltr">
+  <div class="lang" id="lang-ru" dir="ltr" style="display:none">
     <div class="gate">
       <div class="brand">FABLE TOUR</div>
       <div class="title">Экскурсия в Вавилон</div>
@@ -340,17 +339,27 @@
 
     </div>
 
-    <a class="wa" href="https://wa.me/9647711745353"><svg width="24" height="24" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.6-6.1c-.3-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.3-.7.8-.8 1-.1.2-.3.2-.5.1-.3-.1-1.1-.4-2-1.2-.8-.7-1.3-1.5-1.4-1.8-.1-.3 0-.4.1-.5l.4-.5c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s1 2.5 1.1 2.7c.1.2 1.9 3 4.7 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.4-.3z"/></svg><span>WhatsApp</span><span class="num">+964 771 174 5353</span></a>
-
-    <a class="cta" href="$authtarget">Открыть сайт и забронировать →</a>
-    <div class="note">Нажатие кнопки подключит вас к интернету и откроет страницу тура</div>
   </div>
+
+  <!-- Shared action buttons (single instance, labels switch with language) -->
+  <a class="wa" href="https://wa.me/9647711745353"><svg width="24" height="24" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.6-6.1c-.3-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.3-.7.8-.8 1-.1.2-.3.2-.5.1-.3-.1-1.1-.4-2-1.2-.8-.7-1.3-1.5-1.4-1.8-.1-.3 0-.4.1-.5l.4-.5c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s1 2.5 1.1 2.7c.1.2 1.9 3 4.7 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.4-.3z"/></svg><span id="waLabel">واتساب</span><span class="num">+964 771 174 5353</span></a>
+  <a class="cta" id="siteBtn" href="https://discovery.fabletour.com/babylon-tour">زيارة الموقع والحجز الآن ←</a>
+  <a class="cta2" id="netBtn" href="$authtarget">تفعيل الإنترنت المجاني</a>
+  <div class="note" id="noteTxt">تصفح صفحة الرحلة من هنا مباشرة، وعند تفعيل الإنترنت قد تُغلق هذه النافذة تلقائياً</div>
 
   <div class="footer">FABLE TOUR · BAGHDAD · DISCOVERY.FABLETOUR.COM</div>
 </div>
 
 <script>
 /* nodogsplash-safe: no template literals, no dollar-brace syntax */
+var TXT = {
+  ar: {wa:'واتساب', site:'زيارة الموقع والحجز الآن ←', net:'تفعيل الإنترنت المجاني',
+       note:'تصفح صفحة الرحلة من هنا مباشرة، وعند تفعيل الإنترنت قد تُغلق هذه النافذة تلقائياً'},
+  en: {wa:'WhatsApp', site:'Visit the website & book now →', net:'Activate free internet',
+       note:'Browse the tour page right here; activating internet may close this window automatically'},
+  ru: {wa:'WhatsApp', site:'Открыть сайт и забронировать →', net:'Включить бесплатный интернет',
+       note:'Просматривайте страницу тура прямо здесь; при включении интернета это окно может закрыться автоматически'}
+};
 function setLang(code){
   var codes = ['ar','en','ru'];
   var i;
@@ -358,13 +367,17 @@ function setLang(code){
     var pane = document.getElementById('lang-' + codes[i]);
     var btn  = document.getElementById('btn-'  + codes[i]);
     if(codes[i] === code){
-      pane.className = 'lang show';
-      btn.className  = 'langbtn active';
+      pane.style.display = 'block';
+      btn.className = 'langbtn active';
     }else{
-      pane.className = 'lang';
-      btn.className  = 'langbtn';
+      pane.style.display = 'none';
+      btn.className = 'langbtn';
     }
   }
+  document.getElementById('waLabel').textContent = TXT[code].wa;
+  document.getElementById('siteBtn').textContent = TXT[code].site;
+  document.getElementById('netBtn').textContent  = TXT[code].net;
+  document.getElementById('noteTxt').textContent = TXT[code].note;
   document.body.dir = (code === 'ar') ? 'rtl' : 'ltr';
 }
 </script>
