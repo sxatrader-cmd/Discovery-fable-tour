@@ -128,13 +128,10 @@
     font-family:inherit;
   }
   .cta:active{transform:translateY(1px);}
-  .cta2{
-    display:block;text-align:center;text-decoration:none;
-    background:transparent;border:1.5px solid var(--gold);
-    color:var(--gold);font-size:16px;font-weight:bold;
-    padding:13px;border-radius:12px;margin-top:12px;font-family:inherit;
+  #siteFrame{
+    position:fixed;top:0;left:0;width:100%;height:100%;
+    border:0;background:var(--lapis-deep);z-index:50;display:none;
   }
-  .cta2:active{transform:translateY(1px);}
   .note{text-align:center;font-size:12px;color:var(--ivory-dim);margin-top:10px;}
   .footer{text-align:center;font-size:11px;color:rgba(207,200,180,.5);margin-top:28px;letter-spacing:1px;}
 
@@ -342,24 +339,30 @@
   </div>
 
   <!-- Shared action buttons (single instance, labels switch with language) -->
-  <a class="wa" href="https://wa.me/9647711745353"><svg width="24" height="24" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.6-6.1c-.3-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.3-.7.8-.8 1-.1.2-.3.2-.5.1-.3-.1-1.1-.4-2-1.2-.8-.7-1.3-1.5-1.4-1.8-.1-.3 0-.4.1-.5l.4-.5c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s1 2.5 1.1 2.7c.1.2 1.9 3 4.7 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.4-.3z"/></svg><span id="waLabel">واتساب</span><span class="num">+964 771 174 5353</span></a>
-  <a class="cta" id="siteBtn" href="https://discovery.fabletour.com/babylon-tour">زيارة الموقع والحجز الآن ←</a>
-  <a class="cta2" id="netBtn" href="$authtarget">تفعيل الإنترنت المجاني</a>
-  <div class="note" id="noteTxt">تصفح صفحة الرحلة من هنا مباشرة، وعند تفعيل الإنترنت قد تُغلق هذه النافذة تلقائياً</div>
+  <a class="wa" id="waBtn" href="https://wa.me/9647711745353" onclick="return openWhatsApp()"><svg width="24" height="24" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.6-6.1c-.3-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.3-.7.8-.8 1-.1.2-.3.2-.5.1-.3-.1-1.1-.4-2-1.2-.8-.7-1.3-1.5-1.4-1.8-.1-.3 0-.4.1-.5l.4-.5c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s1 2.5 1.1 2.7c.1.2 1.9 3 4.7 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.4-.3z"/></svg><span id="waLabel">واتساب</span><span class="num">+964 771 174 5353</span></a>
+  <a class="cta" id="siteBtn" href="https://discovery.fabletour.com/babylon-tour" onclick="return openSite()">زيارة الموقع والحجز الآن ←</a>
+  <div class="note" id="noteTxt">افتح صفحة الرحلة وسيتفعل الإنترنت المجاني تلقائياً خلال ثوانٍ لتتمكن من مراسلتنا على واتساب</div>
 
   <div class="footer">FABLE TOUR · BAGHDAD · DISCOVERY.FABLETOUR.COM</div>
 </div>
 
+<iframe id="siteFrame" title="Fable Tour"></iframe>
+
 <script>
 /* nodogsplash-safe: no template literals, no dollar-brace syntax */
+var AUTH_URL = '$authtarget';
+var SITE_URL = 'https://discovery.fabletour.com/babylon-tour';
+var authDone = false;
+
 var TXT = {
-  ar: {wa:'واتساب', site:'زيارة الموقع والحجز الآن ←', net:'تفعيل الإنترنت المجاني',
-       note:'تصفح صفحة الرحلة من هنا مباشرة، وعند تفعيل الإنترنت قد تُغلق هذه النافذة تلقائياً'},
-  en: {wa:'WhatsApp', site:'Visit the website & book now →', net:'Activate free internet',
-       note:'Browse the tour page right here; activating internet may close this window automatically'},
-  ru: {wa:'WhatsApp', site:'Открыть сайт и забронировать →', net:'Включить бесплатный интернет',
-       note:'Просматривайте страницу тура прямо здесь; при включении интернета это окно может закрыться автоматически'}
+  ar: {wa:'واتساب', waWait:'جاري تفعيل الإنترنت وفتح واتساب...', site:'زيارة الموقع والحجز الآن ←',
+       note:'افتح صفحة الرحلة وسيتفعل الإنترنت المجاني تلقائياً خلال ثوانٍ لتتمكن من مراسلتنا على واتساب'},
+  en: {wa:'WhatsApp', waWait:'Activating internet, opening WhatsApp...', site:'Visit the website & book now →',
+       note:'Open the tour page and free internet activates automatically within seconds so you can message us on WhatsApp'},
+  ru: {wa:'WhatsApp', waWait:'Включаем интернет, открываем WhatsApp...', site:'Открыть сайт и забронировать →',
+       note:'Откройте страницу тура — бесплатный интернет включится автоматически через несколько секунд, и вы сможете написать нам в WhatsApp'}
 };
+
 function setLang(code){
   var codes = ['ar','en','ru'];
   var i;
@@ -376,9 +379,35 @@ function setLang(code){
   }
   document.getElementById('waLabel').textContent = TXT[code].wa;
   document.getElementById('siteBtn').textContent = TXT[code].site;
-  document.getElementById('netBtn').textContent  = TXT[code].net;
   document.getElementById('noteTxt').textContent = TXT[code].note;
+  curLang = code;
   document.body.dir = (code === 'ar') ? 'rtl' : 'ltr';
+}
+
+function grantInternet(){
+  if(authDone){ return; }
+  authDone = true;
+  var img = new Image();
+  img.src = AUTH_URL;
+}
+
+var curLang = 'ar';
+
+function openWhatsApp(){
+  grantInternet();
+  document.getElementById('waLabel').textContent = TXT[curLang].waWait;
+  setTimeout(function(){
+    window.location.href = 'https://wa.me/9647711745353';
+  }, 2000);
+  return false;
+}
+
+function openSite(){
+  var f = document.getElementById('siteFrame');
+  f.src = SITE_URL;
+  f.style.display = 'block';
+  setTimeout(grantInternet, 3000);
+  return false;
 }
 </script>
 </body>
