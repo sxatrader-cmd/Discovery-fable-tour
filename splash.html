@@ -75,19 +75,23 @@
   .fact .num{color:var(--gold);font-size:20px;font-weight:bold;}
   .fact .lbl{font-size:12px;color:var(--ivory-dim);margin-top:2px;}
 
-  /* Itinerary */
-  .stops{list-style:none;}
-  .stops li{
-    position:relative;padding:10px 34px 10px 6px;
-    border-bottom:1px dashed rgba(212,175,55,.25);font-size:15px;
+  /* Itinerary accordion */
+  .hint{text-align:center;font-size:12px;color:var(--ivory-dim);margin:-6px 0 10px;}
+  .stop{border-bottom:1px dashed rgba(212,175,55,.25);}
+  .stop summary{
+    list-style:none;cursor:pointer;position:relative;
+    padding:13px 30px 13px 6px;font-size:15px;font-weight:bold;color:var(--ivory);
   }
-  [dir="ltr"] .stops li{padding:10px 6px 10px 34px;}
-  .stops li:before{
-    content:"◆";color:var(--gold);position:absolute;right:8px;top:11px;font-size:12px;
+  [dir="ltr"] .stop summary{padding:13px 6px 13px 30px;}
+  .stop summary::-webkit-details-marker{display:none;}
+  .stop summary:before{content:"◆";color:var(--gold);position:absolute;right:8px;top:15px;font-size:12px;}
+  [dir="ltr"] .stop summary:before{right:auto;left:8px;}
+  .stop[open] summary{color:var(--gold);}
+  .stop p{
+    font-size:14px;color:var(--ivory-dim);line-height:1.9;
+    padding:0 30px 14px 6px;text-align:justify;
   }
-  [dir="ltr"] .stops li:before{right:auto;left:8px;}
-  .stops b{color:var(--ivory);}
-  .stops small{display:block;color:var(--ivory-dim);font-size:13px;}
+  [dir="ltr"] .stop p{padding:0 6px 14px 30px;}
 
   /* Included list */
   .inc{list-style:none;font-size:15px;}
@@ -166,20 +170,39 @@
     </div>
 
     <h2 class="sec">برنامج الرحلة</h2>
-    <ul class="stops">
-      <li><b>الانطلاق من بغداد</b><small>استلامك من الفندق أو أي موقع تحدده صباحاً</small></li>
-      <li><b>بوابة عشتار والشارع الموكبي</b><small>أشهر معالم بابل وطريق المواكب الملكية</small></li>
-      <li><b>أسد بابل</b><small>التمثال البازلتي الشهير رمز المدينة</small></li>
-      <li><b>القصر الجنوبي وأطلال المدينة</b><small>قصور نبوخذنصر وأسوار بابل العظيمة</small></li>
-      <li><b>التل المطل على المدينة</b><small>إطلالة بانورامية وجلسة تصوير</small></li>
-      <li><b>العودة إلى بغداد</b><small>توصيلك إلى موقعك مساءً</small></li>
-    </ul>
+    <div class="hint">اضغط على أي محطة لقراءة تفاصيلها</div>
+    <details class="stop"><summary>الانطلاق من بغداد</summary>
+      <p>استلامك صباحاً من الفندق أو أي موقع تحدده داخل بغداد، والانطلاق بسيارة حديثة مكيفة نحو محافظة بابل.</p>
+    </details>
+    <details class="stop"><summary>بوابة عشتار والشارع الموكبي</summary>
+      <p>البوابة الثامنة لمدينة بابل القديمة وأشهر معالمها على الإطلاق، شيدها الملك نبوخذنصر الثاني في القرن السادس قبل الميلاد وكرّسها للإلهة عشتار. تتميز البوابة بطابوقها المزجج باللون الأزرق اللازوردي المزين بنقوش بارزة لثيران الإله أدد وتنانين الإله مردوخ. يمر من خلالها الشارع الموكبي الذي كانت تعبره المواكب الملكية والدينية في احتفالات رأس السنة البابلية، وتصطف على جانبيه جدران مزينة بأسود عشتار. النسخة الأصلية الكاملة محفوظة اليوم في متحف بيرغامون ببرلين، أما في الموقع فستشاهد النسخة المعاد بناؤها والأجزاء الأصلية من الأساسات، وستمشي على نفس الطريق الذي مشى عليه ملوك بابل قبل ألفين وخمسمئة عام.</p>
+    </details>
+    <details class="stop"><summary>أسد بابل</summary>
+      <p>تمثال بازلتي أسود يبلغ طوله نحو مترين ونصف، يجسد أسداً يقف فوق جسد إنسان، وهو الرمز الأشهر لمدينة بابل ولدولة العراق الحديثة أيضاً، إذ ظهر على العملات والطوابع والشعارات الوطنية. يعود التمثال إلى العهد البابلي الحديث في عهد نبوخذنصر الثاني تقريباً، ويرجّح الباحثون أنه يرمز إلى الإلهة عشتار التي كان الأسد حيوانها المقدس، وإلى قوة بابل المنتصرة على أعدائها. نُحت التمثال من حجر البازلت الصلب الذي لا يوجد في أرض بابل، ما يشير إلى أنه جُلب من مناطق بعيدة. اكتُشف عام 1776 وبقي في مكانه منذ ذلك الحين، وهو اليوم المحطة المفضلة للتصوير التذكاري لدى كل زوار المدينة.</p>
+    </details>
+    <details class="stop"><summary>القصر الجنوبي وأسوار المدينة</summary>
+      <p>المجمع الملكي الضخم الذي حكم منه نبوخذنصر الثاني إمبراطوريته الممتدة من الخليج إلى البحر المتوسط. يضم القصر خمس ساحات كبرى تحيط بها مئات الغرف والقاعات، أشهرها قاعة العرش التي يُعتقد أن جدرانها كانت مكسوة بالطابوق المزجج الأزرق والذهبي، وفيها بحسب الروايات التاريخية توفي الإسكندر المقدوني عام 323 قبل الميلاد. ستشاهد أيضاً الجدران المعاد بناؤها بارتفاعاتها المهيبة، وبقايا الأسوار المزدوجة التي جعلت بابل أعظم مدينة محصّنة في العالم القديم، والموقع المرجّح للجنائن المعلقة إحدى عجائب الدنيا السبع. جولة داخل الممرات والساحات تمنحك إحساساً حقيقياً بضخامة المدينة التي وصفها هيرودوت بأنها تفوق في روعتها كل مدن الأرض.</p>
+    </details>
+    <details class="stop"><summary>قصر صدام حسين</summary>
+      <p>على تل صناعي مرتفع يطل مباشرة على أطلال بابل ونهر الفرات، شُيّد في تسعينيات القرن الماضي قصر صيفي فخم على الطراز البابلي الحديث، لتتجاور في مشهد واحد قصور الحاكم القديم والحديث. القصر المهجور اليوم مفتوح للزوار، وتتميز قاعاته الواسعة بسقوف منقوشة ونوافذ ضخمة وزخارف جصية تمزج الرموز البابلية والآشورية، وتغطي جدرانه كتابات الزوار من مختلف الجنسيات. الصعود إلى شرفاته العليا يمنحك أجمل إطلالة بانورامية في المحافظة: أطلال بابل بالكامل، بساتين النخيل الممتدة، ونهر الفرات المتعرج بينها. إنها محطة التصوير الأهم في الرحلة، خصوصاً وقت الغروب حين تكتسي المدينة القديمة بضوء ذهبي ساحر.</p>
+    </details>
+    <details class="stop"><summary>مدينة بورسيبا الأثرية</summary>
+      <p>على بعد نحو عشرين كيلومتراً جنوب غرب بابل تقع بورسيبا، المدينة التوأم لبابل ومركز عبادة الإله نابو إله الحكمة والكتابة. أبرز معالمها زقورة إيزيدا الشامخة التي ما تزال بقاياها ترتفع نحو خمسين متراً، وتُعرف محلياً باسم برس نمرود، وتربطها الروايات الشعبية والدينية ببرج بابل الذي ذُكر في الكتب المقدسة. اللافت في الموقع كتل الطابوق المتزججة المنصهرة في قمة الزقورة، والتي يفسرها الموروث المحلي بالنار العظيمة التي أشعلها النمرود، بينما يرجعها الآثاريون إلى حريق هائل قديم. المشي حول الزقورة وسط السهل المفتوح بعيداً عن الزحام تجربة مهيبة تنقلك إلى عمق التاريخ الرافديني.</p>
+    </details>
+    <details class="stop"><summary>مقام النبي إبراهيم الخليل (ع)</summary>
+      <p>إلى جوار زقورة بورسيبا مباشرة يقع مقام النبي إبراهيم الخليل عليه السلام، في الموضع الذي تقول الروايات المحلية والدينية إن النمرود ألقى فيه إبراهيم في النار فجعلها الله برداً وسلاماً عليه. المقام مسجد قديم متجدد البناء تعلوه قبة، وتحيط به ساحة هادئة يقصدها الزوار من مختلف المحافظات ومن خارج العراق للصلاة والتبرك وقراءة القصص القرآني في مكان حدوثه كما يعتقد أهل المنطقة. الجمع بين الزقورة الأثرية والمقام الديني في موقع واحد يجعل هذه المحطة فريدة، إذ يلتقي فيها التاريخ الرافديني القديم بالموروث الإبراهيمي المشترك بين الديانات السماوية الثلاث، وهي محطة محببة جداً لمحبي السياحة الدينية والتاريخية معاً.</p>
+    </details>
+    <details class="stop"><summary>مرقد النبي أيوب (ع)</summary>
+      <p>في منطقة الرارنجية قرب الحلة يقع مرقد النبي أيوب عليه السلام، رمز الصبر في الموروث الديني، حيث تروي المصادر المحلية أنه عاش سنوات ابتلائه في هذه الأرض ثم شفاه الله عندها. يضم الموقع المرقد بقبته وصحنه الهادئ، وإلى جواره بئر وعين ماء يعتقد الزوار أنها العين التي اغتسل منها أيوب فبرئ من سقمه، ولذلك يقصدها الناس للتبرك والاستشفاء. المكان محاط ببساتين النخيل ويتميز بأجواء ريفية ساكنة تختلف تماماً عن صخب المدن، ما يجعله ختاماً روحانياً مريحاً ليوم حافل بالتاريخ. الزيارة قصيرة لكنها تضيف للرحلة بعداً إيمانياً وإنسانياً يلامس قلوب الزوار من كل الخلفيات.</p>
+    </details>
+    <details class="stop"><summary>العودة إلى بغداد</summary>
+      <p>بعد يوم حافل بالتاريخ والروحانية، نعود بك مساءً إلى بغداد ونوصلك إلى فندقك أو أي موقع تختاره.</p>
+    </details>
 
     <h2 class="sec">الرحلة تشمل</h2>
     <ul class="inc">
       <li>سيارة حديثة مكيفة ذهاباً وإياباً</li>
       <li>مرشد محلي (عربي / إنكليزي / روسي)</li>
-      <li>تذاكر دخول المواقع الأثرية</li>
       <li>ماء وقهوة عربية خلال الرحلة</li>
     </ul>
 
@@ -213,20 +236,39 @@
     </div>
 
     <h2 class="sec">Itinerary</h2>
-    <ul class="stops">
-      <li><b>Departure from Baghdad</b><small>Morning pickup from your hotel or any location</small></li>
-      <li><b>Ishtar Gate &amp; Processional Way</b><small>Babylon's iconic gate and royal parade street</small></li>
-      <li><b>Lion of Babylon</b><small>The famous basalt statue, symbol of the city</small></li>
-      <li><b>Southern Palace &amp; city ruins</b><small>Nebuchadnezzar's palaces and the great walls</small></li>
-      <li><b>Panoramic hilltop</b><small>City overlook and photo stop</small></li>
-      <li><b>Return to Baghdad</b><small>Evening drop-off at your location</small></li>
-    </ul>
+    <div class="hint">Tap any stop to read its details</div>
+    <details class="stop"><summary>Departure from Baghdad</summary>
+      <p>Morning pickup from your hotel or any location in Baghdad, then off to Babil province in a modern air-conditioned car.</p>
+    </details>
+    <details class="stop"><summary>Ishtar Gate &amp; Processional Way</summary>
+      <p>The eighth gate of ancient Babylon and its most celebrated monument, built by King Nebuchadnezzar II in the sixth century BC and dedicated to the goddess Ishtar. Its glazed lapis-blue bricks carry relief images of the bulls of the god Adad and the dragons of the god Marduk. Through it ran the Processional Way, the avenue of royal and religious parades during the Babylonian New Year festival, lined with walls decorated with Ishtar's lions. The complete original gate stands today in Berlin's Pergamon Museum, while on site you will see the reconstructed gate and the original foundations — and walk the very road that Babylon's kings walked two and a half thousand years ago.</p>
+    </details>
+    <details class="stop"><summary>Lion of Babylon</summary>
+      <p>A black basalt statue about two and a half meters long depicting a lion standing over a fallen man — the most famous symbol of Babylon and of modern Iraq, appearing on coins, stamps and national emblems. It dates roughly to the Neo-Babylonian era of Nebuchadnezzar II, and scholars believe it represents the goddess Ishtar, whose sacred animal was the lion, and Babylon's triumph over its enemies. The hard basalt stone does not exist in the plains of Babylon, suggesting it was brought from distant lands. Discovered in 1776, the statue has remained in place ever since and is every visitor's favorite photo stop in the ancient city.</p>
+    </details>
+    <details class="stop"><summary>Southern Palace &amp; city walls</summary>
+      <p>The vast royal complex from which Nebuchadnezzar II governed an empire stretching from the Gulf to the Mediterranean. The palace contains five great courtyards surrounded by hundreds of rooms and halls, the most famous being the Throne Room, whose walls are believed to have been faced with blue and gold glazed brick, and where historical accounts say Alexander the Great died in 323 BC. You will also see the imposing reconstructed walls, the remains of the double fortifications that made Babylon the greatest fortified city of antiquity, and the presumed site of the Hanging Gardens, one of the Seven Wonders. Walking these courtyards gives a real sense of the city Herodotus said surpassed all others on earth.</p>
+    </details>
+    <details class="stop"><summary>Saddam Hussein's palace</summary>
+      <p>On a high artificial hill directly overlooking the ruins of Babylon and the Euphrates, a lavish summer palace was built in the 1990s in a neo-Babylonian style — placing the palaces of the ancient and modern rulers side by side in a single view. Abandoned today and open to visitors, its vast halls feature carved ceilings, huge windows and plaster reliefs mixing Babylonian and Assyrian motifs, while its walls are covered in inscriptions left by visitors from around the world. Climbing to its upper balconies rewards you with the finest panoramic view in the province: the full ruins of Babylon, endless palm groves, and the winding Euphrates — truly magical at sunset, when golden light bathes the ancient city.</p>
+    </details>
+    <details class="stop"><summary>Ancient city of Borsippa</summary>
+      <p>About twenty kilometers southwest of Babylon lies Borsippa, Babylon's twin city and the cult center of Nabu, god of wisdom and writing. Its landmark is the towering Ezida ziggurat, whose remains still rise nearly fifty meters and are known locally as Birs Nimrud; popular and religious traditions link it to the Tower of Babel mentioned in scripture. Most striking are the masses of vitrified, melted brick crowning the ziggurat — local lore attributes them to the great fire kindled by Nimrod, while archaeologists point to a massive ancient blaze. Walking around the ziggurat in the open plain, far from any crowds, is a genuinely awe-inspiring journey into the depths of Mesopotamian time.</p>
+    </details>
+    <details class="stop"><summary>Shrine of Prophet Ibrahim (Abraham)</summary>
+      <p>Right beside the Borsippa ziggurat stands the shrine of Prophet Ibrahim, peace be upon him, at the spot where local and religious tradition says Nimrod cast him into the fire, which God turned cool and safe for him. The shrine is an old, often-renewed domed mosque set in a quiet courtyard, visited by pilgrims from across Iraq and beyond who come to pray and reflect where the Quranic story is believed to have unfolded. The meeting of the ancient ziggurat and the holy shrine in one place makes this stop unique: deep Mesopotamian history stands alongside the Abrahamic heritage shared by the three monotheistic faiths — a favorite for lovers of both religious and historical travel.</p>
+    </details>
+    <details class="stop"><summary>Shrine of Prophet Ayoub (Job)</summary>
+      <p>In the Al-Rarinjiya area near Hilla lies the shrine of Prophet Ayoub, peace be upon him, the enduring symbol of patience in religious tradition. Local sources recount that he lived his years of trial on this land and was healed here by God. The site holds the domed shrine with its peaceful courtyard, and beside it a well and spring whose water visitors believe to be that in which Ayoub washed and was cured — so people still come seeking blessing and healing. Surrounded by palm groves and calm countryside far from the noise of cities, it makes a serene and spiritual close to a day filled with history, touching visitors of every background.</p>
+    </details>
+    <details class="stop"><summary>Return to Baghdad</summary>
+      <p>After a day rich in history and spirituality, we drive you back to Baghdad in the evening and drop you at your hotel or any location you choose.</p>
+    </details>
 
     <h2 class="sec">The trip includes</h2>
     <ul class="inc">
       <li>Modern air-conditioned car, round trip</li>
       <li>Local guide (Arabic / English / Russian)</li>
-      <li>Entrance tickets to the archaeological sites</li>
       <li>Water and Arabic coffee on the road</li>
     </ul>
 
@@ -260,20 +302,39 @@
     </div>
 
     <h2 class="sec">Программа</h2>
-    <ul class="stops">
-      <li><b>Выезд из Багдада</b><small>Утренний трансфер из отеля или любой точки</small></li>
-      <li><b>Ворота Иштар и Дорога процессий</b><small>Главные символы древнего Вавилона</small></li>
-      <li><b>Вавилонский лев</b><small>Знаменитая базальтовая статуя</small></li>
-      <li><b>Южный дворец и руины города</b><small>Дворцы Навуходоносора и великие стены</small></li>
-      <li><b>Панорамный холм</b><small>Вид на город и фотостоп</small></li>
-      <li><b>Возвращение в Багдад</b><small>Вечерний трансфер обратно</small></li>
-    </ul>
+    <div class="hint">Нажмите на остановку, чтобы прочитать подробности</div>
+    <details class="stop"><summary>Выезд из Багдада</summary>
+      <p>Утренний трансфер из отеля или любой точки Багдада, затем отправление в провинцию Бабиль на современном автомобиле с кондиционером.</p>
+    </details>
+    <details class="stop"><summary>Ворота Иштар и Дорога процессий</summary>
+      <p>Восьмые ворота древнего Вавилона и его самый знаменитый памятник, построенный царём Навуходоносором II в VI веке до н.э. и посвящённый богине Иштар. Глазурованный кирпич лазурного цвета украшен рельефами быков бога Адада и драконов бога Мардука. Через ворота проходила Дорога процессий — улица царских и религиозных шествий во время вавилонского Нового года, обрамлённая стенами со львами Иштар. Полностью сохранившийся оригинал находится сегодня в берлинском Пергамском музее, а на месте вы увидите реконструкцию ворот и подлинные фундаменты — и пройдёте той самой дорогой, которой цари Вавилона шли две с половиной тысячи лет назад.</p>
+    </details>
+    <details class="stop"><summary>Вавилонский лев</summary>
+      <p>Статуя из чёрного базальта длиной около двух с половиной метров изображает льва, стоящего над поверженным человеком, — самый известный символ Вавилона и современного Ирака, изображавшийся на монетах, марках и государственных эмблемах. Она датируется нововавилонской эпохой Навуходоносора II; учёные считают, что лев олицетворяет богиню Иштар, чьим священным животным он был, и победу Вавилона над врагами. Твёрдый базальт не встречается на вавилонской равнине — камень привезли издалека. Статуя, обнаруженная в 1776 году, до сих пор стоит на своём месте и остаётся любимой точкой для памятных фотографий у всех гостей древнего города.</p>
+    </details>
+    <details class="stop"><summary>Южный дворец и стены города</summary>
+      <p>Огромный царский комплекс, из которого Навуходоносор II управлял империей от Персидского залива до Средиземного моря. Дворец включает пять больших дворов, окружённых сотнями комнат и залов; самый знаменитый — Тронный зал, стены которого, как считается, были облицованы синим и золотым глазурованным кирпичом и где, по историческим свидетельствам, в 323 году до н.э. умер Александр Македонский. Вы также увидите величественные восстановленные стены, остатки двойных укреплений, сделавших Вавилон самым защищённым городом древности, и предполагаемое место Висячих садов — одного из семи чудес света. Прогулка по дворам и коридорам даёт живое ощущение города, который Геродот называл прекраснейшим на земле.</p>
+    </details>
+    <details class="stop"><summary>Дворец Саддама Хусейна</summary>
+      <p>На высоком искусственном холме прямо над руинами Вавилона и Евфратом в 1990-х годах был построен роскошный летний дворец в нововавилонском стиле — дворцы древнего и современного правителей оказались рядом в одной панораме. Сегодня заброшенный дворец открыт для посещения: просторные залы с резными потолками, огромными окнами и гипсовыми рельефами, сочетающими вавилонские и ассирийские мотивы, а стены покрыты надписями гостей со всего мира. С верхних балконов открывается лучший панорамный вид в провинции: все руины Вавилона, бескрайние пальмовые рощи и извилистый Евфрат. Это главная фотоостановка тура, особенно волшебная на закате, когда древний город залит золотым светом.</p>
+    </details>
+    <details class="stop"><summary>Древний город Борсиппа</summary>
+      <p>Примерно в двадцати километрах к юго-западу от Вавилона лежит Борсиппа — город-близнец Вавилона и центр культа Набу, бога мудрости и письма. Главная достопримечательность — величественный зиккурат Эзида, руины которого до сих пор поднимаются почти на пятьдесят метров; местные называют его Бирс-Нимруд, а народные и религиозные предания связывают его с Вавилонской башней из священных писаний. Вершину зиккурата венчают оплавленные, остеклованные кирпичи: местная традиция объясняет их великим огнём Нимрода, археологи — древним мощным пожаром. Прогулка вокруг зиккурата посреди открытой равнины, вдали от толп, — по-настоящему впечатляющее путешествие в глубь месопотамской истории.</p>
+    </details>
+    <details class="stop"><summary>Святилище пророка Ибрахима (Авраама)</summary>
+      <p>Прямо рядом с зиккуратом Борсиппы находится святилище пророка Ибрахима, мир ему, — на месте, где, по местным и религиозным преданиям, Нимрод бросил его в огонь, который Бог сделал для него прохладным и безопасным. Святилище — старинная, не раз обновлённая мечеть с куполом и тихим двором, куда приезжают паломники со всего Ирака и из-за рубежа, чтобы помолиться там, где, как верят, разворачивалась кораническая история. Соседство древнего зиккурата и святого места делает эту остановку уникальной: месопотамская древность встречается здесь с авраамическим наследием, общим для трёх мировых религий, — любимое место ценителей религиозных и исторических путешествий.</p>
+    </details>
+    <details class="stop"><summary>Святилище пророка Айюба (Иова)</summary>
+      <p>В районе Эр-Раринджия недалеко от Хиллы находится святилище пророка Айюба, мир ему, — символа терпения в религиозной традиции. Местные источники рассказывают, что годы своих испытаний он провёл на этой земле и здесь был исцелён Богом. На территории — купольное святилище с тихим двором, а рядом колодец и источник, воду которого паломники считают той самой, в которой омылся и исцелился Айюб, поэтому сюда до сих пор приезжают за благословением и исцелением. Окружённое пальмовыми рощами тихое сельское место, вдали от городского шума, становится умиротворяющим духовным завершением дня, наполненного историей.</p>
+    </details>
+    <details class="stop"><summary>Возвращение в Багдад</summary>
+      <p>После дня, наполненного историей и духовностью, вечером мы возвращаем вас в Багдад и довозим до отеля или любой удобной точки.</p>
+    </details>
 
     <h2 class="sec">В экскурсию входит</h2>
     <ul class="inc">
       <li>Современный автомобиль с кондиционером туда и обратно</li>
       <li>Местный гид (арабский / английский / русский)</li>
-      <li>Входные билеты на археологические объекты</li>
       <li>Вода и арабский кофе в дороге</li>
     </ul>
 
