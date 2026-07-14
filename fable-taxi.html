@@ -163,15 +163,24 @@
   .form-msg.ok{display:block;color:#1a8f3c}
   .form-msg.err{display:block;color:var(--red)}
 
-  /* واتساب عائم */
+  /* واتساب عائم — مخفي حتى يظهر السعر */
   .wa-float{
     position:fixed;bottom:22px;z-index:900;
     background:#25D366;color:#fff;
     width:60px;height:60px;border-radius:50%;
-    display:flex;align-items:center;justify-content:center;
+    display:none;align-items:center;justify-content:center;
     box-shadow:0 6px 18px rgba(37,211,102,.45);
-    animation:waPulse 1.6s ease-in-out infinite;
     text-decoration:none;
+  }
+  .wa-float.show{
+    display:flex;
+    animation:waIntro .9s cubic-bezier(.2,1.4,.4,1), waPulse 1.6s ease-in-out .9s infinite;
+  }
+  @keyframes waIntro{
+    0%{transform:scale(0);opacity:0}
+    55%{transform:scale(1.45);opacity:1;box-shadow:0 0 0 22px rgba(37,211,102,.45),0 6px 30px rgba(37,211,102,.9)}
+    75%{transform:scale(.92)}
+    100%{transform:scale(1);box-shadow:0 6px 18px rgba(37,211,102,.45)}
   }
   body:not(.ltr) .wa-float{left:22px}
   body.ltr .wa-float{right:22px}
@@ -180,7 +189,7 @@
     0%,100%{transform:scale(1);box-shadow:0 6px 18px rgba(37,211,102,.45)}
     50%{transform:scale(1.1);box-shadow:0 6px 28px rgba(37,211,102,.75)}
   }
-  @media (prefers-reduced-motion:reduce){.wa-float{animation:none}}
+  @media (prefers-reduced-motion:reduce){.wa-float.show{animation:none}}
 
   footer{
     background:var(--red-dark);color:#fff;text-align:center;
@@ -709,6 +718,13 @@ const fareAmount = document.getElementById('fareAmount');
 const fareLabel = document.getElementById('fareLabel');
 const fareExtra = document.getElementById('fareExtra');
 const formMsg = document.getElementById('formMsg');
+const waBtn = document.querySelector('.wa-float');
+
+// إظهار/إخفاء صندوق السعر وزر الواتساب معاً
+function showFare(on){
+  fareBox.classList.toggle('show', on);
+  waBtn.classList.toggle('show', on);
+}
 
 els.date.min = new Date().toISOString().split('T')[0];
 
@@ -768,18 +784,18 @@ function allFilled(){
 function updateFare(){
   formMsg.className = 'form-msg';
   const from = els.from.value, to = els.to.value;
-  if (!from || !to){ fareBox.classList.remove('show'); return; }
+  if (!from || !to){ showFare(false); return; }
   if (from === to){
-    fareBox.classList.remove('show');
+    showFare(false);
     formMsg.textContent = T[lang].errSame;
     formMsg.classList.add('err');
     return;
   }
   // السعر لا يظهر إلا بعد اختيار عدد الركاب (لأن السعر يعتمد عليه)
-  if (!els.pax.value){ fareBox.classList.remove('show'); return; }
+  if (!els.pax.value){ showFare(false); return; }
   const r = resolveFare(from, to, els.pax.value);
   if (r.err){
-    fareBox.classList.remove('show');
+    showFare(false);
     formMsg.textContent = T[lang][r.err];
     formMsg.classList.add('err');
     return;
@@ -792,7 +808,7 @@ function updateFare(){
         ? " — " + T[lang].waitIncluded.replace("{w}", fmtDur(f.waitV, f.waitType))
         : ""))
     : "";
-  fareBox.classList.add('show');
+  showFare(true);
 }
 Object.values(els).forEach(el=>{
   el.addEventListener('input', updateFare);
@@ -852,7 +868,7 @@ document.getElementById('bookingForm').addEventListener('submit', async (e)=>{
     if (data.success){
       formMsg.textContent = T[lang].ok; formMsg.classList.add('ok');
       e.target.reset();
-      fareBox.classList.remove('show');
+      showFare(false);
       if (marker){ map.removeLayer(marker); marker = null; }
       pickedLatLng = null;
       const hint = document.getElementById('mapHint');
