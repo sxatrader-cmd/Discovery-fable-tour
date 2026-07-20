@@ -278,6 +278,11 @@
       <select id="addon"></select>
     </div>
 
+    <div class="field" id="addon2Field" style="display:none">
+      <label for="addon2"><span data-i18n="addonLabel2">وجهة إضافية ثانية (اختياري)</span></label>
+      <select id="addon2"></select>
+    </div>
+
     <div class="field">
       <label><span data-i18n="tripType">نوع الرحلة</span> <span>*</span></label>
       <div class="trip-type">
@@ -289,20 +294,11 @@
     </div>
 
     <div class="field">
-      <label for="pax"><span data-i18n="pax">عدد الركاب (1 - 10)</span> <span>*</span></label>
+      <label for="pax"><span data-i18n="pax">عدد الركاب</span> <span>*</span></label>
       <select id="pax" required>
         <option value="">—</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-        <option value="9">9</option>
-        <option value="10">10</option>
       </select>
+      <p class="map-hint" id="paxHint" data-i18n="paxHint" style="display:none">🚗 كل 3 ركاب بسيارة واحدة — والعدد مفتوح</p>
     </div>
 
     <div class="fare-box" id="fareBox">
@@ -390,13 +386,19 @@ const T = {
     mapHint:"👆 اضغط على الخريطة لتحديد نقطة الاستلام",
     mapOk:"✅ تم تحديد الموقع",
     locateBtn:"📍 استخدم موقعي الحالي",
-    pax:"عدد الركاب (1 - 10)", name:"الاسم الكامل", phone:"رقم الهاتف / واتساب",
+    pax:"عدد الركاب", name:"الاسم الكامل", phone:"رقم الهاتف / واتساب",
+    paxHint:"🚗 كل 3 ركاب بسيارة واحدة",
+    busHint:"🚌 من 7 إلى 20 راكب: باص - تويوتا كوستر بسعر موحد",
+    busLabel:"🚌 باص - تويوتا كوستر",
+    busIncl:"السعر شامل الوجهات الإضافية والانتظار",
+    carsCount:"🚗 {n}",
     errGroupOnly:"⚠️ الناصرية والأهوار والبصرة متاحة للمجموعات من 4 إلى 10 ركاب فقط",
     errAirportCity:"ℹ️ للتوصيل بين مطار بغداد وداخل بغداد، تواصل معنا مباشرة عبر زر الواتساب",
     errTime:"⏰ أقرب وقت متاح للحجز بعد ساعتين من الآن — عدّلنا الوقت لك تلقائياً",
     addonLabel:"وجهة إضافية (اختياري)",
+    addonLabel2:"وجهة إضافية ثانية (اختياري)",
     addonNone:"بدون وجهة إضافية",
-    addonIncluded:"يشمل وجهة إضافية: {c}",
+    addonIncluded:"الوجهات الإضافية: {c}",
     iqd:"دينار عراقي",
     fareOneway:"سعر الرحلة (ذهاب فقط)", fareReturn:"سعر الرحلة (ذهاب وعودة)",
     fareWait:"انتظار ساعتين مجاناً + 5,000 د.ع لكل ساعة إضافية",
@@ -416,6 +418,7 @@ const T = {
     waitLabel:"مدة الانتظار",
     waitNoteHour:"⏱️ انتظار {d} مجاناً — وكل ساعة إضافية 5,000 د.ع فقط",
     waitNoteDay:"⏱️ انتظار 24 ساعة مجاناً — وكل يوم إضافي 100,000 د.ع",
+    waitNoteAddon:"⏱️ انتظار ساعتين مجاناً في كل وجهة ({d} إجمالاً) — وكل ساعة إضافية 5,000 د.ع فقط",
     waitFree:"مجاناً",
     waitIncluded:"السعر يشمل انتظار {w}",
   },
@@ -433,13 +436,19 @@ const T = {
     mapHint:"👆 Tap the map to set your pickup point",
     mapOk:"✅ Location set",
     locateBtn:"📍 Use my current location",
-    pax:"Passengers (1 - 10)", name:"Full name", phone:"Phone / WhatsApp",
+    pax:"Passengers", name:"Full name", phone:"Phone / WhatsApp",
+    paxHint:"🚗 Each car takes up to 3 passengers",
+    busHint:"🚌 7-20 passengers: Toyota Coaster bus at one flat rate",
+    busLabel:"🚌 Toyota Coaster bus",
+    busIncl:"Price includes extra stops and waiting",
+    carsCount:"🚗 {n}",
     errGroupOnly:"⚠️ Nasiriyah, the Marshes and Basra are available for groups of 4-10 passengers only",
     errAirportCity:"ℹ️ For transfers between Baghdad Airport and Baghdad city, contact us directly via WhatsApp",
     errTime:"⏰ The earliest booking time is 2 hours from now — we adjusted the time for you",
     addonLabel:"Extra stop (optional)",
+    addonLabel2:"Second extra stop (optional)",
     addonNone:"No extra stop",
-    addonIncluded:"Includes extra stop: {c}",
+    addonIncluded:"Extra stops: {c}",
     iqd:"IQD",
     fareOneway:"Your fare (one way)", fareReturn:"Your fare (round trip)",
     fareWait:"2 hours waiting free + 5,000 IQD per extra hour",
@@ -459,6 +468,7 @@ const T = {
     waitLabel:"Waiting time",
     waitNoteHour:"⏱️ {d} of waiting free — each extra hour is only 5,000 IQD",
     waitNoteDay:"⏱️ 24 hours of waiting free — each extra day is 100,000 IQD",
+    waitNoteAddon:"⏱️ 2 hours of waiting free at each stop ({d} total) — each extra hour is only 5,000 IQD",
     waitFree:"free",
     waitIncluded:"Price includes {w} of waiting",
   },
@@ -476,13 +486,19 @@ const T = {
     mapHint:"👆 Нажмите на карту, чтобы указать точку подачи",
     mapOk:"✅ Место выбрано",
     locateBtn:"📍 Моё текущее местоположение",
-    pax:"Пассажиры (1 - 10)", name:"Полное имя", phone:"Телефон / WhatsApp",
+    pax:"Пассажиры", name:"Полное имя", phone:"Телефон / WhatsApp",
+    paxHint:"🚗 Каждая машина вмещает до 3 пассажиров",
+    busHint:"🚌 7-20 пассажиров: автобус Toyota Coaster по единой цене",
+    busLabel:"🚌 Автобус Toyota Coaster",
+    busIncl:"Цена включает доп. остановки и ожидание",
+    carsCount:"🚗 {n}",
     errGroupOnly:"⚠️ Насирия, Болота и Басра доступны только для групп от 4 до 10 пассажиров",
     errAirportCity:"ℹ️ Для трансфера между аэропортом Багдада и городом свяжитесь с нами напрямую через WhatsApp",
     errTime:"⏰ Ближайшее время бронирования — через 2 часа. Мы автоматически скорректировали время",
     addonLabel:"Доп. остановка (по желанию)",
+    addonLabel2:"Вторая доп. остановка (по желанию)",
     addonNone:"Без доп. остановки",
-    addonIncluded:"Включая доп. остановку: {c}",
+    addonIncluded:"Доп. остановки: {c}",
     iqd:"IQD",
     fareOneway:"Стоимость (в одну сторону)", fareReturn:"Стоимость (туда и обратно)",
     fareWait:"2 часа ожидания бесплатно + 5 000 IQD за каждый доп. час",
@@ -502,6 +518,7 @@ const T = {
     waitLabel:"Время ожидания",
     waitNoteHour:"⏱️ {d} ожидания бесплатно — каждый доп. час всего 5 000 IQD",
     waitNoteDay:"⏱️ 24 часа ожидания бесплатно — каждый доп. день 100 000 IQD",
+    waitNoteAddon:"⏱️ По 2 часа ожидания бесплатно на каждой остановке ({d} всего) — каждый доп. час всего 5 000 IQD",
     waitFree:"бесплатно",
     waitIncluded:"Цена включает {w} ожидания",
   }
@@ -519,7 +536,7 @@ const CITY_LABELS = {
   Marshes:{ar:"الأهوار (الجبايش)",en:"The Marshes (Chibayish)",ru:"Болота (Эль-Чибаиш)"},
   Basra:{ar:"البصرة",en:"Basra",ru:"Басра"},
 };
-// أسعار 1-3 ركاب (سيارة خاصة)
+// أسعار السيارة الواحدة (تتسع لـ 3 ركاب — أكثر من 3 يعني أكثر من سيارة والسعر يتضاعف)
 const FARES = {
   "Baghdad|Hillah":    { oneway:45000,  ret:90000 },
   "Baghdad|Karbala":   { oneway:50000,  ret:100000 },
@@ -529,16 +546,7 @@ const FARES = {
   "Baghdad|Basra":     { oneway:150000, ret:300000 },
   "Hillah|Karbala":    { oneway:25000,  ret:50000 },
   "Hillah|Najaf":      { oneway:25000,  ret:50000 },
-  "Najaf|Karbala":     { oneway:50000,  ret:100000 },
-};
-// أسعار المجموعات 4-10 ركاب (ذهاب فقط — المرجع = الضعف)
-const GROUP_FARES = {
-  "Baghdad|Hillah":    200000,
-  "Baghdad|Karbala":   200000,
-  "Baghdad|Najaf":     200000,
-  "Baghdad|Nasiriyah": 300000,
-  "Baghdad|Marshes":   300000,
-  "Baghdad|Basra":     400000,
+  "Najaf|Karbala":     { oneway:25000,  ret:50000 },
 };
 // إضافة المطار: أي رحلة من/إلى مطار بغداد = السعر + 25,000
 const AIRPORT_SURCHARGE = 25000;
@@ -548,17 +556,14 @@ const ADDONS = {
   Marshes:   { stops:{ Nasiriyah:45000, Basra:45000 } }, // بغداد ⇄ الأهوار: إضافة أور أو البصرة
   Nasiriyah: { stops:{ Marshes:45000,  Basra:45000 } },  // بغداد ⇄ الناصرية (أور): إضافة الأهوار أو البصرة
   Hillah:    { stops:{ Karbala:25000,  Najaf:25000 } },  // بغداد ⇄ الحلة (بابل): إضافة كربلاء أو النجف
-  Karbala:   { stops:{ Najaf:50000,   Hillah:25000 } },  // بغداد ⇄ كربلاء: إضافة النجف أو الحلة
-  Najaf:     { stops:{ Karbala:50000, Hillah:25000 } },  // بغداد ⇄ النجف: إضافة كربلاء أو الحلة
+  Karbala:   { stops:{ Najaf:25000,   Hillah:25000 } },  // بغداد ⇄ كربلاء: إضافة النجف أو الحلة
+  Najaf:     { stops:{ Karbala:25000, Hillah:25000 } },  // بغداد ⇄ النجف: إضافة كربلاء أو الحلة
 };
-// للمجموعات (4 ركاب فأكثر) سعر أي وجهة إضافية = 150,000 موحد
-const GROUP_ADDON_FEE = 150000;
 
 function addonPrice(city){
   const info = addonInfo();
   if (!info || info.stops[city] === undefined) return 0;
-  const p = parseInt(document.getElementById('pax').value || "1", 10);
-  return p >= 4 ? GROUP_ADDON_FEE : info.stops[city];
+  return info.stops[city];
 }
 
 function addonInfo(){
@@ -576,6 +581,20 @@ function selectedAddon(){
   return (addonInfo() && sel.value) ? sel.value : "";
 }
 
+function selectedAddon2(){
+  const sel = document.getElementById('addon2');
+  const a1 = selectedAddon();
+  const info = addonInfo();
+  return (info && a1 && sel.value && sel.value !== a1 && info.stops[sel.value] !== undefined) ? sel.value : "";
+}
+
+function selectedAddons(){
+  return [selectedAddon(), selectedAddon2()].filter(Boolean);
+}
+
+// من 7 إلى 20 راكب: باص - تويوتا كوستر بسعر موحد 300,000 مهما كانت الوجهات والانتظار
+const BUS_FARE = 300000;
+
 function resolveFare(from, to, pax){
   if (!from || !to) return null;
   if (from === to) return { err:"errSame" };
@@ -584,19 +603,24 @@ function resolveFare(from, to, pax){
   const a = norm(from), b = norm(to);
   const sur = (isA(from) || isA(to)) ? AIRPORT_SURCHARGE : 0;
   const p = parseInt(pax || "1", 10);
-  if (a === b){
-    // مطار بغداد ↔ داخل بغداد
-    const ow = p >= 4 ? 150000 : 25000;
-    return { oneway: ow, ret: ow * 2 };
+  if (!(p >= 1)) return null;
+  if (p >= 7){
+    // باص تويوتا كوستر (7-20 راكب)
+    // من بغداد إلى الحلة/كربلاء/النجف (بكل احتمالاتها كوجهة إضافية): 100,000 ذهاب / 200,000 مرجع
+    // باقي الخطوط: 300,000 ذهاب / 600,000 مرجع — وكلها شاملة الوجهات الإضافية والانتظار
+    const holyCities = ["Hillah","Karbala","Najaf"];
+    const shortBus = (a === "Baghdad" && holyCities.includes(b));
+    const ow = shortBus ? 100000 : BUS_FARE;
+    return { oneway: ow, ret: ow * 2, bus:true, cars:1 };
   }
-  if (p >= 4){
-    const g = GROUP_FARES[a+"|"+b] ?? GROUP_FARES[b+"|"+a];
-    if (!g) return { err:"errRoute" };
-    return { oneway: g + sur, ret: g*2 + sur };
+  const cars = Math.ceil(p / 3); // كل 3 ركاب بسيارة
+  if (a === b){
+    // مطار بغداد ↔ داخل بغداد (سعر السيارة الواحدة)
+    return { oneway:25000, ret:50000, cars };
   }
   const f = FARES[a+"|"+b] || FARES[b+"|"+a];
   if (!f) return { err:"errRoute" };
-  return { oneway: f.oneway + sur, ret: f.ret + sur };
+  return { oneway: f.oneway + sur, ret: f.ret + sur, cars };
 }
 
 // ============ اللغة ============
@@ -628,6 +652,9 @@ document.querySelectorAll(".lang-switch button").forEach(b=>{
   b.addEventListener("click", ()=> applyLang(b.dataset.lang));
 });
 
+// نقطة الانطلاق حصراً: بغداد أو مطار بغداد الدولي
+const FROM_CITIES = ["Baghdad","Airport"];
+
 function buildCityOptions(){
   ["from","to"].forEach(id=>{
     const sel = document.getElementById(id);
@@ -636,7 +663,7 @@ function buildCityOptions(){
     const ph = document.createElement("option");
     ph.value = ""; ph.textContent = T[lang].choose;
     sel.appendChild(ph);
-    CITIES.forEach(c=>{
+    (id === "from" ? FROM_CITIES : CITIES).forEach(c=>{
       const o = document.createElement("option");
       o.value = c; o.textContent = CITY_LABELS[c][lang];
       sel.appendChild(o);
@@ -657,8 +684,16 @@ function buildCityOptions(){
 }
 
 // سياسة الانتظار حسب الوجهة (لرحلات الذهاب والعودة)
-// البصرة: 24 ساعة مجاناً ثم 100,000 عن كل يوم — الناصرية: 8 ساعات مجاناً — الباقي: ساعتان مجاناً
+// عند اختيار وجهات إضافية: ساعتان مجاناً في كل وجهة توقف
+// (ذهاب فقط: الوجهات الوسطية فقط لأن الأخيرة نهاية الرحلة — مرجع: كل الوجهات)
+// بدون وجهات إضافية — البصرة: 24 ساعة مجاناً ثم 100,000/يوم — الناصرية: 8 ساعات — الباقي: ساعتان
 function waitPolicy(){
+  const nAdd = selectedAddons().length;
+  if (nAdd > 0){
+    const isReturn = document.getElementById('return').checked;
+    const stops = isReturn ? nAdd + 1 : nAdd;
+    return { type:"hour", free: 2 * stops, fee:5000, max: 2 * stops + 6, addon:true };
+  }
   const v = id => document.getElementById(id).value || "";
   const norm = c => c === "Airport" ? "Baghdad" : c;
   const a = norm(v('from')), b = norm(v('to'));
@@ -681,8 +716,18 @@ function fmtDur(v, type){
   return v + " ч.";
 }
 
+// صياغة عدد السيارات حسب اللغة
+function fmtCars(n){
+  if (lang === "ar") return n === 2 ? "سيارتان" : n + " سيارات";
+  if (lang === "en") return n + " cars";
+  return n + (n < 5 ? " машины" : " машин");
+}
+
 function waitNoteText(){
   const p = waitPolicy();
+  if (p.addon){
+    return T[lang].waitNoteAddon.replace("{d}", fmtDur(p.free, "hour"));
+  }
   if (p.type === "day") return T[lang].waitNoteDay;
   return T[lang].waitNoteHour.replace("{d}", fmtDur(p.free, "hour"));
 }
@@ -713,6 +758,7 @@ function buildAddonOptions(){
   if (!info){
     field.style.display = "none";
     sel.innerHTML = "";
+    buildAddon2Options();
     return;
   }
   const prev = sel.value;
@@ -723,22 +769,67 @@ function buildAddonOptions(){
   Object.keys(info.stops).forEach(c=>{
     const o = document.createElement("option");
     o.value = c;
-    o.textContent = CITY_LABELS[c][lang] + " (+" + addonPrice(c).toLocaleString('en-US') + " " + T[lang].iqd + ")";
+    o.textContent = CITY_LABELS[c][lang] + (busMode()
+      ? " — " + T[lang].waitFree
+      : " (+" + addonPrice(c).toLocaleString('en-US') + " " + T[lang].iqd + ")");
     sel.appendChild(o);
   });
   sel.value = info.stops[prev] !== undefined ? prev : "";
   field.style.display = "";
+  buildAddon2Options();
+}
+
+// الوجهة الإضافية الثانية: تظهر فقط بعد اختيار الأولى، وتعرض الخيارات المتبقية
+function buildAddon2Options(){
+  const field = document.getElementById('addon2Field');
+  const sel = document.getElementById('addon2');
+  const info = addonInfo();
+  const a1 = document.getElementById('addon').value;
+  if (!info || !a1 || info.stops[a1] === undefined){
+    field.style.display = "none";
+    sel.innerHTML = "";
+    return;
+  }
+  const prev = sel.value;
+  sel.innerHTML = "";
+  const none = document.createElement("option");
+  none.value = ""; none.textContent = T[lang].addonNone;
+  sel.appendChild(none);
+  Object.keys(info.stops).filter(c => c !== a1).forEach(c=>{
+    const o = document.createElement("option");
+    o.value = c;
+    o.textContent = CITY_LABELS[c][lang] + (busMode()
+      ? " — " + T[lang].waitFree
+      : " (+" + addonPrice(c).toLocaleString('en-US') + " " + T[lang].iqd + ")");
+    sel.appendChild(o);
+  });
+  sel.value = (prev && prev !== a1 && info.stops[prev] !== undefined) ? prev : "";
+  field.style.display = "";
+}
+
+function busMode(){
+  return parseInt(document.getElementById('pax').value || "0", 10) >= 7;
 }
 
 function toggleWaitField(){
-  // حقل الانتظار يظهر لرحلات الذهاب والعودة، أو عند اختيار وجهة إضافية (انتظار بالمحطة الأولى)
+  // حقل الانتظار يظهر لرحلات الذهاب والعودة، أو عند اختيار وجهات إضافية — ويختفي بوضع الباص (الانتظار مجاني)
   const isReturn = document.getElementById('return').checked;
-  const show = isReturn || !!selectedAddon();
+  const show = !busMode() && (isReturn || selectedAddons().length > 0);
   document.getElementById('waitField').style.display = show ? "" : "none";
 }
 
 // ============ تعبئة المدن فوراً (قبل أي كود يعتمد على مكتبة خارجية) ============
 buildCityOptions();
+
+// تعبئة قائمة عدد الركاب (اختيار وليس كتابة) — من 1 إلى 20
+(function buildPaxOptions(){
+  const sel = document.getElementById('pax');
+  for (let i = 1; i <= 20; i++){
+    const o = document.createElement("option");
+    o.value = i; o.textContent = i;
+    sel.appendChild(o);
+  }
+})();
 
 // ============ الخريطة (اختيارية — إذا فشل تحميلها يستمر الموقع بدونها) ============
 let map = null, marker = null, pickedLatLng = null, mapAvailable = false;
@@ -843,15 +934,25 @@ function currentFare(){
   const r = resolveFare(els.from.value, els.to.value, els.pax.value);
   if (!r || r.err) return null;
   const isReturn = document.getElementById('return').checked;
-  const addon = selectedAddon();
-  const addonFee = addon ? addonPrice(addon) * (isReturn ? 2 : 1) : 0;
+  const addons = selectedAddons();
+  if (r.bus){
+    // الباص: سعر موحد شامل الوجهات الإضافية والانتظار
+    return {
+      amount: isReturn ? r.ret : r.oneway, bus:true, cars:1,
+      isReturn, waitApplies:false, waitV:0, waitType:"hour", extraWait:0,
+      addons, addonFee:0
+    };
+  }
+  const addonFee = addons.reduce((s, c) => s + addonPrice(c), 0) * (isReturn ? 2 : 1);
   const p = waitPolicy();
-  const waitApplies = isReturn || !!addon;
+  const waitApplies = isReturn || addons.length > 0;
   const waitV = waitApplies ? parseInt(document.getElementById('wait').value || String(p.free), 10) : 0;
   const extraWait = waitApplies ? Math.max(0, waitV - p.free) * p.fee : 0;
+  // السعر لكل سيارة × عدد السيارات (كل 3 ركاب بسيارة)
+  const perCar = (isReturn ? r.ret : r.oneway) + addonFee + extraWait;
   return {
-    amount: (isReturn ? r.ret : r.oneway) + addonFee + extraWait,
-    isReturn, waitApplies, waitV, waitType: p.type, extraWait, addon, addonFee
+    amount: perCar * r.cars, cars: r.cars, bus:false,
+    isReturn, waitApplies, waitV, waitType: p.type, extraWait, addons, addonFee
   };
 }
 function allFilled(){
@@ -863,6 +964,12 @@ function allFilled(){
 }
 function updateFare(){
   formMsg.className = 'form-msg';
+  // ملاحظة الركاب: سيارات لـ4-6، باص لـ7-20، مخفية لأقل من 4
+  const pNum = parseInt(els.pax.value, 10);
+  const hintEl = document.getElementById('paxHint');
+  if (pNum >= 7){ hintEl.textContent = T[lang].busHint; hintEl.style.display = ""; }
+  else if (pNum >= 4){ hintEl.textContent = T[lang].paxHint; hintEl.style.display = ""; }
+  else { hintEl.style.display = "none"; }
   const from = els.from.value, to = els.to.value;
   if (!from || !to){ showFare(false); return; }
   if (from === to){
@@ -871,8 +978,8 @@ function updateFare(){
     formMsg.classList.add('err');
     return;
   }
-  // السعر لا يظهر إلا بعد اختيار عدد الركاب (لأن السعر يعتمد عليه)
-  if (!els.pax.value){ showFare(false); return; }
+  // السعر لا يظهر إلا بعد اختيار عدد الركاب (لأن عدد السيارات يعتمد عليه)
+  if (!els.pax.value || !(pNum >= 1)){ showFare(false); return; }
   const r = resolveFare(from, to, els.pax.value);
   if (r.err){
     showFare(false);
@@ -884,7 +991,13 @@ function updateFare(){
   fareAmount.textContent = f.amount.toLocaleString('en-US');
   fareLabel.textContent = f.isReturn ? T[lang].fareReturn : T[lang].fareOneway;
   const parts = [];
-  if (f.addon) parts.push(T[lang].addonIncluded.replace("{c}", CITY_LABELS[f.addon][lang]));
+  if (f.bus) parts.push(T[lang].busLabel);
+  else if (f.cars > 1) parts.push(T[lang].carsCount.replace("{n}", fmtCars(f.cars)));
+  if (f.addons.length){
+    const names = f.addons.map(c => CITY_LABELS[c][lang]).join(lang === "ar" ? "، " : ", ");
+    parts.push(T[lang].addonIncluded.replace("{c}", names));
+  }
+  if (f.bus) parts.push(T[lang].busIncl);
   if (f.waitApplies){
     parts.push(waitNoteText() + (f.extraWait > 0
       ? " — " + T[lang].waitIncluded.replace("{w}", fmtDur(f.waitV, f.waitType))
@@ -901,14 +1014,16 @@ document.getElementById('wait').addEventListener('change', updateFare);
 // عند تغيير المدن تتغير سياسة الانتظار والوجهات الإضافية
 els.from.addEventListener('change', ()=>{ buildAddonOptions(); buildWaitOptions(); toggleWaitField(); updateFare(); });
 els.to.addEventListener('change', ()=>{ buildAddonOptions(); buildWaitOptions(); toggleWaitField(); updateFare(); });
-document.getElementById('addon').addEventListener('change', ()=>{ toggleWaitField(); updateFare(); });
-// تغيير عدد الركاب يغيّر سعر الوجهة الإضافية (150 ألف للمجموعات)
-els.pax.addEventListener('change', ()=>{ buildAddonOptions(); updateFare(); });
+document.getElementById('addon').addEventListener('change', ()=>{ buildAddon2Options(); toggleWaitField(); buildWaitOptions(); updateFare(); });
+document.getElementById('addon2').addEventListener('change', ()=>{ toggleWaitField(); buildWaitOptions(); updateFare(); });
+// تغيير عدد الركاب قد يفعّل وضع الباص (7+) فنحدّث الإضافات وحقل الانتظار
+els.pax.addEventListener('change', ()=>{ buildAddonOptions(); toggleWaitField(); updateFare(); });
 // فحص الوقت بعد تحديث السعر حتى تبقى رسالة التنبيه ظاهرة
 els.date.addEventListener('change', ()=>{ refreshTimeMin(); enforceMinTime(true); });
 els.time.addEventListener('change', ()=> enforceMinTime(true));
 document.querySelectorAll('input[name=tripType]').forEach(r=> r.addEventListener('change', ()=>{
   toggleWaitField();
+  buildWaitOptions();
   updateFare();
 }));
 
@@ -939,13 +1054,15 @@ document.getElementById('bookingForm').addEventListener('submit', async (e)=>{
         "من": CITY_LABELS[els.from.value].ar,
         "إلى": CITY_LABELS[els.to.value].ar,
         "نوع الرحلة": isReturn ? "ذهاب وعودة (مرجع)" : "ذهاب فقط",
-        "وجهة إضافية": f.addon ? CITY_LABELS[f.addon].ar : "—",
+        "وجهة إضافية": f.addons[0] ? CITY_LABELS[f.addons[0]].ar : "—",
+        "وجهة إضافية ثانية": f.addons[1] ? CITY_LABELS[f.addons[1]].ar : "—",
         "مدة الانتظار": f.waitApplies ? (f.waitType === "day" ? f.waitV + " يوم" : f.waitV + " ساعة") : "—",
         "السعر": f.amount.toLocaleString('en-US') + " د.ع",
         "التاريخ": els.date.value,
         "الوقت": els.time.value,
         "الموقع على الخريطة": mapsLink,
         "عدد الركاب": els.pax.value,
+        "المركبة": f.bus ? "باص - تويوتا كوستر" : (f.cars > 1 ? f.cars + " سيارات" : "سيارة واحدة"),
         "الاسم": els.name.value.trim(),
         "الهاتف": els.phone.value.trim(),
         "لغة الزائر": lang.toUpperCase(),
