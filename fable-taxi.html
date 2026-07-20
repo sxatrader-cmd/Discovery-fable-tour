@@ -549,6 +549,15 @@ const ADDONS = {
   Nasiriyah: { stops:{ Marshes:45000,  Basra:45000 } },  // بغداد ⇄ الناصرية (أور): إضافة الأهوار أو البصرة
   Hillah:    { stops:{ Karbala:25000,  Najaf:25000 } },  // بغداد ⇄ الحلة (بابل): إضافة كربلاء أو النجف
 };
+// للمجموعات (4 ركاب فأكثر) سعر أي وجهة إضافية = 150,000 موحد
+const GROUP_ADDON_FEE = 150000;
+
+function addonPrice(city){
+  const info = addonInfo();
+  if (!info || info.stops[city] === undefined) return 0;
+  const p = parseInt(document.getElementById('pax').value || "1", 10);
+  return p >= 4 ? GROUP_ADDON_FEE : info.stops[city];
+}
 
 function addonInfo(){
   const v = id => document.getElementById(id).value || "";
@@ -712,7 +721,7 @@ function buildAddonOptions(){
   Object.keys(info.stops).forEach(c=>{
     const o = document.createElement("option");
     o.value = c;
-    o.textContent = CITY_LABELS[c][lang] + " (+" + info.stops[c].toLocaleString('en-US') + " " + T[lang].iqd + ")";
+    o.textContent = CITY_LABELS[c][lang] + " (+" + addonPrice(c).toLocaleString('en-US') + " " + T[lang].iqd + ")";
     sel.appendChild(o);
   });
   sel.value = info.stops[prev] !== undefined ? prev : "";
@@ -833,8 +842,7 @@ function currentFare(){
   if (!r || r.err) return null;
   const isReturn = document.getElementById('return').checked;
   const addon = selectedAddon();
-  const info = addonInfo();
-  const addonFee = addon && info ? info.stops[addon] * (isReturn ? 2 : 1) : 0;
+  const addonFee = addon ? addonPrice(addon) * (isReturn ? 2 : 1) : 0;
   const p = waitPolicy();
   const waitApplies = isReturn || !!addon;
   const waitV = waitApplies ? parseInt(document.getElementById('wait').value || String(p.free), 10) : 0;
@@ -892,6 +900,8 @@ document.getElementById('wait').addEventListener('change', updateFare);
 els.from.addEventListener('change', ()=>{ buildAddonOptions(); buildWaitOptions(); toggleWaitField(); updateFare(); });
 els.to.addEventListener('change', ()=>{ buildAddonOptions(); buildWaitOptions(); toggleWaitField(); updateFare(); });
 document.getElementById('addon').addEventListener('change', ()=>{ toggleWaitField(); updateFare(); });
+// تغيير عدد الركاب يغيّر سعر الوجهة الإضافية (150 ألف للمجموعات)
+els.pax.addEventListener('change', ()=>{ buildAddonOptions(); updateFare(); });
 // فحص الوقت بعد تحديث السعر حتى تبقى رسالة التنبيه ظاهرة
 els.date.addEventListener('change', ()=>{ refreshTimeMin(); enforceMinTime(true); });
 els.time.addEventListener('change', ()=> enforceMinTime(true));
