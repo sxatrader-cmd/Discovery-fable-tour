@@ -321,6 +321,7 @@
       <div class="field">
         <label for="time"><span data-i18n="time">الوقت</span> <span>*</span></label>
         <input type="time" id="time" required>
+        <p class="map-hint" id="timeHint" style="display:none">🕔 الانطلاق للمحافظات بين 5:00 فجراً و 4:00 عصراً</p>
       </div>
     </div>
 
@@ -395,6 +396,8 @@ const T = {
     errGroupOnly:"⚠️ الناصرية والأهوار والبصرة متاحة للمجموعات من 4 إلى 10 ركاب فقط",
     errAirportCity:"ℹ️ للتوصيل بين مطار بغداد وداخل بغداد، تواصل معنا مباشرة عبر زر الواتساب",
     errTime:"⏰ أقرب وقت متاح للحجز بعد ساعتين من الآن — عدّلنا الوقت لك تلقائياً",
+    errTimeWindow:"🕔 الانطلاق للمحافظات متاح بين 5:00 فجراً و 4:00 عصراً — عدّلنا الوقت لك تلقائياً",
+    timeWindowHint:"🕔 الانطلاق للمحافظات بين 5:00 فجراً و 4:00 عصراً",
     addonLabel:"وجهة إضافية (اختياري)",
     addonLabel2:"وجهة إضافية ثانية (اختياري)",
     addonNone:"بدون وجهة إضافية",
@@ -445,6 +448,8 @@ const T = {
     errGroupOnly:"⚠️ Nasiriyah, the Marshes and Basra are available for groups of 4-10 passengers only",
     errAirportCity:"ℹ️ For transfers between Baghdad Airport and Baghdad city, contact us directly via WhatsApp",
     errTime:"⏰ The earliest booking time is 2 hours from now — we adjusted the time for you",
+    errTimeWindow:"🕔 Departures to the provinces run between 5:00 AM and 4:00 PM — we adjusted the time for you",
+    timeWindowHint:"🕔 Departures to the provinces: 5:00 AM - 4:00 PM",
     addonLabel:"Extra stop (optional)",
     addonLabel2:"Second extra stop (optional)",
     addonNone:"No extra stop",
@@ -495,6 +500,8 @@ const T = {
     errGroupOnly:"⚠️ Насирия, Болота и Басра доступны только для групп от 4 до 10 пассажиров",
     errAirportCity:"ℹ️ Для трансфера между аэропортом Багдада и городом свяжитесь с нами напрямую через WhatsApp",
     errTime:"⏰ Ближайшее время бронирования — через 2 часа. Мы автоматически скорректировали время",
+    errTimeWindow:"🕔 Выезд в провинции возможен с 5:00 до 16:00 — мы автоматически скорректировали время",
+    timeWindowHint:"🕔 Выезд в провинции: с 5:00 до 16:00",
     addonLabel:"Доп. остановка (по желанию)",
     addonLabel2:"Вторая доп. остановка (по желанию)",
     addonNone:"Без доп. остановки",
@@ -646,6 +653,7 @@ function applyLang(l){
   if (typeof mapAvailable !== "undefined" && !mapAvailable){
     document.getElementById('mapHint').textContent = t.mapNA;
   }
+  if (typeof els !== "undefined" && els.date) refreshTimeMin();
   updateFare();
 }
 document.querySelectorAll(".lang-switch button").forEach(b=>{
@@ -891,38 +899,77 @@ function showFare(on){
   waBtn.classList.toggle('show', on);
 }
 
-els.date.min = new Date().toISOString().split('T')[0];
-
-// التاريخ والوقت الافتراضي: بعد ساعتين من الآن (بتوقيت الزائر المحلي)
+// التاريخ والوقت الافتراضي والقيود
 const pad2 = n => String(n).padStart(2, '0');
-function minDateTime(){ return new Date(Date.now() + 2 * 60 * 60 * 1000); }
+const WIN_START = 5, WIN_END = 16; // 5 فجراً - 4 عصراً
+
+// القيد ينطبق على الرحلات للمحافظات فقط — مطار بغداد ⇄ بغداد متاح 24 ساعة
+function timeRestricted(){
+  const norm = c => c === "Airport" ? "Baghdad" : c;
+  const from = els.from.value, to = els.to.value;
+  if (!from || !to) return false;
+  return norm(from) !== norm(to);
+}
+
+// أقرب موعد مسموح: بعد ساعتين من الآن، وضمن نافذة الوقت إن كانت مطبقة
+function earliestAllowed(){
+  const t = new Date(Date.now() + 2 * 60 * 60 * 1000);
+  if (!timeRestricted()) return t;
+  if (t.getHours() < WIN_START){ t.setHours(WIN_START, 0, 0, 0); return t; }
+  if (t.getHours() > WIN_END || (t.getHours() === WIN_END && t.getMinutes() > 0)){
+    t.setDate(t.getDate() + 1);
+    t.setHours(WIN_START, 0, 0, 0);
+  }
+  return t;
+}
+
+const dStr = d => d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate());
+const tStr = d => pad2(d.getHours()) + ":" + pad2(d.getMinutes());
 
 function refreshTimeMin(){
-  // إذا التاريخ المختار هو اليوم، أقل وقت مسموح = بعد ساعتين من الآن
-  const m = minDateTime();
-  const minDateStr = m.getFullYear() + "-" + pad2(m.getMonth() + 1) + "-" + pad2(m.getDate());
-  els.time.min = (els.date.value === minDateStr) ? (pad2(m.getHours()) + ":" + pad2(m.getMinutes())) : "";
+  const m = earliestAllowed();
+  els.date.min = dStr(m);
+  const sameDay = els.date.value === dStr(m);
+  const hint = document.getElementById('timeHint');
+  if (timeRestricted()){
+    els.time.min = sameDay ? tStr(m) : pad2(WIN_START) + ":00";
+    els.time.max = pad2(WIN_END) + ":00";
+    hint.textContent = T[lang].timeWindowHint;
+    hint.style.display = "";
+  } else {
+    els.time.min = sameDay ? tStr(m) : "";
+    els.time.removeAttribute("max");
+    hint.style.display = "none";
+  }
 }
 
 function setDefaultDateTime(){
-  const d = minDateTime();
-  els.date.value = d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate());
-  els.time.value = pad2(d.getHours()) + ":" + pad2(d.getMinutes());
+  const d = earliestAllowed();
+  els.date.value = dStr(d);
+  els.time.value = tStr(d);
   refreshTimeMin();
 }
 setDefaultDateTime();
 
-// إذا اختار وقتاً قبل ساعتين من الآن، نصحّحه تلقائياً لأقرب وقت متاح
+// تصحيح تلقائي إذا اختار وقتاً خارج النافذة أو أقرب من ساعتين
 function enforceMinTime(showMsg){
   if (!els.date.value || !els.time.value) return true;
   const sel = new Date(els.date.value + "T" + els.time.value);
-  const m = minDateTime();
-  if (sel < m){
-    els.date.value = m.getFullYear() + "-" + pad2(m.getMonth() + 1) + "-" + pad2(m.getDate());
-    els.time.value = pad2(m.getHours()) + ":" + pad2(m.getMinutes());
+  let fixed = new Date(sel), outOfWindow = false;
+  if (timeRestricted()){
+    const h = sel.getHours(), mn = sel.getMinutes();
+    if (h < WIN_START){ fixed.setHours(WIN_START, 0, 0, 0); outOfWindow = true; }
+    else if (h > WIN_END || (h === WIN_END && mn > 0)){ fixed.setHours(WIN_END, 0, 0, 0); outOfWindow = true; }
+  }
+  const min = earliestAllowed();
+  let tooSoon = false;
+  if (fixed < min){ fixed = min; tooSoon = true; }
+  if (outOfWindow || tooSoon){
+    els.date.value = dStr(fixed);
+    els.time.value = tStr(fixed);
     refreshTimeMin();
     if (showMsg){
-      formMsg.textContent = T[lang].errTime;
+      formMsg.textContent = outOfWindow ? T[lang].errTimeWindow : T[lang].errTime;
       formMsg.className = 'form-msg err';
     }
     return false;
@@ -1012,8 +1059,8 @@ Object.values(els).forEach(el=>{
 });
 document.getElementById('wait').addEventListener('change', updateFare);
 // عند تغيير المدن تتغير سياسة الانتظار والوجهات الإضافية
-els.from.addEventListener('change', ()=>{ buildAddonOptions(); buildWaitOptions(); toggleWaitField(); updateFare(); });
-els.to.addEventListener('change', ()=>{ buildAddonOptions(); buildWaitOptions(); toggleWaitField(); updateFare(); });
+els.from.addEventListener('change', ()=>{ buildAddonOptions(); buildWaitOptions(); toggleWaitField(); refreshTimeMin(); enforceMinTime(false); updateFare(); });
+els.to.addEventListener('change', ()=>{ buildAddonOptions(); buildWaitOptions(); toggleWaitField(); refreshTimeMin(); enforceMinTime(false); updateFare(); });
 document.getElementById('addon').addEventListener('change', ()=>{ buildAddon2Options(); toggleWaitField(); buildWaitOptions(); updateFare(); });
 document.getElementById('addon2').addEventListener('change', ()=>{ toggleWaitField(); buildWaitOptions(); updateFare(); });
 // تغيير عدد الركاب قد يفعّل وضع الباص (7+) فنحدّث الإضافات وحقل الانتظار
