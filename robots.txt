@@ -1,4 +1,15 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://discovery.fabletour.com/assyria-tour/sitemap.xml
+# Internal / non-marketing pages — keep out of search results
+Disallow: /baghdad-admin.html
+Disallow: /fable-tour-wifi-portal.html
+Disallow: /splash.html
+Disallow: /assyria-tour.html
+
+# Raw data and archives — nothing useful to index
+Disallow: /*.sql$
+Disallow: /*.zip$
+Disallow: /README.md
+
+Sitemap: https://discovery.fabletour.com/sitemap.xml
