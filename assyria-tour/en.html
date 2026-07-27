@@ -83,15 +83,33 @@ html[lang="ru"] h1,html[lang="ru"] h2,html[lang="ru"] h3,html[lang="ru"] h4{font
 .brand{display:flex;align-items:center;gap:10px;font-family:'Cinzel',serif;font-weight:600;letter-spacing:.16em;font-size:13px;color:var(--gold-2);text-transform:uppercase}
 .brand svg{flex:0 0 auto}
 .nav-right{display:flex;align-items:center;gap:10px}
-.langs{display:flex;border:1px solid var(--line);border-radius:2px;overflow:hidden}
-.langs button{
-  background:transparent;border:0;color:var(--sand-2);cursor:pointer;
-  padding:7px 12px;font-size:12px;letter-spacing:.1em;font-family:'IBM Plex Sans',sans-serif;
-  font-weight:500;transition:.2s;
+.langbox{position:relative}
+.langtrigger{
+  display:inline-flex;align-items:center;gap:7px;
+  background:transparent;border:1px solid var(--line);border-radius:2px;
+  color:var(--sand-2);cursor:pointer;padding:7px 11px;
+  font-size:12px;letter-spacing:.1em;font-family:'IBM Plex Sans',sans-serif;
+  font-weight:600;transition:.2s;
 }
-.langs button+button{border-inline-start:1px solid var(--line)}
-.langs button:hover{color:var(--gold-2)}
-.langs button.on{background:var(--gold);color:var(--ink);font-weight:600}
+.langtrigger:hover,.langbox.open .langtrigger{color:var(--gold-2);border-color:var(--gold)}
+.langtrigger svg{width:15px;height:15px;stroke:currentColor;fill:none}
+.langtrigger .chev{width:12px;height:12px;transition:transform .2s}
+.langbox.open .chev{transform:rotate(180deg)}
+.langmenu{
+  position:absolute;inset-inline-end:0;top:calc(100% + 6px);z-index:60;
+  min-width:150px;list-style:none;margin:0;padding:5px;
+  background:var(--ink-2);border:1px solid var(--line);border-radius:3px;
+  box-shadow:0 12px 30px rgba(0,0,0,.45);
+  opacity:0;visibility:hidden;transform:translateY(-4px);transition:.16s;
+}
+.langbox.open .langmenu{opacity:1;visibility:visible;transform:translateY(0)}
+.langmenu li{margin:0}
+.langmenu a{
+  display:block;padding:9px 12px;border-radius:2px;color:var(--sand-2);
+  font-size:13px;letter-spacing:.04em;font-family:'IBM Plex Sans',sans-serif;transition:.15s;
+}
+.langmenu a:hover{background:rgba(201,162,39,.12);color:var(--gold-2)}
+.langmenu a.on{background:var(--gold);color:var(--ink);font-weight:600}
 .btn{
   display:inline-block;background:var(--gold);color:var(--ink);
   padding:10px 22px;border:0;border-radius:2px;cursor:pointer;
@@ -360,10 +378,17 @@ html[dir="rtl"] .fab-bub::after{inset-inline-end:-6px}
       <span>Fable Tour</span>
     </div>
     <div class="nav-right">
-      <div class="langs" role="group" aria-label="Language">
-        <a href="index.html" hreflang="ar">العربية</a>
-        <a href="#" hreflang="en" class="on" aria-current="page">EN</a>
-        <a href="ru.html" hreflang="ru">РУ</a>
+      <div class="langbox">
+        <button class="langtrigger" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Language">
+          <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 2.5 15.4 0 18M12 3c-2.5 2.6-2.5 15.4 0 18"/></svg>
+          <span>EN</span>
+          <svg class="chev" viewBox="0 0 24 24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <ul class="langmenu">
+        <li><a href="index.html" hreflang="ar">العربية</a></li>
+        <li><a href="en.html" hreflang="en" class="on" aria-current="page">English</a></li>
+        <li><a href="ru.html" hreflang="ru">Русский</a></li>
+        </ul>
       </div>
       <a href="#book" class="btn" data-t="nav_book">Book now</a>
     </div>
@@ -835,6 +860,21 @@ form.addEventListener('submit', async e=>{
   }catch(err){ msg.className='f-msg err'; msg.textContent=d.fl_err; }
   btn.disabled=false; btn.innerHTML=old;
 });
+</script>
+<script>
+(function(){
+  var box=document.querySelector('.langbox');
+  if(!box)return;
+  var trig=box.querySelector('.langtrigger');
+  function close(){box.classList.remove('open');trig.setAttribute('aria-expanded','false');}
+  trig.addEventListener('click',function(e){
+    e.stopPropagation();
+    var open=box.classList.toggle('open');
+    trig.setAttribute('aria-expanded',open?'true':'false');
+  });
+  document.addEventListener('click',function(e){if(!box.contains(e.target))close();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+})();
 </script>
 </body>
 </html>
