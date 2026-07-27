@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://discovery.fabletour.com/sitemap.xml
+Sitemap: https://discovery.fabletour.com/assyria-tour/sitemap.xml
