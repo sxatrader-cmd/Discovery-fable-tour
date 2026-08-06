@@ -331,7 +331,11 @@ footer p{color:var(--muted);font-size:.9rem;margin-top:8px}
 </footer>
 
 <script>
-// ضع مفتاح Web3Forms هنا ليصلك الحجز على الإيميل. اتركه فارغاً للاعتماد على واتساب فقط.
+/* ══════════════════════════════════════════════════════════════
+   ★ السطر الوحيد الذي تحتاج تعديله ★
+   الصق مفتاح Web3Forms بين علامتي التنصيص ليصلك الحجز على الإيميل.
+   نفس المفتاح المستخدم في موقع discovery.fabletour.com
+   ══════════════════════════════════════════════════════════════ */
 const WEB3FORMS_KEY = "";
 const WHATSAPP = "9647711745353";
 
@@ -407,6 +411,9 @@ form.addEventListener('submit', async e => {
   form.style.display = 'none';
   document.getElementById('done').classList.add('on');
   document.getElementById('booking').scrollIntoView({behavior:'smooth', block:'start'});
+
+  // فتح واتساب تلقائياً — إذا منعه المتصفح يبقى الزر ظاهراً للزبون
+  window.open(document.getElementById('wa').href, '_blank', 'noopener');
 });
 </script>
 </body>
