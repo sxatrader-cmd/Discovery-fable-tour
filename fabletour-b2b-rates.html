@@ -47,6 +47,51 @@
   footer a{color:var(--navy);text-decoration:none;font-weight:500}
   .conf{font-size:11px;color:#2d5088;letter-spacing:1px;text-transform:uppercase}
   .print-btn{display:block;margin:20px auto 0;background:var(--navy);color:#fff;border:0;padding:12px 26px;border-radius:6px;font:500 14px 'Inter',sans-serif;cursor:pointer}
+
+  .days{display:flex;flex-direction:column;gap:22px}
+  .day{border:1px solid var(--line);border-radius:12px;padding:20px 20px 16px;background:#fff}
+  .day-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+  .day-num{background:var(--navy);color:#fff;font-weight:600;font-size:12px;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:20px}
+  .day-route{font-size:12px;color:var(--gold);font-weight:600;letter-spacing:1px;text-transform:uppercase}
+  .day h3{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--navy);margin-bottom:12px;line-height:1.2}
+  .day p{margin:12px 0 10px}
+  .stay{font-size:13px;color:var(--muted);border-top:1px dashed var(--line);padding-top:10px}
+  .stay span{font-weight:600;color:var(--navy);margin-right:6px}
+  .gal{display:grid;gap:8px}
+  .gal.g1{grid-template-columns:1fr}
+  .gal.g2{grid-template-columns:1.6fr 1fr}
+  .gal.g3{grid-template-columns:1.6fr 1fr;grid-template-rows:1fr 1fr}
+  .gal.g3 .big{grid-row:1 / span 2}
+  .ph{position:relative;margin:0;border-radius:8px;overflow:hidden;cursor:zoom-in;background:var(--gold-soft);min-height:150px}
+  .gal.g1 .ph{aspect-ratio:16/8}
+  .gal.g2 .ph{aspect-ratio:auto;height:240px}
+  .gal.g3 .ph{height:auto;min-height:150px}
+  .gal.g3 .big{min-height:308px}
+  .ph img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(1.18) contrast(1.06) brightness(1.03);transition:transform .5s ease}
+  .ph:hover img,.ph:focus img{transform:scale(1.04)}
+  .ph figcaption{position:absolute;left:0;right:0;bottom:0;padding:18px 10px 7px;font-size:11.5px;color:#fff;background:linear-gradient(transparent,rgba(10,25,50,.75))}
+  .ph:focus{outline:3px solid var(--gold);outline-offset:2px}
+  .lb{position:fixed;inset:0;background:rgba(8,18,36,.92);display:none;align-items:center;justify-content:center;z-index:100;padding:16px}
+  .lb.open{display:flex}
+  .lb-frame{position:relative;background:#fff;border-radius:14px;padding:14px 14px 12px;max-width:min(1100px,96vw);box-shadow:0 20px 60px rgba(0,0,0,.45);border:4px solid var(--navy)}
+  .lb-logo{position:absolute;top:-34px;left:50%;transform:translateX(-50%);width:68px;height:68px;border-radius:50%;background:#fff;border:3px solid var(--navy);box-shadow:0 4px 14px rgba(0,0,0,.3)}
+  .lb-img{display:block;max-width:100%;max-height:74vh;border-radius:8px;margin:0 auto;filter:saturate(1.18) contrast(1.06) brightness(1.03)}
+  .lb-mark{position:absolute;right:26px;bottom:62px;width:54px;height:54px;border-radius:50%;opacity:.85;background:#fff;padding:2px}
+  .lb-cap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline;margin-top:10px;font-size:14px}
+  .lb-cap b{color:var(--navy)}
+  .lb-cap small{color:var(--muted);font-size:11.5px}
+  .lb-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.95);border:0;width:44px;height:44px;border-radius:50%;font-size:22px;color:var(--navy);cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.3)}
+  .lb-prev{left:-14px}.lb-next{right:-14px}
+  .lb-close{position:absolute;top:-14px;right:-14px;width:38px;height:38px;border-radius:50%;border:0;background:var(--navy);color:#fff;font-size:20px;cursor:pointer}
+  @media (max-width:640px){
+    .gal.g2,.gal.g3{grid-template-columns:1fr 1fr;grid-template-rows:auto}
+    .gal.g2 .big,.gal.g3 .big{grid-column:1 / span 2;grid-row:auto;min-height:220px;height:220px}
+    .gal.g2 .ph:not(.big),.gal.g3 .ph:not(.big){height:130px;min-height:130px}
+    .gal.g1 .ph{aspect-ratio:auto;height:220px}
+    .lb-prev{left:2px}.lb-next{right:2px}
+    .lb-mark{width:40px;height:40px;right:22px;bottom:70px}
+  }
+  @media print{.day{break-inside:avoid}.lb{display:none!important}}
   @media (max-width:640px){
     header,main,footer{padding-left:18px;padding-right:18px}
     .doc-meta{text-align:left}
@@ -82,9 +127,64 @@
     <div class="tags">
       <span class="tag">Private group</span>
       <span class="tag">Guides: English · Russian · Arabic</span>
-      <span class="tag">Start: Baghdad International Airport</span>
+      <span class="tag">Start &amp; end: Baghdad International Airport</span>
       <span class="tag">Groups of 2–20</span>
     </div>
+
+
+    <h2>Day-by-day program</h2>
+    <div class="days">
+    <article class="day">
+      <div class="day-head"><span class="day-num">Day 1</span><span class="day-route">Baghdad · Babylon · Karbala</span></div>
+      <h3>Ancient Babylon &amp; arrival in Karbala</h3>
+      <div class="gal g3"><figure class="ph big" tabindex="0" role="button" aria-label="Enlarge: Ishtar Gate reconstruction, Babylon" data-full="https://images.unsplash.com/photo-1737314411644-ab95b4bd5c3f?auto=format&fit=crop&w=2000&q=80" data-cap="Ishtar Gate reconstruction, Babylon" data-by="Tatiana Mokhova"><img loading="lazy" src="https://images.unsplash.com/photo-1737314411644-ab95b4bd5c3f?auto=format&fit=crop&w=1000&q=80" alt="Ishtar Gate reconstruction, Babylon"><figcaption>Ishtar Gate reconstruction, Babylon</figcaption></figure><figure class="ph" tabindex="0" role="button" aria-label="Enlarge: Ancient Babylon at dusk" data-full="https://images.unsplash.com/photo-1763590897919-308cf0973853?auto=format&fit=crop&w=2000&q=80" data-cap="Ancient Babylon at dusk" data-by="Mr. Great Heart"><img loading="lazy" src="https://images.unsplash.com/photo-1763590897919-308cf0973853?auto=format&fit=crop&w=1000&q=80" alt="Ancient Babylon at dusk"><figcaption>Ancient Babylon at dusk</figcaption></figure><figure class="ph" tabindex="0" role="button" aria-label="Enlarge: Imam Hussein Shrine, Karbala, at dusk" data-full="https://images.unsplash.com/photo-1718680962024-0fa899e1815e?auto=format&fit=crop&w=2000&q=80" data-cap="Imam Hussein Shrine, Karbala, at dusk" data-by="Hasan Majed"><img loading="lazy" src="https://images.unsplash.com/photo-1718680962024-0fa899e1815e?auto=format&fit=crop&w=1000&q=80" alt="Imam Hussein Shrine, Karbala, at dusk"><figcaption>Imam Hussein Shrine, Karbala, at dusk</figcaption></figure></div>
+      <p>Arrival at Baghdad International Airport, meet &amp; greet and transfer south. Visit the legendary city of <b>Babylon</b> — its processional way, palaces and temples, and the reconstructed Ishtar Gate — then the archaeological site of <b>Borsippa</b> with the Ziggurat of Nabu and the Shrine of Prophet Job. Continue to Karbala to see the Imam Hussein and Al-Abbas shrines in the evening light.</p>
+      <div class="stay"><span>Overnight</span> Karbala — Al-Baron Hotel (5★)</div>
+    </article>
+    <article class="day">
+      <div class="day-head"><span class="day-num">Day 2</span><span class="day-route">Najaf · Kufa</span></div>
+      <h3>The sacred cities of Najaf &amp; Kufa</h3>
+      <div class="gal g1"><figure class="ph big" tabindex="0" role="button" aria-label="Enlarge: The golden crown of the Imam Ali Shrine, Najaf" data-full="https://images.unsplash.com/photo-1700130375571-8f2eca1b825e?auto=format&fit=crop&w=2000&q=80" data-cap="The golden crown of the Imam Ali Shrine, Najaf" data-by="Imam Ali Holy Shrine"><img loading="lazy" src="https://images.unsplash.com/photo-1700130375571-8f2eca1b825e?auto=format&fit=crop&w=1000&q=80" alt="The golden crown of the Imam Ali Shrine, Najaf"><figcaption>The golden crown of the Imam Ali Shrine, Najaf</figcaption></figure></div>
+      <p>Drive to Kufa to visit the <b>Great Mosque of Kufa</b>, one of the oldest in the Islamic world, the House of Imam Ali and the Shrine of Maytham al-Tammar. In Najaf, visit the Imam Ali Shrine and <b>Wadi al-Salam</b>, among the largest cemeteries in the world.</p>
+      <div class="stay"><span>Overnight</span> Najaf — Granada, Do Najaf or Naseem Al-Najaf Hotel (5★)</div>
+    </article>
+    <article class="day">
+      <div class="day-head"><span class="day-num">Day 3</span><span class="day-route">Uruk · Ur · The Marshes</span></div>
+      <h3>Cradle of civilization &amp; the Marshes</h3>
+      <div class="gal g3"><figure class="ph big" tabindex="0" role="button" aria-label="Enlarge: The Ziggurat of Ur, Dhi Qar" data-full="https://images.unsplash.com/photo-1709659576051-ba19d58fd0d9?auto=format&fit=crop&w=2000&q=80" data-cap="The Ziggurat of Ur, Dhi Qar" data-by="Hasan Majed"><img loading="lazy" src="https://images.unsplash.com/photo-1709659576051-ba19d58fd0d9?auto=format&fit=crop&w=1000&q=80" alt="The Ziggurat of Ur, Dhi Qar"><figcaption>The Ziggurat of Ur, Dhi Qar</figcaption></figure><figure class="ph" tabindex="0" role="button" aria-label="Enlarge: The Mesopotamian Marshes from above" data-full="https://images.unsplash.com/photo-1707997827915-00f33ec78c12?auto=format&fit=crop&w=2000&q=80" data-cap="The Mesopotamian Marshes from above" data-by="Hasan Majed"><img loading="lazy" src="https://images.unsplash.com/photo-1707997827915-00f33ec78c12?auto=format&fit=crop&w=1000&q=80" alt="The Mesopotamian Marshes from above"><figcaption>The Mesopotamian Marshes from above</figcaption></figure><figure class="ph" tabindex="0" role="button" aria-label="Enlarge: Traditional boat in the Marshes" data-full="https://images.unsplash.com/photo-1712264556912-1b3ae677a712?auto=format&fit=crop&w=2000&q=80" data-cap="Traditional boat in the Marshes" data-by="Hasan Majed"><img loading="lazy" src="https://images.unsplash.com/photo-1712264556912-1b3ae677a712?auto=format&fit=crop&w=1000&q=80" alt="Traditional boat in the Marshes"><figcaption>Traditional boat in the Marshes</figcaption></figure></div>
+      <p>Explore <b>Uruk</b>, where writing first appeared, and the majestic <b>Ziggurat of Ur</b>. Then a traditional boat ride through the <b>Mesopotamian Marshes</b> (UNESCO World Heritage), a unique landscape of reed houses (mudhif) and birdlife, with a stop at the legendary Tree of Adam.</p>
+      <div class="stay"><span>Overnight</span> Basra — Mövenpick Zinat Al-Hayat or Corniche Hotel (4★)</div>
+    </article>
+    <article class="day">
+      <div class="day-head"><span class="day-num">Day 4</span><span class="day-route">Basra → Baghdad</span></div>
+      <h3>Basra, the Venice of the East</h3>
+      <div class="gal g2"><figure class="ph big" tabindex="0" role="button" aria-label="Enlarge: Basra and the Shatt al-Arab" data-full="https://images.unsplash.com/photo-1711611479241-6ef3cb18bf65?auto=format&fit=crop&w=2000&q=80" data-cap="Basra and the Shatt al-Arab" data-by="Hasan Majed"><img loading="lazy" src="https://images.unsplash.com/photo-1711611479241-6ef3cb18bf65?auto=format&fit=crop&w=1000&q=80" alt="Basra and the Shatt al-Arab"><figcaption>Basra and the Shatt al-Arab</figcaption></figure><figure class="ph" tabindex="0" role="button" aria-label="Enlarge: Shanasheel balconies, old Basra" data-full="https://images.unsplash.com/photo-1648996133474-220fc4bbad8e?auto=format&fit=crop&w=2000&q=80" data-cap="Shanasheel balconies, old Basra" data-by="Hussain Mustafa"><img loading="lazy" src="https://images.unsplash.com/photo-1648996133474-220fc4bbad8e?auto=format&fit=crop&w=1000&q=80" alt="Shanasheel balconies, old Basra"><figcaption>Shanasheel balconies, old Basra</figcaption></figure></div>
+      <p>A walk through old Basra and its streets of carved wooden <b>shanasheel</b> balconies, the old Armenian churches and the <b>Basra Museum</b>, set in a former palace. In the afternoon, drive north to Baghdad.</p>
+      <div class="stay"><span>Overnight</span> Baghdad — Do Baghdad, Alabasly Suites or Bilitum Hotel (4★)</div>
+    </article>
+    <article class="day">
+      <div class="day-head"><span class="day-num">Day 5</span><span class="day-route">Samarra · Mosul</span></div>
+      <h3>Abbasid Samarra &amp; the road north</h3>
+      <div class="gal g1"><figure class="ph big" tabindex="0" role="button" aria-label="Enlarge: Pasha Mosque, Mosul" data-full="https://images.unsplash.com/photo-1620607017542-a680f0c53f45?auto=format&fit=crop&w=2000&q=80" data-cap="Pasha Mosque, Mosul" data-by="Levi Meir Clancy"><img loading="lazy" src="https://images.unsplash.com/photo-1620607017542-a680f0c53f45?auto=format&fit=crop&w=1000&q=80" alt="Pasha Mosque, Mosul"><figcaption>Pasha Mosque, Mosul</figcaption></figure></div>
+      <p>Head north to <b>Samarra</b> to see the iconic spiral <b>Malwiya Minaret</b>, a masterpiece of Abbasid architecture, and the golden-domed Al-Askari Shrine. Continue to Mosul, the historic capital of northern Iraq.</p>
+      <div class="stay"><span>Overnight</span> Mosul — Ramada Hotel (4★)</div>
+    </article>
+    <article class="day">
+      <div class="day-head"><span class="day-num">Day 6</span><span class="day-route">Old Mosul · Nimrud · Hatra</span></div>
+      <h3>Old Mosul &amp; the desert city of Hatra</h3>
+      <div class="gal g1"><figure class="ph big" tabindex="0" role="button" aria-label="Enlarge: By the Tigris in Mosul" data-full="https://images.unsplash.com/photo-1640545505130-2e2b04c715e3?auto=format&fit=crop&w=2000&q=80" data-cap="By the Tigris in Mosul" data-by="Levi Meir Clancy"><img loading="lazy" src="https://images.unsplash.com/photo-1640545505130-2e2b04c715e3?auto=format&fit=crop&w=1000&q=80" alt="By the Tigris in Mosul"><figcaption>By the Tigris in Mosul</figcaption></figure></div>
+      <p>Discover <b>Old Mosul</b> and its revived heritage quarters, the Assyrian site of <b>Nimrud</b>, and the remarkable caravan city of <b>Hatra</b> (UNESCO World Heritage) in the desert. Return to Baghdad in the evening.</p>
+      <div class="stay"><span>Overnight</span> Baghdad — Do Baghdad, Alabasly Suites or Bilitum Hotel (4★)</div>
+    </article>
+    <article class="day">
+      <div class="day-head"><span class="day-num">Day 7</span><span class="day-route">Baghdad → Departure</span></div>
+      <h3>Grand finale in Baghdad</h3>
+      <div class="gal g2"><figure class="ph big" tabindex="0" role="button" aria-label="Enlarge: Al-Mutanabbi statue and the Qishla clock tower, Baghdad" data-full="https://images.unsplash.com/photo-1737314414983-0a92d03e8996?auto=format&fit=crop&w=2000&q=80" data-cap="Al-Mutanabbi statue and the Qishla clock tower, Baghdad" data-by="Tatiana Mokhova"><img loading="lazy" src="https://images.unsplash.com/photo-1737314414983-0a92d03e8996?auto=format&fit=crop&w=1000&q=80" alt="Al-Mutanabbi statue and the Qishla clock tower, Baghdad"><figcaption>Al-Mutanabbi statue and the Qishla clock tower, Baghdad</figcaption></figure><figure class="ph" tabindex="0" role="button" aria-label="Enlarge: Baghdad on the Tigris" data-full="https://images.unsplash.com/photo-1737314417437-b97a7e6229c5?auto=format&fit=crop&w=2000&q=80" data-cap="Baghdad on the Tigris" data-by="Tatiana Mokhova"><img loading="lazy" src="https://images.unsplash.com/photo-1737314417437-b97a7e6229c5?auto=format&fit=crop&w=1000&q=80" alt="Baghdad on the Tigris"><figcaption>Baghdad on the Tigris</figcaption></figure></div>
+      <p>Visit the shrines of <b>Kadhimiya</b>, then stroll through old Baghdad and the historic <b>Al-Mutanabbi Street</b> with its book stalls and traditional tea houses. A final stop at the ancient <b>Ziggurat of Aqar Quf</b> before the transfer to Baghdad International Airport.</p>
+      <div class="stay"><span>Overnight</span> End of services</div>
+    </article>
+    </div>
+    <p class="note">Photos are illustrative. Tap or click any photo to enlarge. The order of visits may be adjusted on the ground for timing and opening hours.</p>
 
     <h2>Net rates per person</h2>
     <div class="table-wrap">
@@ -174,6 +274,54 @@
     <div class="conf">Confidential — for trade partners only</div>
   </footer>
 </div>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Photo viewer">
+  <div class="lb-frame">
+    <img class="lb-logo" id="lb-logo" alt="Fable Tour">
+    <button class="lb-close" id="lb-close" aria-label="Close">&times;</button>
+    <button class="lb-btn lb-prev" id="lb-prev" aria-label="Previous">&#8249;</button>
+    <img class="lb-img" id="lb-img" alt="">
+    <img class="lb-mark" id="lb-mark" alt="" aria-hidden="true">
+    <button class="lb-btn lb-next" id="lb-next" aria-label="Next">&#8250;</button>
+    <div class="lb-cap"><b id="lb-cap"></b><small id="lb-by"></small></div>
+  </div>
+</div>
+<script>
+(function(){
+  const logo = document.querySelector('header .logo img');
+  const lb = document.getElementById('lb'), img = document.getElementById('lb-img');
+  const cap = document.getElementById('lb-cap'), by = document.getElementById('lb-by');
+  if (logo) { document.getElementById('lb-logo').src = logo.src; document.getElementById('lb-mark').src = logo.src; }
+  const items = Array.from(document.querySelectorAll('.ph'));
+  let i = 0;
+  function show(n){
+    i = (n + items.length) % items.length;
+    const f = items[i];
+    img.src = f.dataset.full; img.alt = f.dataset.cap;
+    cap.textContent = f.dataset.cap;
+    by.textContent = 'Photo: ' + f.dataset.by + ' / Unsplash';
+  }
+  function open(n){ show(n); lb.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function close(){ lb.classList.remove('open'); document.body.style.overflow = ''; }
+  items.forEach((f, n) => {
+    f.addEventListener('click', () => open(n));
+    f.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(n); } });
+  });
+  document.getElementById('lb-close').onclick = close;
+  document.getElementById('lb-prev').onclick = () => show(i - 1);
+  document.getElementById('lb-next').onclick = () => show(i + 1);
+  lb.addEventListener('click', e => { if (e.target === lb) close(); });
+  document.addEventListener('keydown', e => {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowRight') show(i + 1);
+    if (e.key === 'ArrowLeft') show(i - 1);
+  });
+  let x0 = null;
+  lb.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, {passive:true});
+  lb.addEventListener('touchend', e => { if (x0 === null) return; const dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 50) show(i + (dx < 0 ? 1 : -1)); x0 = null; });
+})();
+</script>
 <button class="print-btn" onclick="window.print()">Print / Save as PDF</button>
 </body>
 </html>
