@@ -11,5 +11,6 @@ Disallow: /assyria-tour.html
 Disallow: /*.sql$
 Disallow: /*.zip$
 Disallow: /README.md
+Disallow: /_babylon-src/
 
 Sitemap: https://discovery.fabletour.com/sitemap.xml
