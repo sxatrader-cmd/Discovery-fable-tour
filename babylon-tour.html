@@ -423,10 +423,10 @@ html[lang="ar"] .promo-domain{letter-spacing:.2em}
 @media (prefers-color-scheme: dark){
   html,body{background:#f7f3e8 !important;color:#1b3a6b}
 }
-.ru-video{display:none}
-html[lang="ru"] .ru-video{display:block}
-.ru-video .vwrap{position:relative;max-width:900px;margin:0 auto;aspect-ratio:16/9;border-radius:14px;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.35)}
-.ru-video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.ru-video,.en-video{display:none}
+html[lang="ru"] .ru-video,html[lang="en"] .en-video{display:block}
+.ru-video .vwrap,.en-video .vwrap{position:relative;max-width:900px;margin:0 auto;aspect-ratio:16/9;border-radius:14px;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.35)}
+.ru-video iframe,.en-video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 </style>
 </head>
 <body>
@@ -470,6 +470,19 @@ html[lang="ru"] .ru-video{display:block}
     </div>
     <p class="prose" data-i="intro.lead"></p>
     <div class="orn" style="margin-top:2.6rem"><span class="ln"></span><span class="dia"></span><span class="ln"></span></div>
+  </div>
+</section>
+
+<!-- ░░ EN VIDEO (English only) ░░ -->
+<section class="section en-video" id="video-en">
+  <div class="container reveal">
+    <div class="head">
+      <span class="label">Video</span>
+      <h2>Babylon through our guests' eyes</h2>
+    </div>
+    <div class="vwrap">
+      <iframe src="https://www.youtube.com/embed/3KqS6ZwAKZU" title="Babylon Tour — Fable Tour" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    </div>
   </div>
 </section>
 
