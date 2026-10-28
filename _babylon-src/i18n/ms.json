@@ -27,7 +27,7 @@
    ],
    [
     "Apakah yang termasuk dalam harga?",
-    "336,000 IQD ialah harga tetap untuk keseluruhan lawatan bagi 1 hingga 3 orang: kereta peribadi khas untuk anda, jemputan dan hantaran dari mana-mana lokasi di Baghdad, serta iringan dan penerangan di tapak. Tiket masuk ke Babylon tidak termasuk dan dibayar di tapak."
+    "Harganya tetap untuk keseluruhan lawatan bagi 1 hingga 3 orang: kereta peribadi khas untuk anda, jemputan dan hantaran dari mana-mana lokasi di Baghdad, serta iringan dan penerangan di tapak. Tiket masuk ke Babylon tidak termasuk dan dibayar di tapak. Harga keseluruhan dipaparkan sebaik sahaja anda memilih tarikh dan tempat duduk dalam borang tempahan."
    ],
    [
     "Bolehkah pelancong asing melawat Babylon?",
@@ -149,6 +149,7 @@
   "ok_title": "Tempahan diterima",
   "ok_body": "Hari anda telah ditempah dan tidak lagi tersedia untuk orang lain. Hantar butiran melalui WhatsApp untuk pengesahan.",
   "wa_btn": "Hantar melalui WhatsApp",
-  "wa_msg": "Tempahan lawatan Babylon\nNama: {name}\nHari: {date}\nTempat duduk: {seats}\nTelefon: {phone}\nWhatsApp: {wa}\nE-mel: {email}\nJumlah: 336,000 IQD"
+  "wa_msg": "Tempahan lawatan Babylon\nNama: {name}\nHari: {date}\nTempat duduk: {seats}\nTelefon: {phone}\nWhatsApp: {wa}\nE-mel: {email}\nJumlah: 336,000 IQD",
+  "price.hint": "Harga keseluruhan dipaparkan sebaik sahaja anda memilih tarikh dan tempat duduk dalam borang tempahan."
  }
 }

@@ -27,7 +27,7 @@
    ],
    [
     "Co obejmuje cena?",
-    "336 000 IQD to stała cena za całą wycieczkę dla 1–3 osób: prywatne auto tylko dla Was, odbiór i powrót z dowolnego miejsca w Bagdadzie oraz opieka z opowieścią na miejscu. Bilety wstępu do Babilonu nie są wliczone i opłaca się je na miejscu."
+    "Cena jest stała za całą wycieczkę dla 1–3 osób: prywatne auto tylko dla Was, odbiór i powrót z dowolnego miejsca w Bagdadzie oraz opieka z opowieścią na miejscu. Bilety wstępu do Babilonu nie są wliczone i opłaca się je na miejscu. Łączną cenę zobaczysz po wybraniu daty i miejsc w formularzu rezerwacji."
    ],
    [
     "Czy zagraniczni turyści mogą zwiedzać Babilon?",
@@ -149,6 +149,7 @@
   "ok_title": "Rezerwacja przyjęta",
   "ok_body": "Twój dzień jest zarezerwowany i nie jest już dostępny dla innych. Wyślij szczegóły przez WhatsApp, aby potwierdzić.",
   "wa_btn": "Wyślij przez WhatsApp",
-  "wa_msg": "Rezerwacja wycieczki do Babilonu\nImię: {name}\nDzień: {date}\nMiejsca: {seats}\nTelefon: {phone}\nWhatsApp: {wa}\nE-mail: {email}\nRazem: 336 000 IQD"
+  "wa_msg": "Rezerwacja wycieczki do Babilonu\nImię: {name}\nDzień: {date}\nMiejsca: {seats}\nTelefon: {phone}\nWhatsApp: {wa}\nE-mail: {email}\nRazem: 336 000 IQD",
+  "price.hint": "Łączną cenę zobaczysz po wybraniu daty i miejsc w formularzu rezerwacji."
  }
 }

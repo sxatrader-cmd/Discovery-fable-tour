@@ -27,7 +27,7 @@
    ],
    [
     "Co je zahrnuto v ceně?",
-    "336 000 IQD je pevná cena za celý výlet pro 1 až 3 osoby: soukromý vůz jen pro vás, vyzvednutí a návrat kdekoli v Bagdádu a doprovod s výkladem na místě. Vstupenky do Babylonu nejsou zahrnuty a platí se na místě."
+    "Cena je pevná za celý výlet pro 1 až 3 osoby: soukromý vůz jen pro vás, vyzvednutí a návrat kdekoli v Bagdádu a doprovod s výkladem na místě. Vstupenky do Babylonu nejsou zahrnuty a platí se na místě. Celkovou cenu uvidíte, jakmile v rezervačním formuláři zvolíte datum a místa."
    ],
    [
     "Mohou zahraniční turisté navštívit Babylon?",
@@ -149,6 +149,7 @@
   "ok_title": "Rezervace přijata",
   "ok_body": "Váš den je zarezervován a pro ostatní již není dostupný. Pošlete podrobnosti přes WhatsApp pro potvrzení.",
   "wa_btn": "Odeslat přes WhatsApp",
-  "wa_msg": "Rezervace výletu do Babylonu\nJméno: {name}\nDen: {date}\nMísta: {seats}\nTelefon: {phone}\nWhatsApp: {wa}\nE-mail: {email}\nCelkem: 336 000 IQD"
+  "wa_msg": "Rezervace výletu do Babylonu\nJméno: {name}\nDen: {date}\nMísta: {seats}\nTelefon: {phone}\nWhatsApp: {wa}\nE-mail: {email}\nCelkem: 336 000 IQD",
+  "price.hint": "Celkovou cenu uvidíte, jakmile v rezervačním formuláři zvolíte datum a místa."
  }
 }

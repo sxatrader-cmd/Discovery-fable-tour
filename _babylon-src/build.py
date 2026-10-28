@@ -31,11 +31,11 @@ SAME_AS = [
 ]
 
 # Google Fonts per language. Latin brand faces (Marcellus + Jost) are always loaded.
-BASE_FONTS = "family=Marcellus&family=Jost:ital,wght@0,300;0,400;0,500;1,300;1,400"
+BASE_FONTS = "family=Libre+Baskerville:wght@400;700&family=Inter+Tight:wght@400;500;600;700"
 FONTS = {
-    "ar": "family=Amiri:ital,wght@0,400;0,700;1,400&family=Almarai:wght@300;400;700",
+    "ar": "family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700",
     "fa": "family=Amiri:ital,wght@0,400;0,700&family=Vazirmatn:wght@300;400;500;700",
-    "ru": "family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400",
+    "ru": "family=PT+Serif:wght@400;700",
     "el": "family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=Noto+Sans:wght@300;400;500",
     "zh-Hans": "family=Noto+Serif+SC:wght@400;600&family=Noto+Sans+SC:wght@300;400;500",
     "ja": "family=Noto+Serif+JP:wght@400;600&family=Noto+Sans+JP:wght@300;400;500",
@@ -114,7 +114,7 @@ def head_seo(L, langs):
         f'<meta name="twitter:image" content="{IMG_JPG}">',
         f'<meta name="twitter:image:alt" content="{E(s["img_alt"])}">',
         '',
-        '<meta name="theme-color" content="#1b3a6b">',
+        '<meta name="theme-color" content="#1B2A47">',
         '<script type="application/ld+json">' + json.dumps(schema(L, langs), ensure_ascii=False).replace("</", "<\\/") + '</script>',
     ]
     return "\n".join(out)
@@ -145,9 +145,6 @@ def schema(L, langs):
         "touristType": ["Cultural tourism", "Archaeology", "Heritage tourism", "History"],
         "itinerary": {"@type": "ItemList", "numberOfItems": 1,
                       "itemListElement": [{"@type": "ListItem", "position": 1, "item": place}]},
-        "offers": {"@type": "Offer", "price": PRICE, "priceCurrency": "IQD", "url": u + "#booking",
-                   "availability": "https://schema.org/InStock", "validFrom": "2026-01-01",
-                   "description": s["offer_desc"], "seller": {"@id": SITE + "/#fabletour"}},
         "provider": {"@id": SITE + "/#fabletour"},
     }
     page = {
@@ -162,7 +159,31 @@ def schema(L, langs):
     faq = {"@type": "FAQPage", "@id": u + "#faq", "inLanguage": L["code"], "mainEntity": [
         {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}}
         for q, a in L["faq"]["items"]]}
-    return {"@context": "https://schema.org", "@graph": [org, page, trip, faq]}
+    graph = [org, page, trip, faq]
+    v = L.get("video")
+    if v:
+        graph.append({"@type": "VideoObject", "@id": u + "#video", "name": v["title"],
+                      "description": s["description"], "inLanguage": L["code"],
+                      "thumbnailUrl": f'https://i.ytimg.com/vi/{v["id"]}/hqdefault.jpg',
+                      "embedUrl": f'https://www.youtube.com/embed/{v["id"]}',
+                      "contentUrl": f'https://www.youtube.com/watch?v={v["id"]}'})
+    return {"@context": "https://schema.org", "@graph": graph}
+
+
+# Internal links to the other tour pages (languages that have them)
+MORE_TOURS = {
+    "en": ("More tours", [("Baghdad Old Town walking tour", "/baghdad-old-town"), ("Iraq tour programs", "https://iraq.fabletour.com/en/")]),
+    "ar": ("جولات أخرى", [("جولة بغداد القديمة", "/ar/baghdad-old-town"), ("برامج العراق السياحية", "https://iraq.fabletour.com/")]),
+    "ru": ("Другие туры", [("Экскурсия по Старому Багдаду", "/ru/baghdad-old-town"), ("Туры по Ираку", "https://iraq.fabletour.com/ru/")]),
+}
+
+
+def more_tours(L):
+    m = MORE_TOURS.get(L["code"])
+    if not m:
+        return ""
+    links = " · ".join(f'<a href="{u}">{E(t)}</a>' for t, u in m[1])
+    return f'<p class="more-tours">{E(m[0])}: {links}</p>'
 
 
 def lang_switch(L, langs):
@@ -339,6 +360,7 @@ def render(L, langs, tpl):
         "{{HERO_IMG}}": hero,
         "{{VIDEO}}": video(L),
         "{{FAQ}}": faq(L),
+        "{{MORE_TOURS}}": more_tours(L),
         "{{PROMO_HREF}}": promo,
         "{{PROMO_DOMAIN}}": promo.replace("https://", "").rstrip("/"),
         "{{T_JS}}": t_js(L),

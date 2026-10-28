@@ -31,7 +31,7 @@
    ],
    [
     "What is included in the price?",
-    "336,000 IQD is a flat price for the whole journey for 1 to 3 guests: a private car reserved only for you, pickup and drop-off anywhere in Baghdad, and guided narration at the site. Entry tickets to Babylon are not included and are paid on site."
+    "The price is flat for the whole journey for 1 to 3 guests: a private car reserved only for you, pickup and drop-off anywhere in Baghdad, and guided narration at the site. Entry tickets to Babylon are not included and are paid on site. Choose your date and seats in the booking form to see the total price."
    ],
    [
     "Can foreign tourists visit Babylon?",
@@ -153,6 +153,7 @@
   "ok_title": "Reservation received",
   "ok_body": "Your day is booked and is now unavailable to others. Send the details on WhatsApp to confirm.",
   "wa_btn": "Send on WhatsApp",
-  "wa_msg": "Babylon Tour reservation\nName: {name}\nDay: {date}\nSeats: {seats}\nPhone: {phone}\nWhatsApp: {wa}\nEmail: {email}\nTotal: 336,000 IQD"
+  "wa_msg": "Babylon Tour reservation\nName: {name}\nDay: {date}\nSeats: {seats}\nPhone: {phone}\nWhatsApp: {wa}\nEmail: {email}\nTotal: 336,000 IQD",
+  "price.hint": "Choose your date and seats in the booking form to see the total price."
  }
 }
