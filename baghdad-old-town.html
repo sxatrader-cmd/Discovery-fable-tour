@@ -135,6 +135,8 @@ section.alt{background:var(--panel)}
 section > .wrap > h2{color:var(--navy)}
 section p{max-width:68ch}
 
+.yt-video{position:relative;aspect-ratio:16/9;margin-bottom:26px;border-radius:6px;overflow:hidden;background:var(--navy);box-shadow:0 0 0 1px var(--line),0 0 0 4px var(--paper),0 0 0 5px var(--gold)}
+.yt-video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 /* ---------- Route timeline ---------- */
 .route{position:relative;padding-inline-start:78px}
 .route::before{content:"";position:absolute;inset-inline-start:30px;top:10px;bottom:10px;width:2px;background:repeating-linear-gradient(to bottom,var(--gold) 0 8px,transparent 8px 16px)}
@@ -294,6 +296,9 @@ footer a{color:var(--gold-2)}
 <!-- ============ INTRO ============ -->
 <section>
   <div class="wrap narrow">
+    <div class="yt-video" id="yt-en" hidden>
+      <iframe src="https://www.youtube-nocookie.com/embed/BqSXeqqE9cI" title="Baghdad Old Town tour — Fable Tour" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    </div>
     <span class="eyebrow" data-t="intro.eyebrow"></span>
     <h2 style="font-size:clamp(28px,4vw,40px);margin-bottom:20px" data-t="intro.title"></h2>
     <p data-t="intro.p1"></p>
@@ -775,6 +780,7 @@ function applyLang(lang){
   document.documentElement.dir = L.dir;
   document.querySelectorAll('[data-t]').forEach(el=>{ el.textContent = t(el.getAttribute('data-t')); });
   document.querySelectorAll('.langs button').forEach(b=>{ b.classList.toggle('on', b.dataset.lang === lang); });
+  document.getElementById('yt-en').hidden = (lang !== 'en');
   renderStops();
   renderAddons();
   updateWa();
