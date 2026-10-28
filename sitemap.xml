@@ -454,9 +454,49 @@
   <!-- BABYLON-DAY-TRIP:END -->
 
   <url>
-    <loc>https://discovery.fabletour.com/baghdad-old-town.html</loc>
+    <loc>https://discovery.fabletour.com/baghdad-old-town</loc>
+    <lastmod>2026-10-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://discovery.fabletour.com/baghdad-old-town"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://discovery.fabletour.com/ar/baghdad-old-town"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://discovery.fabletour.com/ru/baghdad-old-town"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://discovery.fabletour.com/baghdad-old-town"/>
+    <image:image><image:loc>https://discovery.fabletour.com/mutanabbi-statue.webp</image:loc></image:image>
+    <image:image><image:loc>https://discovery.fabletour.com/qishla-arcade.webp</image:loc></image:image>
+    <image:image><image:loc>https://discovery.fabletour.com/shabandar-cafe-tea.webp</image:loc></image:image>
+    <image:image><image:loc>https://discovery.fabletour.com/tigris-boat-clock-tower.webp</image:loc></image:image>
+    <image:image><image:loc>https://discovery.fabletour.com/baghdadi-museum-scene.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://discovery.fabletour.com/ar/baghdad-old-town</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://discovery.fabletour.com/baghdad-old-town"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://discovery.fabletour.com/ar/baghdad-old-town"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://discovery.fabletour.com/ru/baghdad-old-town"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://discovery.fabletour.com/baghdad-old-town"/>
+    <image:image><image:loc>https://discovery.fabletour.com/mutanabbi-statue.webp</image:loc></image:image>
+    <image:image><image:loc>https://discovery.fabletour.com/qishla-arcade.webp</image:loc></image:image>
+    <image:image><image:loc>https://discovery.fabletour.com/shabandar-cafe-tea.webp</image:loc></image:image>
+    <image:image><image:loc>https://discovery.fabletour.com/tigris-boat-clock-tower.webp</image:loc></image:image>
+    <image:image><image:loc>https://discovery.fabletour.com/baghdadi-museum-scene.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://discovery.fabletour.com/ru/baghdad-old-town</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://discovery.fabletour.com/baghdad-old-town"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://discovery.fabletour.com/ar/baghdad-old-town"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://discovery.fabletour.com/ru/baghdad-old-town"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://discovery.fabletour.com/baghdad-old-town"/>
+    <image:image><image:loc>https://discovery.fabletour.com/mutanabbi-statue.webp</image:loc></image:image>
+    <image:image><image:loc>https://discovery.fabletour.com/qishla-arcade.webp</image:loc></image:image>
+    <image:image><image:loc>https://discovery.fabletour.com/shabandar-cafe-tea.webp</image:loc></image:image>
+    <image:image><image:loc>https://discovery.fabletour.com/tigris-boat-clock-tower.webp</image:loc></image:image>
+    <image:image><image:loc>https://discovery.fabletour.com/baghdadi-museum-scene.webp</image:loc></image:image>
   </url>
 
   <url>
